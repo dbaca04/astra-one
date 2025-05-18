@@ -27,8 +27,10 @@ html {
   --accent: #2337ff;
   --accent-dark: #000d8a;
   --black: 15, 18, 25;
-  --gray: 96, 115, 159;
-  --gray-light: 229, 233, 240;
+  --gray: 70, 85, 120;
+  /* Darkened for better contrast */
+  --gray-light: 220, 225, 235;
+  /* Slightly darkened for better contrast */
   --gray-dark: 34, 41, 57;
   --gray-gradient: rgba(var(--gray-light), 50%), #fff;
   --box-shadow:
@@ -36,23 +38,30 @@ html {
     0 16px 32px rgba(var(--gray), 33%);
   --code-bg: #1e1e1e;
   --code-fg: #d4d4d4;
-  --blockquote-bg: rgba(var(--gray-light), 50%);
+  --blockquote-bg: rgba(var(--gray-light), 60%);
+  /* Increased opacity for better contrast */
 
   /* Theme colors - light mode default */
   --theme-bg: #ffffff;
   --theme-text: rgb(var(--gray-dark));
   --theme-accent: var(--accent);
   --theme-accent-dark: var(--accent-dark);
-  --theme-code-bg: rgba(var(--gray-light), 70%);
+  --theme-code-bg: rgba(var(--gray-light), 80%);
+  /* Increased opacity for better contrast */
   --theme-code-text: var(--accent-dark);
-  --theme-selection-bg: rgba(var(--gray-light), 70%);
+  --theme-selection-bg: rgba(var(--gray-light), 80%);
+  /* Increased opacity for better contrast */
   --theme-header-bg: #ffffff;
   --theme-header-text: rgb(var(--black));
-  --theme-border: rgba(var(--gray), 20%);
-  --theme-blockquote-bg: rgba(var(--gray-light), 50%);
+  --theme-border: rgba(var(--gray), 30%);
+  /* Increased opacity for better visibility */
+  --theme-blockquote-bg: rgba(var(--gray-light), 60%);
+  /* Increased opacity for better contrast */
   --theme-card-bg: #ffffff;
-  --theme-table-header-bg: rgba(var(--gray-light), 50%);
-  --theme-table-row-even: rgba(var(--gray-light), 20%);
+  --theme-table-header-bg: rgba(var(--gray-light), 60%);
+  /* Increased opacity for better contrast */
+  --theme-table-row-even: rgba(var(--gray-light), 30%);
+  /* Increased opacity for better contrast */
 
   /* Base typography values */
   --base-font-size: 20px;
@@ -87,38 +96,56 @@ html {
 /* Dark Mode Theme */
 html.dark {
   --theme-bg: #121212;
-  --theme-text: rgba(255, 255, 255, 0.87);
-  --theme-accent: #6d7bff;
-  --theme-accent-dark: #a3adff;
+  --theme-text: rgba(255, 255, 255, 1);
+  /* Increased opacity for better contrast */
+  --theme-accent: #a3adff;
+  /* Lightened for better contrast */
+  --theme-accent-dark: #c5cbff;
+  /* Lightened for better contrast */
   --theme-code-bg: #2d2d2d;
-  --theme-code-text: #e2e2e2;
-  --theme-selection-bg: rgba(255, 255, 255, 0.15);
+  --theme-code-text: #ffffff;
+  /* Brightened for better contrast */
+  --theme-selection-bg: rgba(255, 255, 255, 0.25);
+  /* Increased opacity for better contrast */
   --theme-header-bg: #1a1a1a;
-  --theme-header-text: rgba(255, 255, 255, 0.9);
-  --theme-border: rgba(255, 255, 255, 0.15);
-  --theme-blockquote-bg: rgba(255, 255, 255, 0.1);
+  --theme-header-text: rgba(255, 255, 255, 1);
+  --theme-border: rgba(255, 255, 255, 0.35);
+  /* Increased opacity for better visibility */
+  --theme-blockquote-bg: rgba(255, 255, 255, 0.15);
+  /* Increased opacity for better contrast */
   --theme-card-bg: #1e1e1e;
-  --theme-table-header-bg: rgba(255, 255, 255, 0.1);
-  --theme-table-row-even: rgba(255, 255, 255, 0.05);
+  --theme-table-header-bg: rgba(255, 255, 255, 0.2);
+  /* Increased opacity for better contrast */
+  --theme-table-row-even: rgba(255, 255, 255, 0.1);
+  /* Increased opacity for better contrast */
   --gray-gradient: #1a1a1a, #121212;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
     --theme-bg: #121212;
-    --theme-text: rgba(255, 255, 255, 0.87);
-    --theme-accent: #6d7bff;
-    --theme-accent-dark: #a3adff;
+    --theme-text: rgba(255, 255, 255, 1);
+    /* Increased opacity for better contrast */
+    --theme-accent: #a3adff;
+    /* Lightened for better contrast */
+    --theme-accent-dark: #c5cbff;
+    /* Lightened for better contrast */
     --theme-code-bg: #2d2d2d;
-    --theme-code-text: #e2e2e2;
-    --theme-selection-bg: rgba(255, 255, 255, 0.15);
+    --theme-code-text: #ffffff;
+    /* Brightened for better contrast */
+    --theme-selection-bg: rgba(255, 255, 255, 0.25);
+    /* Increased opacity for better contrast */
     --theme-header-bg: #1a1a1a;
-    --theme-header-text: rgba(255, 255, 255, 0.9);
-    --theme-border: rgba(255, 255, 255, 0.15);
-    --theme-blockquote-bg: rgba(255, 255, 255, 0.1);
+    --theme-header-text: rgba(255, 255, 255, 1);
+    --theme-border: rgba(255, 255, 255, 0.35);
+    /* Increased opacity for better visibility */
+    --theme-blockquote-bg: rgba(255, 255, 255, 0.15);
+    /* Increased opacity for better contrast */
     --theme-card-bg: #1e1e1e;
-    --theme-table-header-bg: rgba(255, 255, 255, 0.1);
-    --theme-table-row-even: rgba(255, 255, 255, 0.05);
+    --theme-table-header-bg: rgba(255, 255, 255, 0.2);
+    /* Increased opacity for better contrast */
+    --theme-table-row-even: rgba(255, 255, 255, 0.1);
+    /* Increased opacity for better contrast */
     --gray-gradient: #1a1a1a, #121212;
   }
 }
@@ -223,13 +250,21 @@ a {
   color: var(--theme-accent);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease, outline 0.2s ease;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
-a:hover {
+a:hover,
+a:focus {
   color: var(--theme-accent-dark);
   text-decoration: none;
   border-bottom: 1px solid var(--theme-accent-dark);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  border-radius: 2px;
 }
 
 p {
@@ -377,50 +412,46 @@ li>ol {
 }
 
 /* Adjustments for line length readability on different screen sizes */
-@media (max-width: var(--tablet)) {
+@media (max-width: 768px) {
   .prose {
-    max-width: 100%;
+    font-size: 0.95rem;
   }
 
   p,
   li {
-    line-height: 1.65;
+    font-size: 0.95rem;
   }
 
   ul,
   ol {
-    margin-left: 1.5em;
+    padding-left: 1.2rem;
   }
 }
 
-/* Additional spacing adjustments for smaller screens */
-@media (max-width: var(--mobile)) {
+@media (max-width: 480px) {
   main {
-    padding: 1.5em 0.8em;
+    padding: 2em 1em;
   }
 
   p {
-    margin-bottom: 1.2em;
+    font-size: 0.9rem;
   }
 
   blockquote {
-    padding: 1em 1.2em;
-    margin: 1.5em 0;
+    padding: 1.5rem 1rem;
   }
 
   blockquote::before {
-    font-size: 2em;
-    top: 0.1em;
-    left: 0.1em;
+    left: 0.5rem;
+    top: 0.5rem;
   }
 
   pre {
-    padding: 0.8em 1em;
-    margin: 1.2em 0;
+    padding: 1rem;
   }
 
   figure {
-    margin: 1.5em 0;
+    margin: 1rem 0;
   }
 }
 
@@ -459,12 +490,12 @@ li>ol {
   display: none;
 }
 
-@media (max-width: var(--tablet)) {
+@media (max-width: 768px) {
   .hide-on-mobile {
-    display: none;
+    display: none !important;
   }
 
   .show-on-mobile {
-    display: block;
+    display: block !important;
   }
 }

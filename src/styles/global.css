@@ -287,8 +287,8 @@ blockquote {
 }
 
 blockquote::before {
-  content: "" ";
- position: absolute;
+  content: "\201C";
+  position: absolute;
   top: 0.2em;
   left: 0.2em;
   font-size: 3em;

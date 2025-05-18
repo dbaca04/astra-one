@@ -26,6 +26,9 @@ const displayImage = heroImage || image;
 			}
 			.hero-image {
 				width: 100%;
+				max-height: 70vh;
+				overflow: hidden;
+				margin-bottom: 2em;
 			}
 			.hero-image img {
 				display: block;
@@ -39,27 +42,77 @@ const displayImage = heroImage || image;
 				margin: auto;
 				padding: 1em;
 				color: rgb(var(--gray-dark));
+				font-size: 1.05em;
+				line-height: 1.75;
+			}
+			.prose :global(h2) {
+				margin-top: 2em;
+				margin-bottom: 0.5em;
+			}
+			.prose :global(h3) {
+				margin-top: 1.5em;
+				margin-bottom: 0.5em;
+			}
+			.prose :global(img) {
+				margin: 2em auto;
+				border-radius: 8px;
+				box-shadow: 0 2px 6px rgba(var(--gray), 20%);
+			}
+			.prose :global(pre) {
+				border-radius: 8px;
+				padding: 1.2em 1.4em;
+				margin: 1.5em 0 2em;
+				background-color: var(--code-bg);
+				color: var(--code-fg);
+			}
+			.prose :global(blockquote) {
+				margin: 2em 0;
+				padding: 1.5em 2em;
+				background: var(--blockquote-bg);
+				border-radius: 8px;
+				font-style: italic;
+				line-height: 1.6;
+			}
+			.prose :global(ul),
+			.prose :global(ol) {
+				margin: 1em 0 2em 2em;
+			}
+			.prose :global(li) {
+				margin-bottom: 0.5em;
+				line-height: 1.6;
 			}
 			.title {
-				margin-bottom: 1em;
+				margin-bottom: 1.5em;
 				padding: 1em 0;
 				text-align: center;
-				line-height: 1;
+				line-height: 1.2;
 			}
 			.title h1 {
 				margin: 0 0 0.5em 0;
+				letter-spacing: -0.02em;
 			}
 			.date {
 				margin-bottom: 0.5em;
 				color: rgb(var(--gray));
+				font-size: 0.9em;
 			}
 			.last-updated-on {
 				font-style: italic;
 			}
 			.tags {
-				margin-top: 1em;
+				margin-top: 1.2em;
 				font-size: 0.9em;
-				color: rgb(var(--gray-light));
+				color: rgb(var(--gray));
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5em;
+				justify-content: center;
+			}
+			.tags span {
+				display: inline-block;
+				padding: 0.2em 0.6em;
+				background-color: rgba(var(--gray-light), 70%);
+				border-radius: 4px;
 			}
 		</style>
 	</head>
@@ -104,8 +157,9 @@ const displayImage = heroImage || image;
 						{
 							tags && tags.length > 0 && (
 								<div class="tags">
-									Tags:{" "}
-									{tags.map((tag) => `#${tag}`).join(" ")}
+									{tags.map((tag) => (
+										<span>#{tag}</span>
+									))}
 								</div>
 							)
 						}

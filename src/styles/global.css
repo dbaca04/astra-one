@@ -4,6 +4,24 @@
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
 
+/* Import breakpoints for consistent responsive design */
+@import './breakpoints.css';
+/* Import grid system for responsive layouts */
+@import './grid.css';
+
+/* Base responsive reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
 :root {
   --accent: #2337ff;
   --accent-dark: #000d8a;
@@ -15,7 +33,11 @@
   --box-shadow:
     0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
     0 16px 32px rgba(var(--gray), 33%);
+  --code-bg: #1e1e1e;
+  --code-fg: #d4d4d4;
+  --blockquote-bg: rgba(var(--gray-light), 50%);
 }
+
 @font-face {
   font-family: "Atkinson";
   src: url("/fonts/atkinson-regular.woff") format("woff");
@@ -23,6 +45,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: "Atkinson";
   src: url("/fonts/atkinson-bold.woff") format("woff");
@@ -30,6 +53,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 body {
   font-family: "Atkinson", sans-serif;
   margin: 0;
@@ -42,13 +66,19 @@ body {
   color: rgb(var(--gray-dark));
   font-size: 20px;
   line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+
 main {
   width: 720px;
   max-width: calc(100% - 2em);
   margin: auto;
   padding: 3em 1em;
+  flex: 1;
 }
+
 h1,
 h2,
 h3,
@@ -59,80 +89,281 @@ h6 {
   color: rgb(var(--black));
   line-height: 1.2;
 }
+
 h1 {
   font-size: 3.052em;
+  letter-spacing: -0.03em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
 }
+
 h2 {
   font-size: 2.441em;
+  letter-spacing: -0.02em;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
 }
+
 h3 {
   font-size: 1.953em;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
 }
+
 h4 {
   font-size: 1.563em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
 }
+
 h5 {
   font-size: 1.25em;
+  margin-top: 0.8em;
+  margin-bottom: 0.5em;
 }
+
 strong,
 b {
   font-weight: 700;
 }
+
 a {
   color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
 }
+
 a:hover {
-  color: var(--accent);
+  color: var(--accent-dark);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-dark);
 }
+
 p {
-  margin-bottom: 1em;
+  margin-bottom: 1.5em;
+  line-height: 1.75;
 }
+
 .prose p {
-  margin-bottom: 2em;
+  margin-bottom: 1.8em;
+  font-size: 1.05em;
 }
+
+.prose {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
 textarea {
   width: 100%;
   font-size: 16px;
 }
+
 input {
   font-size: 16px;
 }
+
 table {
   width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0;
+  font-size: 0.85em;
 }
+
+table th,
+table td {
+  padding: 0.75em;
+  border: 1px solid rgba(var(--gray), 20%);
+}
+
+table th {
+  background-color: rgba(var(--gray-light), 50%);
+  font-weight: 700;
+  text-align: left;
+}
+
+table tr:nth-child(even) {
+  background-color: rgba(var(--gray-light), 20%);
+}
+
 img {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
+  display: block;
+  margin: 2em auto;
 }
+
+figure {
+  margin: 2em 0;
+}
+
+figcaption {
+  font-size: 0.85em;
+  color: rgb(var(--gray));
+  text-align: center;
+  margin-top: 0.5em;
+}
+
 code {
-  padding: 2px 5px;
-  background-color: rgb(var(--gray-light));
-  border-radius: 2px;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, Consolas, Monaco, 'Courier New', monospace;
+  font-size: 0.9em;
+  padding: 0.2em 0.4em;
+  background-color: rgba(var(--gray-light), 70%);
+  border-radius: 4px;
+  color: var(--accent-dark);
 }
+
 pre {
-  padding: 1.5em;
+  padding: 1.2em 1.4em;
+  margin: 1.5em 0 2em;
   border-radius: 8px;
+  background-color: var(--code-bg);
+  color: var(--code-fg);
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(var(--black), 0.1);
 }
-pre > code {
+
+pre>code {
   all: unset;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, Consolas, Monaco, 'Courier New', monospace;
 }
+
 blockquote {
+  position: relative;
+  margin: 2em 0;
+  padding: 1.5em 2em;
+  background: var(--blockquote-bg);
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-style: italic;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(var(--black), 0.05);
   border-left: 4px solid var(--accent);
-  padding: 0 0 0 20px;
-  margin: 0px;
-  font-size: 1.333em;
 }
+
+blockquote::before {
+  content: "" ";
+ position: absolute;
+  top: 0.2em;
+  left: 0.2em;
+  font-size: 3em;
+  color: rgba(var(--gray), 30%);
+  font-family: serif;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
 hr {
   border: none;
-  border-top: 1px solid rgb(var(--gray-light));
+  border-top: 2px solid rgba(var(--gray-light), 70%);
+  margin: 2em 0;
 }
-@media (max-width: 720px) {
+
+ul,
+ol {
+  margin: 1em 0 2em 2em;
+}
+
+li {
+  margin-bottom: 0.5em;
+  line-height: 1.6;
+}
+
+li>ul,
+li>ol {
+  margin: 0.5em 0 0.5em 2em;
+}
+
+/* Responsive typography */
+@media (max-width: var(--desktop)) {
+  h1 {
+    font-size: 2.5em;
+  }
+
+  h2 {
+    font-size: 2em;
+  }
+
+  h3 {
+    font-size: 1.6em;
+  }
+}
+
+@media (max-width: var(--tablet)) {
   body {
     font-size: 18px;
   }
+
+  main {
+    padding: 1.5em 1em;
+  }
+
+  h1 {
+    font-size: 2.2em;
+  }
+
+  h2 {
+    font-size: 1.8em;
+  }
+
+  h3 {
+    font-size: 1.4em;
+  }
+
+  blockquote {
+    font-size: 1.1em;
+    padding: 1.2em 1.5em;
+  }
+
+  pre {
+    padding: 1em;
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: var(--mobile)) {
+  body {
+    font-size: 16px;
+  }
+
   main {
     padding: 1em;
+  }
+
+  h1 {
+    font-size: 1.8em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  h3 {
+    font-size: 1.3em;
+  }
+
+  h4 {
+    font-size: 1.1em;
+  }
+
+  blockquote {
+    font-size: 1em;
+    padding: 1em 1.2em;
+  }
+
+  blockquote::before {
+    font-size: 2em;
+  }
+
+  pre {
+    padding: 0.8em;
+    font-size: 0.8em;
   }
 }
 
@@ -150,6 +381,33 @@ hr {
   clip: rect(1px, 1px, 1px, 1px);
   /* modern browsers, clip-path works inwards from each corner */
   clip-path: inset(50%);
-  /* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
+  /* added line to stop words getting smushed together (as they go onto newlines) */
   white-space: nowrap;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width, 1200px);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding, 1rem);
+  padding-right: var(--container-padding, 1rem);
+}
+
+.hide-on-mobile {
+  display: block;
+}
+
+.show-on-mobile {
+  display: none;
+}
+
+@media (max-width: var(--tablet)) {
+  .hide-on-mobile {
+    display: none;
+  }
+
+  .show-on-mobile {
+    display: block;
+  }
 }

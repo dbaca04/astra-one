@@ -1,0 +1,88 @@
+---
+import ContentPage from "../layouts/ContentPage.astro";
+---
+
+<ContentPage
+    title="Create"
+    description="Tools and resources to help you build your next digital creation."
+>
+    <h2>Creation Tools & Resources</h2>
+
+    <p>
+        This section is dedicated to helping you build and create amazing
+        digital projects. Whether you're designing websites, crafting content,
+        or building applications, we've assembled resources to support your
+        creative journey.
+    </p>
+
+    <p>
+        Explore tools, tutorials, and templates that will streamline your
+        workflow and inspire your next creation.
+    </p>
+
+    <div class="creation-categories">
+        <div class="category">
+            <h3>Web Design</h3>
+            <p>Resources for creating beautiful, functional websites</p>
+            <ul>
+                <li>Design principles</li>
+                <li>UI/UX guidelines</li>
+                <li>Template resources</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h3>Content Creation</h3>
+            <p>Tools for developing engaging content</p>
+            <ul>
+                <li>Writing assistance</li>
+                <li>Media creation</li>
+                <li>Editorial guides</li>
+            </ul>
+        </div>
+
+        <div class="category">
+            <h3>Development</h3>
+            <p>Resources for building robust applications</p>
+            <ul>
+                <li>Framework guides</li>
+                <li>Development environments</li>
+                <li>Code generators</li>
+            </ul>
+        </div>
+    </div>
+
+    <p class="cta">
+        Ready to start creating? Explore our resources above or <a
+            href="/contact">contact us</a
+        >
+        if you need specialized guidance for your project.
+    </p>
+</ContentPage>
+
+<style>
+    .creation-categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .category {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .category h3 {
+        margin-top: 0;
+        color: var(--accent);
+    }
+
+    .cta {
+        text-align: center;
+        margin-top: 2rem;
+        font-weight: bold;
+    }
+</style>

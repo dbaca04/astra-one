@@ -1,0 +1,144 @@
+---
+import ContentPage from "../layouts/ContentPage.astro";
+---
+
+<ContentPage
+    title="Automate"
+    description="Discover automation solutions to streamline your workflow and increase productivity."
+>
+    <h2>Automation Solutions</h2>
+
+    <p>
+        Automation allows you to work smarter, not harder. In this section, we
+        explore tools, techniques, and best practices to automate repetitive
+        tasks, workflows, and processes in your projects.
+    </p>
+
+    <p>
+        Whether you're a developer looking to streamline your workflow, a
+        content creator seeking to optimize your publication process, or a
+        professional wanting to increase productivity, you'll find valuable
+        automation resources here.
+    </p>
+
+    <div class="automation-types">
+        <div class="automation-type">
+            <h3>Development Automation</h3>
+            <ul>
+                <li>CI/CD pipelines</li>
+                <li>Code generation tools</li>
+                <li>Testing automation</li>
+                <li>GitHub Actions workflows</li>
+            </ul>
+        </div>
+
+        <div class="automation-type">
+            <h3>Content Automation</h3>
+            <ul>
+                <li>Scheduled publishing</li>
+                <li>Content transformation tools</li>
+                <li>Media processing</li>
+                <li>SEO automation</li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>Getting Started with Automation</h3>
+    <ol class="steps">
+        <li>
+            <strong>Identify repetitive tasks</strong>
+            <p>
+                Look for tasks you perform frequently that follow a predictable
+                pattern.
+            </p>
+        </li>
+        <li>
+            <strong>Choose the right tools</strong>
+            <p>
+                Select automation tools that integrate well with your existing
+                workflow.
+            </p>
+        </li>
+        <li>
+            <strong>Start small</strong>
+            <p>
+                Begin with simple automations and gradually tackle more complex
+                processes.
+            </p>
+        </li>
+        <li>
+            <strong>Monitor and refine</strong>
+            <p>
+                Regularly evaluate your automations and improve them over time.
+            </p>
+        </li>
+    </ol>
+
+    <div class="featured-tool">
+        <h3>Featured Automation Tool: GitHub Actions</h3>
+        <p>
+            GitHub Actions makes it easy to automate all your software
+            workflows. Build, test, and deploy your code right from GitHub. Make
+            code reviews, branch management, and issue triaging work the way you
+            want.
+        </p>
+        <a href="https://github.com/features/actions" target="_blank"
+            >Learn more about GitHub Actions →</a
+        >
+    </div>
+</ContentPage>
+
+<style>
+    .automation-types {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .automation-type {
+        background-color: #f8f9fa;
+        border-left: 4px solid var(--accent);
+        padding: 1rem 1.5rem;
+    }
+
+    .automation-type h3 {
+        margin-top: 0.5rem;
+    }
+
+    .steps {
+        margin: 2rem 0;
+        padding-left: 1rem;
+    }
+
+    .steps li {
+        margin-bottom: 1.5rem;
+    }
+
+    .steps strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--accent);
+    }
+
+    .steps p {
+        margin: 0;
+    }
+
+    .featured-tool {
+        background-color: #f0f7ff;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .featured-tool h3 {
+        margin-top: 0;
+    }
+
+    .featured-tool a {
+        display: inline-block;
+        margin-top: 1rem;
+        font-weight: 500;
+    }
+</style>

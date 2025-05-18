@@ -1,0 +1,79 @@
+---
+import ContentPage from "../layouts/ContentPage.astro";
+---
+
+<ContentPage
+    title="Code"
+    description="Explore coding examples, snippets, and best practices for various technologies."
+>
+    <h2>Code Repository</h2>
+
+    <p>
+        Welcome to our code section, where you'll find useful snippets,
+        examples, and tutorials to help you implement various features and solve
+        common programming challenges.
+    </p>
+
+    <p>
+        Whether you're a beginner looking for starter templates or an
+        experienced developer seeking optimization techniques, this section aims
+        to provide valuable code resources.
+    </p>
+
+    <h3>Featured Categories</h3>
+    <ul>
+        <li>Web Development (Frontend & Backend)</li>
+        <li>Data Processing and Visualization</li>
+        <li>Performance Optimization</li>
+        <li>Integration Examples</li>
+        <li>Testing and DevOps</li>
+    </ul>
+
+    <div class="code-example">
+        <h4>Example Snippet: Simple Astro Component</h4>
+        <pre><code>// MyComponent.astro
+const &#123; title, items = [] &#125; = Astro.props;
+
+&lt;div class="component"&gt;
+  &lt;h2&gt;&#123;title&#125;&lt;/h2&gt;
+  &lt;ul&gt;
+    &#123;items.map(item =&gt; (
+      &lt;li&gt;&#123;item&#125;&lt;/li&gt;
+    ))&#125;
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+  .component &#123;
+    border: 1px solid #ccc;
+    padding: 1rem;
+  &#125;
+&lt;/style&gt;</code></pre>
+    </div>
+
+    <p>
+        Check back often as we continue to add new code examples and resources.
+        Have a specific code challenge you'd like help with?
+        <a href="/contact">Let us know</a>!
+    </p>
+</ContentPage>
+
+<style>
+    .code-example {
+        background-color: #f4f4f4;
+        border-radius: 4px;
+        padding: 1em;
+        margin: 1.5em 0;
+    }
+
+    pre {
+        overflow-x: auto;
+        white-space: pre-wrap;
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+
+    code {
+        font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    }
+</style>

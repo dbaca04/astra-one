@@ -1,0 +1,162 @@
+---
+import ContentPage from "../layouts/ContentPage.astro";
+---
+
+<ContentPage
+    title="Journal"
+    description="Thoughts, reflections, and insights on development, creativity, and technology."
+>
+    <h2>Journal Entries</h2>
+
+    <p class="intro">
+        Welcome to the Journal section, where we share thoughts, reflections,
+        and insights on various aspects of development, creativity, and
+        technology. Unlike blog posts, these entries are more personal,
+        exploratory, and often capture work-in-progress ideas.
+    </p>
+
+    <div class="journal-feed">
+        <article class="journal-entry">
+            <div class="entry-meta">
+                <time datetime="2023-12-15">December 15, 2023</time>
+                <span class="category">Development</span>
+            </div>
+            <h3>Rethinking Component Architecture</h3>
+            <p>
+                I've been experimenting with different approaches to component
+                architecture lately, particularly looking at the intersection of
+                atomic design principles and state management. The challenge is
+                finding the right balance between reusability and
+                maintainability...
+            </p>
+            <a href="#" class="read-more">Continue reading</a>
+        </article>
+
+        <article class="journal-entry">
+            <div class="entry-meta">
+                <time datetime="2023-12-08">December 8, 2023</time>
+                <span class="category">Creativity</span>
+            </div>
+            <h3>The Space Between Tools and Creativity</h3>
+            <p>
+                There's an interesting relationship between the tools we use and
+                our creative output. Sometimes a constraint or limitation in our
+                tools can spark creative solutions, while other times it can
+                stifle progress. I've been reflecting on how to...
+            </p>
+            <a href="#" class="read-more">Continue reading</a>
+        </article>
+
+        <article class="journal-entry">
+            <div class="entry-meta">
+                <time datetime="2023-11-29">November 29, 2023</time>
+                <span class="category">Technology</span>
+            </div>
+            <h3>Exploring the Potential of AI in Content Creation</h3>
+            <p>
+                AI tools have advanced rapidly, especially in the realm of
+                content creation. I've been testing various AI assistants and
+                exploring how they can enhance rather than replace the creative
+                process. The results have been surprising...
+            </p>
+            <a href="#" class="read-more">Continue reading</a>
+        </article>
+    </div>
+
+    <div class="subscribe-section">
+        <h3>Stay Updated</h3>
+        <p>
+            Get notified when new journal entries are published. No spam, just
+            thoughtful content delivered to your inbox.
+        </p>
+        <div class="subscribe-form">
+            <input
+                type="email"
+                placeholder="Your email address"
+                aria-label="Email for journal updates"
+            />
+            <button type="button">Subscribe</button>
+        </div>
+    </div>
+</ContentPage>
+
+<style>
+    .intro {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .journal-feed {
+        margin: 3rem 0;
+    }
+
+    .journal-entry {
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .journal-entry:last-child {
+        border-bottom: none;
+    }
+
+    .entry-meta {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+
+    .category {
+        color: var(--accent);
+    }
+
+    .journal-entry h3 {
+        margin: 0.5rem 0;
+    }
+
+    .read-more {
+        display: inline-block;
+        margin-top: 0.5rem;
+        font-weight: 500;
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    .read-more:hover {
+        text-decoration: underline;
+    }
+
+    .subscribe-section {
+        background-color: #f7f7f7;
+        padding: 2rem;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .subscribe-form {
+        display: flex;
+        max-width: 500px;
+        margin: 1rem auto 0;
+    }
+
+    .subscribe-form input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 4px 0 0 4px;
+        font-size: 1rem;
+    }
+
+    .subscribe-form button {
+        padding: 0.75rem 1.5rem;
+        background-color: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+</style>

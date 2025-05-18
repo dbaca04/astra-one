@@ -55,3 +55,7 @@ tasks/
 .taskmasterconfig
 .roomodes
 remove-sensitive-file.sh
+
+# Scripts files except example
+scripts/*
+!scripts/example_prd.txt

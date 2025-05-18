@@ -60,9 +60,25 @@ const renderTocItems = (items: TocItem[]) => {
     return items
         .map((item) => {
             const { heading, children } = item;
-            return `<li class="level-${heading.level}">
-            <a href="#${heading.id}" class="toc-link">${heading.text}</a>
-            ${children.length > 0 ? `<ul>${renderTocItems(children)}</ul>` : ""}
+            // Define base classes for all list items
+            let liClasses = "leading-snug mb-2 sm:leading-normal"; // Added sm:leading-normal, kept mb-2
+
+            // Apply padding-left based on heading level for indentation
+            if (heading.level === 3) {
+                liClasses += " pl-4"; // Indent level 3
+            } else if (heading.level === 4) {
+                liClasses += " pl-8"; // Indent level 4 (and so on if more levels)
+            }
+            // Level 2 will have no explicit pl, effectively pl-0
+
+            // Add font size adjustment for deeper levels if desired
+            if (heading.level >= 3) {
+                // liClasses += " text-sm"; // Example for smaller text on deeper levels
+            }
+
+            return `<li class="${liClasses}">
+            <a href="#${heading.id}" class="toc-link text-gray-700 dark:text-gray-300 no-underline opacity-85 transition-all duration-200 block py-1 px-2 rounded-md hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-700">${heading.text}</a>
+            ${children.length > 0 ? `<ul class="mt-2">${renderTocItems(children)}</ul>` : ""}
         </li>`;
         })
         .join("");
@@ -71,9 +87,13 @@ const renderTocItems = (items: TocItem[]) => {
 
 {
     headings.length > 0 && (
-        <div class="table-of-contents-container">
+        <div class="table-of-contents-container my-8 md:my-6 sm:my-4 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 transition-colors duration-200 lg:sticky lg:top-8 lg:max-h-[calc(100vh-4rem)]">
             {renderToggle && (
-                <button id="toc-toggle" aria-expanded="false">
+                <button
+                    id="toc-toggle"
+                    aria-expanded="false"
+                    class="w-full flex justify-between items-center border-none bg-transparent text-lg md:text-base sm:text-sm font-medium px-6 py-4 md:px-5 md:py-3 sm:px-4 sm:py-2 text-gray-800 dark:text-gray-200 cursor-pointer transition-colors duration-200 text-left hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
                     <span>{title}</span>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +105,7 @@ const renderTocItems = (items: TocItem[]) => {
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="toc-icon"
+                        class="toc-icon w-5 h-5 transition-transform duration-200 ease-in-out"
                     >
                         <polyline points="6 9 12 15 18 9" />
                     </svg>
@@ -93,12 +113,19 @@ const renderTocItems = (items: TocItem[]) => {
             )}
 
             <div
-                class={`table-of-contents ${renderToggle ? "collapsible" : ""}`}
+                class:list={[
+                    "table-of-contents p-6 md:p-5 sm:p-4 overflow-y-auto max-h-[75vh]",
+                    renderToggle ? "collapsible" : "",
+                ]}
                 id="toc-content"
             >
-                {!renderToggle && <h2 class="toc-title">{title}</h2>}
+                {!renderToggle && (
+                    <h2 class="toc-title text-xl mb-4 pb-2 border-b border-gray-300 dark:border-gray-700">
+                        {title}
+                    </h2>
+                )}
                 <nav>
-                    <ul>
+                    <ul class="list-none p-0 m-0">
                         <Fragment set:html={renderTocItems(tocStructure)} />
                     </ul>
                 </nav>
@@ -107,226 +134,213 @@ const renderTocItems = (items: TocItem[]) => {
     )
 }
 
-<style>
-    .table-of-contents-container {
-        margin: 2rem 0;
-        border: 1px solid var(--theme-border);
-        border-radius: 8px;
-        background-color: var(--theme-bg-offset);
-        transition: var(--theme-transition);
-    }
-
-    .toc-title {
-        font-size: 1.2rem;
-        margin: 0 0 1rem 0;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid var(--theme-border);
-    }
-
-    .table-of-contents {
-        padding: 1.5rem;
-    }
-
-    .table-of-contents.collapsible {
-        display: none;
-    }
-
-    .table-of-contents.collapsible.expanded {
-        display: block;
-    }
-
-    #toc-toggle {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: none;
-        background: none;
-        font-size: 1.2rem;
-        font-weight: 500;
-        padding: 1rem 1.5rem;
-        cursor: pointer;
-        color: var(--theme-text);
-        transition: var(--theme-transition);
-        text-align: left;
-    }
-
-    #toc-toggle:hover {
-        background-color: var(--theme-bg-accent);
-    }
-
-    #toc-toggle .toc-icon {
-        transition: transform 0.2s ease;
-    }
-
-    #toc-toggle[aria-expanded="true"] .toc-icon {
-        transform: rotate(180deg);
-    }
-
-    .table-of-contents nav ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .table-of-contents nav li {
-        margin-bottom: 0.5rem;
-        line-height: 1.4;
-    }
-
-    .table-of-contents nav li ul {
-        margin-top: 0.5rem;
-        margin-left: 1.5rem;
-    }
-
-    .table-of-contents nav li.level-3 {
-        margin-left: 1.5rem;
-        font-size: 0.95em;
-    }
-
-    .toc-link {
-        color: var(--theme-text);
-        text-decoration: none;
-        opacity: 0.85;
-        transition: var(--theme-transition);
-        display: inline-block;
-        padding: 0.2rem 0.4rem;
-        border-radius: 4px;
-    }
-
-    .toc-link:hover {
-        opacity: 1;
-        background-color: var(--theme-bg-accent);
-    }
-
-    .toc-link.active {
-        font-weight: 500;
-        opacity: 1;
-        background-color: var(--theme-bg-accent);
-    }
-
-    /* Responsive styles */
-    @media (max-width: 768px) {
-        .table-of-contents-container {
-            margin: 1.5rem 0;
-        }
-
-        .table-of-contents {
-            padding: 1.2rem;
-        }
-
-        #toc-toggle {
-            padding: 0.8rem 1.2rem;
-            font-size: 1.1rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .table-of-contents-container {
-            margin: 1.2rem 0;
-        }
-
-        .table-of-contents {
-            padding: 1rem;
-        }
-
-        #toc-toggle {
-            padding: 0.7rem 1rem;
-            font-size: 1rem;
-        }
-    }
-</style>
-
 <script>
     // Initialize the toggle functionality for collapsible TOC on mobile
     function initializeTocToggle() {
         const toggleButton = document.getElementById("toc-toggle");
         const tocContent = document.getElementById("toc-content");
+        const icon = toggleButton?.querySelector(".toc-icon");
 
         if (toggleButton && tocContent) {
             toggleButton.addEventListener("click", () => {
                 const isExpanded =
                     toggleButton.getAttribute("aria-expanded") === "true";
-                toggleButton.setAttribute(
-                    "aria-expanded",
-                    isExpanded ? "false" : "true",
-                );
+                toggleButton.setAttribute("aria-expanded", String(!isExpanded));
                 tocContent.classList.toggle("expanded");
+                tocContent.classList.toggle("hidden"); // Control visibility with Tailwind
+                icon?.classList.toggle("rotate-180");
             });
+
+            // Initially hide if collapsible and not expanded
+            if (
+                tocContent.classList.contains("collapsible") &&
+                toggleButton.getAttribute("aria-expanded") === "false"
+            ) {
+                tocContent.classList.add("hidden");
+            }
         }
     }
 
-    // Add active class to the current section in TOC
-    function initializeActiveSection() {
+    // Active link highlighting
+    function initializeActiveLinkHighlighting() {
         const tocLinks = document.querySelectorAll(".toc-link");
+        const headings: HTMLElement[] = Array.from(tocLinks)
+            .map((link) => {
+                const id = link.getAttribute("href")?.substring(1);
+                return id ? document.getElementById(id) : null;
+            })
+            .filter((h): h is HTMLElement => h !== null);
 
-        if (tocLinks.length > 0) {
-            // Track which heading is currently visible
-            const observeHeadings = () => {
-                const headingElements = Array.from(tocLinks)
-                    .map((link) => {
-                        const id = link.getAttribute("href")?.substring(1);
-                        return id ? document.getElementById(id) : null;
-                    })
-                    .filter((el): el is HTMLElement => el !== null);
-
-                if (headingElements.length === 0) return;
-
-                const observer = new IntersectionObserver(
-                    (entries) => {
-                        entries.forEach((entry) => {
-                            if (entry.isIntersecting) {
-                                // Remove active class from all links
-                                tocLinks.forEach((link) =>
-                                    link.classList.remove("active"),
-                                );
-
-                                // Add active class to the link that corresponds to the visible heading
-                                const activeLink = document.querySelector(
-                                    `.toc-link[href="#${entry.target.id}"]`,
-                                );
-                                if (activeLink) {
-                                    activeLink.classList.add("active");
-                                }
-                            }
-                        });
-                    },
-                    { rootMargin: "-80px 0px -80% 0px" },
-                );
-
-                headingElements.forEach((el) => observer.observe(el));
-            };
-
-            // Enable smooth scrolling for TOC links
-            tocLinks.forEach((link) => {
-                link.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute("href");
-                    if (!targetId) return;
-
-                    const targetElement = document.querySelector(
-                        targetId,
-                    ) as HTMLElement;
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80, // Add offset for fixed header
-                            behavior: "smooth",
-                        });
-
-                        // Update URL hash without page jump
-                        history.pushState(null, "", targetId);
-                    }
-                });
-            });
-
-            // Initialize intersection observer for headings
-            observeHeadings();
+        if (tocLinks.length === 0 || headings.length === 0) {
+            return;
         }
+
+        const observerOptions = {
+            rootMargin: "-20% 0px -70% 0px", // Top, Right, Bottom, Left: activate when heading is in upper 30% of viewport
+            threshold: 0, // Trigger as soon as any part is visible within rootMargin
+        };
+
+        let lastActiveLink: Element | null = null;
+
+        const setActiveLink = (linkElement: Element | null) => {
+            if (lastActiveLink === linkElement) return; // No change
+
+            // Remove from previous
+            lastActiveLink?.classList.remove(
+                "active",
+                "font-medium",
+                "opacity-100",
+                "bg-gray-200",
+                "dark:bg-gray-600",
+            );
+            lastActiveLink?.classList.add("opacity-85");
+
+            if (linkElement) {
+                linkElement.classList.add(
+                    "active",
+                    "font-medium",
+                    "opacity-100",
+                    "bg-gray-200",
+                    "dark:bg-gray-600",
+                );
+                linkElement.classList.remove("opacity-85");
+            }
+            lastActiveLink = linkElement;
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            const intersectingEntries = entries.filter(
+                (entry) => entry.isIntersecting,
+            );
+
+            if (intersectingEntries.length === 0) {
+                // No headings are currently intersecting according to rootMargin
+                // Check if viewport is above the first heading or below the last
+                if (headings.length > 0) {
+                    const firstHeadingRect =
+                        headings[0].getBoundingClientRect();
+                    const lastHeadingRect =
+                        headings[headings.length - 1].getBoundingClientRect();
+                    const viewportHeight = window.innerHeight;
+
+                    // If top of first heading is below the 20% mark (observer top rootMargin)
+                    // or bottom of last heading is above the 30% mark from bottom (observer bottom rootMargin)
+                    if (
+                        firstHeadingRect.top > viewportHeight * 0.2 &&
+                        window.scrollY < firstHeadingRect.top
+                    ) {
+                        setActiveLink(null); // Scrolled above all headings
+                    } else if (
+                        lastHeadingRect.bottom < viewportHeight * 0.3 &&
+                        window.scrollY > lastHeadingRect.bottom
+                    ) {
+                        // Potentially set last link as active, or null. For simplicity, set null.
+                        // setActiveLink(document.querySelector(`.toc-link[href="#${headings[headings.length - 1].id}"]`));
+                        setActiveLink(null); // Scrolled past all headings
+                    }
+                    // If in between but none intersecting due to rootMargins, lastActiveLink will persist, which is fine.
+                }
+                return;
+            }
+
+            let bestEntry: IntersectionObserverEntry | null = null;
+
+            if (intersectingEntries.length === 1) {
+                bestEntry = intersectingEntries[0];
+            } else {
+                // Multiple entries intersecting, find the one highest on the screen
+                bestEntry = intersectingEntries.reduce((prev, current) => {
+                    if (
+                        current.boundingClientRect.top <
+                        prev.boundingClientRect.top
+                    ) {
+                        return current;
+                    }
+                    return prev;
+                });
+            }
+
+            if (bestEntry && bestEntry.target instanceof HTMLElement) {
+                const activeId = bestEntry.target.id;
+                const activeLink = document.querySelector(
+                    `.toc-link[href="#${activeId}"]`,
+                );
+                setActiveLink(activeLink);
+            }
+        }, observerOptions);
+
+        headings.forEach((heading) => {
+            observer.observe(heading);
+        });
+
+        // Smooth scroll for TOC links
+        tocLinks.forEach((link) => {
+            link.addEventListener("click", (event) => {
+                event.preventDefault();
+                const href = link.getAttribute("href");
+                if (href) {
+                    const targetElement = document.querySelector(
+                        href,
+                    ) as HTMLElement | null;
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                        });
+                        // Manually update active link on click for immediate feedback
+                        // (observer might take a moment)
+                        if (link !== lastActiveLink) {
+                            lastActiveLink?.classList.remove(
+                                "active",
+                                "font-medium",
+                                "opacity-100",
+                                "bg-gray-200",
+                                "dark:bg-gray-600",
+                            );
+                            lastActiveLink?.classList.add("opacity-85");
+
+                            link.classList.add(
+                                "active",
+                                "font-medium",
+                                "opacity-100",
+                                "bg-gray-200",
+                                "dark:bg-gray-600",
+                            );
+                            link.classList.remove("opacity-85");
+                            lastActiveLink = link;
+                        }
+                        // If TOC is collapsible and an item is clicked, collapse it (common UX for mobile)
+                        const toggleButton =
+                            document.getElementById("toc-toggle");
+                        const tocContent =
+                            document.getElementById("toc-content");
+                        const icon = toggleButton?.querySelector(".toc-icon");
+                        if (
+                            toggleButton &&
+                            tocContent &&
+                            tocContent.classList.contains("collapsible") &&
+                            toggleButton.getAttribute("aria-expanded") ===
+                                "true"
+                        ) {
+                            toggleButton.setAttribute("aria-expanded", "false");
+                            tocContent.classList.remove("expanded");
+                            tocContent.classList.add("hidden");
+                            icon?.classList.remove("rotate-180");
+                        }
+                    }
+                }
+            });
+        });
     }
 
-    // Initialize both toggle and active section functionality
-    document.addEventListener("DOMContentLoaded", () => {
+    // Ensure script runs after DOM is loaded
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => {
+            initializeTocToggle();
+            initializeActiveLinkHighlighting();
+        });
+    } else {
         initializeTocToggle();
-        initializeActiveSection();
-    });
+        initializeActiveLinkHighlighting();
+    }
 </script>

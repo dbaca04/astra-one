@@ -8,11 +8,11 @@ import { SITE_TITLE } from "../consts";
 <header>
 	<nav>
 		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="desktop-nav">
+		<div class="desktop-nav hide-on-mobile">
 			<Nav />
 		</div>
 		<MobileNav />
-		<div class="social-links">
+		<div class="social-links hide-on-mobile">
 			<button id="theme-toggle" aria-label="Toggle Dark Mode">
 				<svg
 					class="sun-icon"
@@ -98,7 +98,7 @@ import { SITE_TITLE } from "../consts";
 <!-- Theme Toggle Script -->
 <script is:inline>
 	// Initialize theme based on user preferences
-	const initializeTheme = () => {
+	function initializeTheme() {
 		const theme = (() => {
 			if (
 				typeof localStorage !== "undefined" &&
@@ -130,13 +130,10 @@ import { SITE_TITLE } from "../consts";
 				theme === "dark" ? "true" : "false",
 			);
 		}
-	};
+	}
 
-	// Initialize on page load
-	initializeTheme();
-
-	// Set up toggle functionality once DOM is loaded
-	document.addEventListener("DOMContentLoaded", () => {
+	// Set up toggle functionality
+	function setupThemeToggle() {
 		const toggleButton = document.getElementById("theme-toggle");
 		if (toggleButton) {
 			toggleButton.addEventListener("click", () => {
@@ -152,6 +149,16 @@ import { SITE_TITLE } from "../consts";
 				);
 			});
 		}
+	}
+
+	// Run on page load
+	initializeTheme();
+	document.addEventListener("DOMContentLoaded", setupThemeToggle);
+
+	// Also run on Astro page transitions
+	document.addEventListener("astro:page-load", () => {
+		initializeTheme();
+		setupThemeToggle();
 	});
 </script>
 
@@ -160,7 +167,7 @@ import { SITE_TITLE } from "../consts";
 		margin: 0;
 		padding: 0 1em;
 		background: var(--theme-header-bg);
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		box-shadow: var(--box-shadow-small);
 		transition: var(--theme-transition);
 	}
 	h2 {
@@ -211,10 +218,13 @@ import { SITE_TITLE } from "../consts";
 		color: var(--theme-header-text);
 		transition:
 			color 0.2s ease,
-			background-color 0.2s ease;
+			background-color 0.2s ease,
+			box-shadow 0.3s ease;
 	}
 	#theme-toggle:hover {
 		background-color: rgba(var(--gray), 10%);
+		box-shadow: 0 0 calc(var(--glow-radius) / 3)
+			calc(var(--glow-spread) / 3) var(--glow-color);
 	}
 	#theme-toggle:focus {
 		outline: 2px solid var(--theme-accent);
@@ -233,13 +243,7 @@ import { SITE_TITLE } from "../consts";
 		display: none;
 	}
 
-	@media (max-width: var(--tablet)) {
-		.social-links {
-			display: none;
-		}
-		.desktop-nav {
-			display: none;
-		}
+	@media (max-width: 768px) {
 		#theme-toggle {
 			margin-right: 0.5rem;
 		}

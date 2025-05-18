@@ -200,6 +200,7 @@ const journalPosts = allPosts
         border: 1px solid var(--theme-border);
         box-shadow: var(--box-shadow);
         margin-top: 3rem;
+        transition: var(--theme-transition);
     }
 
     :global(.content) .subscribe-form {
@@ -242,7 +243,9 @@ const journalPosts = allPosts
     :global(.content) .subscribe-form input:focus {
         outline: none;
         border-color: var(--theme-accent);
-        box-shadow: 0 0 0 2px rgba(var(--accent), 0.25);
+        box-shadow:
+            0 0 0 2px rgba(var(--accent), 0.25),
+            0 0 var(--glow-radius) var(--glow-spread) var(--glow-color);
     }
 
     /* Responsive adjustments */

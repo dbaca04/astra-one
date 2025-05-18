@@ -129,9 +129,12 @@ import ContentPage from "../layouts/ContentPage.astro";
     }
 
     .contact-info {
-        background-color: #f0f7ff;
+        background-color: var(--theme-card-bg);
         padding: 2rem;
         border-radius: 8px;
+        box-shadow: var(--box-shadow);
+        border: 1px solid var(--theme-border);
+        transition: var(--theme-transition);
     }
 
     .info-item {
@@ -186,13 +189,15 @@ import ContentPage from "../layouts/ContentPage.astro";
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background-color: #fff;
-        color: var(--accent);
+        background-color: var(--theme-bg);
+        color: var(--theme-accent);
         transition: all 0.3s;
+        box-shadow: var(--box-shadow-small);
     }
 
     .social-links a:hover {
-        background-color: var(--accent);
+        background-color: var(--theme-accent);
         color: white;
+        box-shadow: var(--box-shadow-hover);
     }
 </style>

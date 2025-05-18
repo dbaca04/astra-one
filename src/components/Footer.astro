@@ -66,9 +66,20 @@ const today = new Date();
 	.social-links a {
 		text-decoration: none;
 		color: var(--theme-text);
-		transition: color 0.2s ease;
+		transition:
+			color 0.2s ease,
+			transform 0.2s ease;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
 	}
 	.social-links a:hover {
 		color: var(--theme-accent);
+		transform: translateY(-2px);
+		box-shadow: 0 0 calc(var(--glow-radius) / 3)
+			calc(var(--glow-spread) / 3) var(--glow-color);
 	}
 </style>

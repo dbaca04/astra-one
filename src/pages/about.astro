@@ -124,15 +124,22 @@ import ContentPage from "../layouts/ContentPage.astro";
 	}
 
 	.about-item {
-		background-color: #f9f9f9;
+		background-color: var(--theme-card-bg);
 		padding: 1.5rem;
 		border-radius: 8px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+		box-shadow: var(--box-shadow-small);
+		border: 1px solid var(--theme-border);
+		transition: var(--theme-transition);
+	}
+
+	.about-item:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--box-shadow-hover);
 	}
 
 	.about-item h3 {
 		margin-top: 0;
-		color: var(--accent);
+		color: var(--theme-accent);
 	}
 
 	.values-list {
@@ -144,9 +151,29 @@ import ContentPage from "../layouts/ContentPage.astro";
 		margin-bottom: 0.75rem;
 	}
 
+	.values-list strong {
+		color: var(--theme-accent);
+	}
+
 	.cta {
 		text-align: center;
 		margin-top: 3rem;
 		font-size: 1.1rem;
+		padding: 1.5rem;
+		background-color: var(--theme-card-bg);
+		border-radius: 8px;
+		box-shadow: var(--box-shadow);
+		border: 1px solid var(--theme-border);
+	}
+
+	.cta a {
+		color: var(--theme-accent);
+		font-weight: bold;
+		text-decoration: none;
+	}
+
+	.cta a:hover {
+		text-decoration: underline;
+		color: var(--theme-accent-dark);
 	}
 </style>

@@ -33,9 +33,23 @@ html {
   /* Slightly darkened for better contrast */
   --gray-dark: 34, 41, 57;
   --gray-gradient: rgba(var(--gray-light), 50%), #fff;
+
+  /* Glow effects for consistent UI */
+  --glow-color: rgba(35, 55, 255, 0.15);
+  --glow-radius: 16px;
+  --glow-spread: 4px;
+
+  /* Box shadows with glow effect */
   --box-shadow:
     0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-    0 16px 32px rgba(var(--gray), 33%);
+    0 16px 32px rgba(var(--gray), 33%), 0 0 var(--glow-radius) var(--glow-spread) var(--glow-color);
+  --box-shadow-small:
+    0 2px 4px rgba(var(--gray), 20%), 0 4px 8px rgba(var(--gray), 25%),
+    0 0 calc(var(--glow-radius) / 2) calc(var(--glow-spread) / 2) var(--glow-color);
+  --box-shadow-hover:
+    0 4px 12px rgba(var(--gray), 30%), 0 12px 32px rgba(var(--gray), 35%),
+    0 0 calc(var(--glow-radius) * 1.5) calc(var(--glow-spread) * 1.2) var(--glow-color);
+
   --code-bg: #1e1e1e;
   --code-fg: #d4d4d4;
   --blockquote-bg: rgba(var(--gray-light), 60%);
@@ -90,7 +104,7 @@ html {
   --h5-max-size: 20;
 
   /* Theme transition */
-  --theme-transition: background-color 0.3s ease, color 0.3s ease;
+  --theme-transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Dark Mode Theme */
@@ -119,6 +133,20 @@ html.dark {
   --theme-table-row-even: rgba(255, 255, 255, 0.1);
   /* Increased opacity for better contrast */
   --gray-gradient: #1a1a1a, #121212;
+
+  /* Dark mode glow effect */
+  --glow-color: rgba(163, 173, 255, 0.15);
+
+  /* Dark mode box shadows with glow */
+  --box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.4),
+    0 16px 32px rgba(0, 0, 0, 0.3), 0 0 var(--glow-radius) var(--glow-spread) var(--glow-color);
+  --box-shadow-small:
+    0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.35),
+    0 0 calc(var(--glow-radius) / 2) calc(var(--glow-spread) / 2) var(--glow-color);
+  --box-shadow-hover:
+    0 4px 12px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.45),
+    0 0 calc(var(--glow-radius) * 1.5) calc(var(--glow-spread) * 1.2) var(--glow-color);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -147,6 +175,20 @@ html.dark {
     --theme-table-row-even: rgba(255, 255, 255, 0.1);
     /* Increased opacity for better contrast */
     --gray-gradient: #1a1a1a, #121212;
+
+    /* Dark mode glow effect */
+    --glow-color: rgba(163, 173, 255, 0.15);
+
+    /* Dark mode box shadows with glow */
+    --box-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.4),
+      0 16px 32px rgba(0, 0, 0, 0.3), 0 0 var(--glow-radius) var(--glow-spread) var(--glow-color);
+    --box-shadow-small:
+      0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.35),
+      0 0 calc(var(--glow-radius) / 2) calc(var(--glow-spread) / 2) var(--glow-color);
+    --box-shadow-hover:
+      0 4px 12px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.45),
+      0 0 calc(var(--glow-radius) * 1.5) calc(var(--glow-spread) * 1.2) var(--glow-color);
   }
 }
 

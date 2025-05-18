@@ -104,10 +104,13 @@ const &#123; title, items = [] &#125; = Astro.props;
 
 <style>
     .code-example {
-        background-color: #f4f4f4;
-        border-radius: 4px;
-        padding: 1em;
+        background-color: var(--theme-card-bg);
+        border-radius: 8px;
+        padding: 1.5em;
         margin: 1.5em 0;
+        box-shadow: var(--box-shadow-small);
+        border: 1px solid var(--theme-border);
+        transition: var(--theme-transition);
     }
 
     pre {
@@ -115,10 +118,14 @@ const &#123; title, items = [] &#125; = Astro.props;
         white-space: pre-wrap;
         font-size: 0.9em;
         line-height: 1.4;
+        padding: 1em;
+        background-color: var(--theme-code-bg);
+        border-radius: 4px;
     }
 
     code {
         font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+        color: var(--theme-code-text);
     }
 
     .post-list {
@@ -126,24 +133,42 @@ const &#123; title, items = [] &#125; = Astro.props;
         padding: 0;
         margin: 2rem 0;
     }
+
     .post-item {
         margin-bottom: 2rem;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--theme-border);
         padding-bottom: 1rem;
+        transition: transform 0.2s ease;
     }
+
+    .post-item:hover {
+        transform: translateY(-2px);
+    }
+
     .post-item a {
         text-decoration: none;
         color: inherit;
         display: block;
+        padding: 1rem;
+        border-radius: 8px;
+        transition: box-shadow 0.3s ease;
     }
+
+    .post-item a:hover {
+        box-shadow: var(--box-shadow-small);
+        background-color: var(--theme-selection-bg);
+    }
+
     .post-item a:hover h4 {
-        color: var(--accent);
+        color: var(--theme-accent);
     }
+
     .post-date {
         font-size: 0.9rem;
-        color: #666;
+        color: rgb(var(--gray));
         margin: 0.25rem 0;
     }
+
     .post-description {
         margin-top: 0.5rem;
     }

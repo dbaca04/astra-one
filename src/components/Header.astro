@@ -8,20 +8,24 @@ import { SITE_TITLE } from "../consts";
 <header class="bg-theme-header-bg shadow-sm transition-theme">
 	<nav class="flex items-center justify-between px-4 py-4">
 		<h2 class="text-base m-0">
-			<a href="/" class="no-underline">{SITE_TITLE}</a>
+			<a
+				href="/"
+				class="no-underline text-theme-header-text hover:text-theme-accent transition-colors"
+				>{SITE_TITLE}</a
+			>
 		</h2>
-		<div class="desktop-nav hide-on-mobile">
+		<div class="desktop-nav hidden md:block">
 			<Nav />
 		</div>
 		<MobileNav />
-		<div class="hide-on-mobile flex items-center">
+		<div class="hidden md:flex items-center">
 			<button
 				id="theme-toggle"
 				aria-label="Toggle Dark Mode"
-				class="bg-transparent border-0 p-0 cursor-pointer flex items-center justify-center w-8 h-8 rounded-full text-theme-header-text hover:bg-gray-10 focus:outline-accent-dark focus:outline-2 focus:outline-offset-2"
+				class="p-2 rounded-full text-theme-header-text hover:bg-theme-selection-bg focus:outline-none focus:ring-2 focus:ring-theme-accent focus:ring-offset-2 focus:ring-offset-theme-header-bg transition-colors duration-200"
 			>
 				<svg
-					class="sun-icon block dark:hidden"
+					class="sun-icon block dark:hidden w-5 h-5"
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
 					height="24"
@@ -43,7 +47,7 @@ import { SITE_TITLE } from "../consts";
 					<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
 				</svg>
 				<svg
-					class="moon-icon hidden dark:block"
+					class="moon-icon hidden dark:block w-5 h-5"
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
 					height="24"

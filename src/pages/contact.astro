@@ -6,20 +6,28 @@ import ContentPage from "../layouts/ContentPage.astro";
     title="Contact"
     description="Get in touch with Domdhi for questions, feedback, or collaboration opportunities related to AI tools and workflows."
 >
-    <h2>Get In Touch</h2>
+    <h2 class="text-3xl font-bold text-theme-text mb-6 text-center">
+        Get In Touch
+    </h2>
 
-    <p class="intro">
+    <p
+        class="max-w-2xl mx-auto mb-8 text-center text-lg text-theme-text leading-relaxed"
+    >
         Have a question about my AI journey, want to share your experiences, or
         interested in collaborating on AI-related projects? I'd love to hear
         from you. Feel free to reach out through email or connect with me on
         social media.
     </p>
 
-    <div class="contact-container">
-        <div class="contact-info">
-            <h3>Contact Information</h3>
+    <div class="max-w-xl mx-auto my-8">
+        <div
+            class="bg-theme-card-bg p-8 rounded-lg shadow-lg border border-theme-border"
+        >
+            <h3 class="text-2xl font-bold text-theme-accent mb-6">
+                Contact Information
+            </h3>
 
-            <div class="info-item">
+            <div class="flex items-center mb-6">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -30,16 +38,23 @@ import ContentPage from "../layouts/ContentPage.astro";
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
+                    class="mr-3 text-theme-accent flex-shrink-0"
                     ><path
                         d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
                     ></path><polyline points="22,6 12,13 2,6"></polyline></svg
                 >
-                <a href="mailto:domdhi@astraone.com">domdhi@astraone.com</a>
+                <a
+                    href="mailto:domdhi@astraone.com"
+                    class="text-theme-accent hover:underline break-all"
+                    >domdhi@astraone.com</a
+                >
             </div>
 
-            <div class="info-section">
-                <h4>Preferred AI Tools & Platforms</h4>
-                <ul class="tools-list">
+            <div class="my-8">
+                <h4 class="text-xl font-semibold text-theme-accent mb-3">
+                    Preferred AI Tools & Platforms
+                </h4>
+                <ul class="list-disc pl-5 space-y-1 text-theme-text">
                     <li>Cursor & GitHub Copilot for coding</li>
                     <li>Midjourney & DALL-E for creative visuals</li>
                     <li>ChatGPT & Claude for research & writing</li>
@@ -47,11 +62,12 @@ import ContentPage from "../layouts/ContentPage.astro";
                 </ul>
             </div>
 
-            <div class="social-links">
+            <div class="flex gap-4 mt-8">
                 <a
                     href="https://twitter.com/domdhi"
                     target="_blank"
                     aria-label="Twitter"
+                    class="flex items-center justify-center w-10 h-10 rounded-full bg-theme-bg text-theme-accent shadow-sm transition-all duration-300 hover:bg-theme-accent hover:text-white hover:shadow-md"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -73,6 +89,7 @@ import ContentPage from "../layouts/ContentPage.astro";
                     href="https://github.com/domdhi"
                     target="_blank"
                     aria-label="GitHub"
+                    class="flex items-center justify-center w-10 h-10 rounded-full bg-theme-bg text-theme-accent shadow-sm transition-all duration-300 hover:bg-theme-accent hover:text-white hover:shadow-md"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -94,6 +111,7 @@ import ContentPage from "../layouts/ContentPage.astro";
                     href="https://www.linkedin.com/in/domdhi"
                     target="_blank"
                     aria-label="LinkedIn"
+                    class="flex items-center justify-center w-10 h-10 rounded-full bg-theme-bg text-theme-accent shadow-sm transition-all duration-300 hover:bg-theme-accent hover:text-white hover:shadow-md"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -116,88 +134,4 @@ import ContentPage from "../layouts/ContentPage.astro";
     </div>
 </ContentPage>
 
-<style>
-    .intro {
-        max-width: 700px;
-        margin: 0 auto 2rem;
-        text-align: center;
-    }
-
-    .contact-container {
-        max-width: 600px;
-        margin: 2rem auto;
-    }
-
-    .contact-info {
-        background-color: var(--theme-card-bg);
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: var(--box-shadow);
-        border: 1px solid var(--theme-border);
-        transition: var(--theme-transition);
-    }
-
-    .info-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-
-    .info-item svg {
-        margin-right: 0.75rem;
-        color: var(--accent);
-    }
-
-    .info-item a {
-        color: var(--accent);
-        text-decoration: none;
-        transition: color 0.3s;
-    }
-
-    .info-item a:hover {
-        text-decoration: underline;
-    }
-
-    .info-section {
-        margin: 2rem 0;
-    }
-
-    .info-section h4 {
-        color: var(--accent);
-        margin-bottom: 0.75rem;
-    }
-
-    .tools-list {
-        padding-left: 1.5rem;
-        margin: 0.5rem 0;
-    }
-
-    .tools-list li {
-        margin-bottom: 0.5rem;
-    }
-
-    .social-links {
-        display: flex;
-        gap: 1rem;
-        margin-top: 2rem;
-    }
-
-    .social-links a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: var(--theme-bg);
-        color: var(--theme-accent);
-        transition: all 0.3s;
-        box-shadow: var(--box-shadow-small);
-    }
-
-    .social-links a:hover {
-        background-color: var(--theme-accent);
-        color: white;
-        box-shadow: var(--box-shadow-hover);
-    }
-</style>
+<style></style>

@@ -2,6 +2,7 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import "../styles/base.css";
 
 const { title, description } = Astro.props;
 ---
@@ -9,85 +10,25 @@ const { title, description } = Astro.props;
 <html lang="en">
     <head>
         <BaseHead title={title} description={description} />
-        <style>
-            main {
-                width: calc(100% - 2em);
-                max-width: 100%;
-                margin: 0;
-            }
-            .content {
-                width: 720px;
-                max-width: calc(100% - 2em);
-                margin: auto;
-                padding: 1em;
-                color: var(--theme-text);
-                transition: var(--theme-transition);
-            }
-            .title {
-                margin-bottom: 1em;
-                padding: 1em 0;
-                text-align: center;
-                line-height: 1;
-            }
-            .title h1 {
-                margin: 0 0 0.5em 0;
-            }
-
-            hr {
-                border: none;
-                border-top: 2px solid var(--theme-border);
-                margin: 1em 0;
-                transition: var(--theme-transition);
-            }
-
-            /* Responsive adjustments */
-            @media (max-width: 768px) {
-                .content {
-                    padding: 0.8em;
-                }
-
-                .title {
-                    padding: 0.8em 0;
-                    margin-bottom: 0.8em;
-                }
-            }
-
-            @media (max-width: 480px) {
-                .content {
-                    padding: 0.6em;
-                }
-
-                .title {
-                    padding: 0.6em 0;
-                    margin-bottom: 0.6em;
-                }
-
-                /* Apply responsive typography to content children */
-                .content :global(p) {
-                    margin-bottom: 1.2em;
-                }
-
-                .content :global(ul),
-                .content :global(ol) {
-                    margin: 1em 0 1.5em 1.5em;
-                }
-
-                .content :global(li) {
-                    margin-bottom: 0.4em;
-                }
-            }
-        </style>
     </head>
 
-    <body>
+    <body
+        class="bg-theme-bg text-theme-text transition-theme min-h-screen flex flex-col bg-[linear-gradient(var(--gray-gradient))] bg-no-repeat bg-[length:100%_600px]"
+    >
         <Header />
-        <main>
-            <div class="content">
-                <div class="title">
-                    <h1>{title}</h1>
-                    <hr />
+        <main class="flex-1">
+            <div
+                class="max-w-[720px] mx-auto px-4 py-8 md:px-6 md:py-12 lg:px-8"
+            >
+                <div class="mb-6 md:mb-8 text-center">
+                    <h1 class="text-3xl md:text-4xl font-bold mb-4">{title}</h1>
+                    <hr
+                        class="border-0 border-t-2 border-theme-border my-4 w-1/2 mx-auto transition-theme"
+                    />
                 </div>
-                <slot />
+                <div class="prose dark:prose-invert max-w-none">
+                    <slot />
+                </div>
             </div>
         </main>
         <Footer />

@@ -9,86 +9,35 @@ import { Picture } from "astro:assets";
 const title = "Blog";
 const description = "All blog posts";
 const posts = await getCollection("blog");
-posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <html lang="en">
     <head>
         <BaseHead title={title} description={description} />
-        <style>
-            main {
-                width: calc(100% - 2em);
-                max-width: 100%;
-                margin: 0;
-                padding: 1em;
-            }
-            ul {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 2rem;
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
-            }
-            ul li {
-                width: calc(50% - 1rem);
-            }
-            ul li * {
-                text-decoration: none;
-                transition: 0.2s ease;
-            }
-            ul li img {
-                margin-bottom: 0.5rem;
-                border-radius: 12px;
-            }
-            ul li a {
-                display: block;
-            }
-            .title {
-                margin: 0;
-                color: rgb(var(--black));
-                line-height: 1;
-            }
-            .date {
-                margin: 0;
-                color: rgb(var(--gray));
-            }
-            ul li a:hover h4,
-            ul li a:hover .date {
-                color: rgb(var(--accent));
-            }
-            ul li a:hover img {
-                box-shadow: var(--box-shadow);
-            }
-            @media (max-width: 720px) {
-                ul {
-                    gap: 0.5em;
-                }
-                ul li {
-                    width: 100%;
-                    text-align: center;
-                }
-            }
-        </style>
     </head>
-    <body>
+    <body class="bg-theme-bg text-theme-text flex flex-col min-h-screen">
         <Header />
-        <main>
-            <section>
-                <h1>Blog</h1>
-                <ul>
+        <main class="w-full max-w-screen-xl mx-auto p-4 flex-grow">
+            <section class="py-8">
+                <h1
+                    class="text-4xl font-bold text-theme-text mb-8 text-center md:text-left"
+                >
+                    Blog
+                </h1>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {
                         posts.map((post) => {
-                            // Check if post has a slug, if not use the id
                             const postSlug = post.data.slug || post.id;
-
-                            // Get the image source
                             const imageSource =
                                 post.data.heroImage || post.data.image;
 
                             return (
-                                <li>
-                                    <a href={`/blog/${postSlug}/`}>
+                                <li class="bg-theme-card-bg rounded-lg shadow-lg overflow-hidden transition-shadow duration-300 hover:shadow-xl">
+                                    <a
+                                        href={`/blog/${postSlug}/`}
+                                        class="block group"
+                                    >
                                         {imageSource && (
                                             <Picture
                                                 src={imageSource}
@@ -101,18 +50,22 @@ posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
                                                     "jpeg",
                                                 ]}
                                                 quality={80}
-                                                sizes="(max-width: 720px) 100vw, 50vw"
+                                                sizes="(max-width: 720px) 100vw, (max-width: 1024px) 50vw, 720px"
                                                 fit="cover"
                                                 position="center"
-                                                layout="constrained"
+                                                class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                                             />
                                         )}
-                                        <h4 class="title">{post.data.title}</h4>
-                                        <p class="date">
-                                            <FormattedDate
-                                                date={post.data.pubDate}
-                                            />
-                                        </p>
+                                        <div class="p-6">
+                                            <h4 class="text-xl font-semibold text-theme-text mb-2 group-hover:text-theme-accent transition-colors duration-200">
+                                                {post.data.title}
+                                            </h4>
+                                            <p class="text-sm text-theme-text opacity-80 group-hover:text-theme-accent transition-colors duration-200">
+                                                <FormattedDate
+                                                    date={post.data.date}
+                                                />
+                                            </p>
+                                        </div>
                                     </a>
                                 </li>
                             );

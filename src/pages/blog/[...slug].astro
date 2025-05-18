@@ -61,9 +61,9 @@ const { Content } = await render(post);
     {/* Add navigation after the content */}
     {
         (prevPost || nextPost || prevSectionPost || nextSectionPost) && (
-            <div class="post-navigation-container">
+            <div class="mt-16 flex flex-col gap-8 md:mt-12 md:gap-6 sm:mt-10 sm:gap-5">
                 {hasSectionNav && (
-                    <div class="navigation-section">
+                    <div class="navigation-section-wrapper">
                         <PostNavigation
                             prevPost={prevSectionPost}
                             nextPost={nextSectionPost}
@@ -74,7 +74,7 @@ const { Content } = await render(post);
                 )}
 
                 {(prevPost || nextPost) && (
-                    <div class="navigation-section">
+                    <div class="navigation-section-wrapper">
                         <PostNavigation
                             prevPost={prevPost}
                             nextPost={nextPost}
@@ -88,30 +88,12 @@ const { Content } = await render(post);
 </BlogPost>
 
 <style>
-    .post-navigation-container {
-        margin-top: 4rem;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    /* If there's only one navigation section, add some bottom margin */
-    .navigation-section:only-child {
-        margin-bottom: 1rem;
-    }
-
-    /* On mobile devices, reduce the top margin and gap */
-    @media (max-width: 768px) {
-        .post-navigation-container {
-            margin-top: 3rem;
-            gap: 1.5rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .post-navigation-container {
-            margin-top: 2.5rem;
-            gap: 1.25rem;
-        }
-    }
+    /* 
+    The :only-child pseudo-class functionality for .navigation-section 
+    is not directly replicable with pure Tailwind without JS or more complex parent selectors.
+    The flex gap on .post-navigation-container should provide adequate spacing.
+    If specific bottom margin is crucial for a single navigation section, 
+    it might need to be handled conditionally in the template or via a wrapper class if only one is rendered.
+    For now, relying on the gap.
+    */
 </style>

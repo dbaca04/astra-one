@@ -14,7 +14,7 @@ interface BlogPost extends CollectionEntry<"blog"> {
 }
 // Cast and sort by date (newest first)
 const latestPosts = allPosts
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 	.slice(0, 5) as BlogPost[]; // Get only the 5 most recent posts
 
 // console.log("Latest Posts:", latestPosts); // Removed debugging console log
@@ -52,12 +52,12 @@ const sections = [
 	title="Domdhi"
 	description="Exploring the intersection of AI, creativity, and productivity"
 >
-	<div class="hero">
-		<h2>Welcome to Domdhi</h2>
-		<p class="tagline">
+	<div class="text-center py-8 mb-8">
+		<h2 class="text-3xl font-bold text-theme-text">Welcome to Domdhi</h2>
+		<p class="text-xl text-theme-accent my-2 mx-0 mb-6">
 			Exploring the intersection of AI, creativity, and productivity
 		</p>
-		<p class="intro">
+		<p class="max-w-[80%] mx-auto leading-relaxed text-theme-text">
 			This site is a collection of experiences, resources, and insights
 			about working with AI tools to enhance both creative and technical
 			workflows. Join me on this journey of discovery as we navigate the
@@ -65,41 +65,56 @@ const sections = [
 		</p>
 	</div>
 
-	<section class="main-sections">
-		<h3>Explore Areas</h3>
-		<div class="section-grid">
+	<section class="my-12">
+		<h3 class="text-2xl font-bold text-theme-text mb-6">Explore Areas</h3>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 			{
 				sections.map((section) => (
-					<a href={section.url} class="section-card">
-						<div class="section-icon" set:html={section.icon} />
-						<h4>{section.title}</h4>
-						<p>{section.description}</p>
+					<a
+						href={section.url}
+						class="block bg-theme-card-bg rounded-lg p-6 text-theme-text no-underline shadow-md border border-theme-border transition-all duration-200 ease-in-out hover:transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-theme-accent focus:ring-offset-2"
+					>
+						<div class="w-[70px] h-[70px] mb-4 flex items-center justify-center bg-theme-selection-bg p-4 rounded-full shadow-sm mx-auto">
+							<div
+								class="section-icon-svg-wrapper"
+								set:html={section.icon}
+							/>
+						</div>
+						<h4 class="mt-2 mb-2 text-theme-accent text-lg font-bold">
+							{section.title}
+						</h4>
+						<p class="mt-2 mb-0 text-base leading-relaxed text-theme-text">
+							{section.description}
+						</p>
 					</a>
 				))
 			}
 		</div>
 	</section>
 
-	<section class="latest-posts">
-		<h3>Latest Articles</h3>
+	<section class="my-12">
+		<h3 class="text-2xl font-bold text-theme-text mb-8">Latest Articles</h3>
 		{
 			latestPosts.length > 0 ? (
-				<ul class="post-list">
+				<ul class="list-none p-0 m-0">
 					{latestPosts.map((post) => (
-						<li class="post-item">
-							<a href={`/blog/${post.id}`}>
-								<h4>{post.data.title}</h4>
-								<div class="post-meta">
-									<span class="post-section">
+						<li class="mb-8 pb-4 border-b border-theme-border">
+							<a
+								href={`/blog/${post.id}`}
+								class="text-inherit no-underline block group"
+							>
+								<h4 class="text-xl font-semibold text-theme-text group-hover:text-theme-accent transition-colors duration-200">
+									{post.data.title}
+								</h4>
+								<div class="flex items-center gap-4 text-sm my-2">
+									<span class="uppercase bg-theme-selection-bg text-theme-accent px-2 py-1 rounded shadow-sm transition-shadow duration-300">
 										{post.data.section}
 									</span>
-									<span class="post-date">
-										<FormattedDate
-											date={post.data.pubDate}
-										/>
+									<span class="text-theme-text opacity-80">
+										<FormattedDate date={post.data.date} />
 									</span>
 								</div>
-								<p class="post-description">
+								<p class="mt-2 leading-relaxed text-theme-text">
 									{post.data.description}
 								</p>
 							</a>
@@ -107,159 +122,25 @@ const sections = [
 					))}
 				</ul>
 			) : (
-				<p>No articles published yet. Check back soon!</p>
+				<p class="text-theme-text">
+					No articles published yet. Check back soon!
+				</p>
 			)
 		}
 	</section>
 </ContentPage>
 
 <style>
-	.hero {
-		text-align: center;
-		padding: 2rem 0;
-		margin-bottom: 2rem;
-	}
-
-	.tagline {
-		font-size: 1.25rem;
-		color: var(--theme-accent);
-		margin: 0.5rem 0 1.5rem;
-	}
-
-	.intro {
-		max-width: 80%;
-		margin: 0 auto;
-		line-height: 1.6;
-	}
-
-	.main-sections {
-		margin: 3rem 0;
-	}
-
-	.section-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-		gap: 1.5rem;
-		margin-top: 1.5rem;
-	}
-
-	.section-card {
-		background-color: var(--theme-card-bg);
-		border-radius: 8px;
-		padding: 1.5rem;
-		text-decoration: none;
-		color: var(--theme-text);
-		transition:
-			transform 0.2s ease,
-			box-shadow 0.3s ease,
-			background-color 0.3s ease;
-		box-shadow: var(--box-shadow-small);
-		border: 1px solid var(--theme-border);
-	}
-
-	.section-card:hover,
-	.section-card:focus {
-		transform: translateY(-4px);
-		box-shadow: var(--box-shadow-hover);
-	}
-
-	.section-card:focus-visible {
-		outline: 2px solid var(--theme-accent);
-		outline-offset: 2px;
-	}
-
-	.section-icon {
-		font-size: 2.5rem;
-		margin-bottom: 1rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: var(--theme-selection-bg);
-		padding: 1rem;
-		border-radius: 50%;
-		box-shadow: var(--box-shadow-small);
-		width: 70px;
-		height: 70px;
-	}
-
-	.section-icon svg {
+	.section-icon-svg-wrapper svg {
 		width: 32px;
 		height: 32px;
 		stroke: var(--theme-accent);
 		transition: all 0.2s ease;
 	}
 
-	.section-card:hover .section-icon svg,
-	.section-card:focus .section-icon svg {
+	.block:hover .section-icon-svg-wrapper svg,
+	.block:focus .section-icon-svg-wrapper svg {
 		stroke: var(--theme-accent-dark);
 		transform: scale(1.1);
-	}
-
-	.section-card h4 {
-		margin: 0.5rem 0;
-		color: var(--theme-accent);
-		font-size: 1.2rem;
-		font-weight: 700;
-	}
-
-	.section-card p {
-		margin: 0.5rem 0 0;
-		font-size: 1rem;
-		line-height: 1.5;
-		color: var(--theme-text);
-	}
-
-	.latest-posts {
-		margin: 3rem 0;
-	}
-
-	.post-list {
-		list-style-type: none;
-		padding: 0;
-		margin: 2rem 0;
-	}
-
-	.post-item {
-		margin-bottom: 2rem;
-		border-bottom: 1px solid var(--theme-border);
-		padding-bottom: 1rem;
-	}
-
-	.post-item a {
-		text-decoration: none;
-		color: inherit;
-		display: block;
-	}
-
-	.post-item a:hover h4 {
-		color: var(--theme-accent);
-	}
-
-	.post-meta {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		font-size: 0.85rem;
-		margin: 0.5rem 0;
-	}
-
-	.post-section {
-		text-transform: uppercase;
-		background-color: var(--theme-selection-bg);
-		color: var(--theme-accent);
-		padding: 0.25rem 0.5rem;
-		border-radius: 4px;
-		box-shadow: var(--box-shadow-small);
-		transition: box-shadow 0.3s ease;
-	}
-
-	.post-date {
-		color: var(--theme-text);
-		opacity: 0.8;
-	}
-
-	.post-description {
-		margin-top: 0.5rem;
-		line-height: 1.5;
 	}
 </style>

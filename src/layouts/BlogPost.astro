@@ -1,291 +1,93 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import { Picture } from "astro:assets";
+import "../styles/base.css";
+import {
+	getRelatedPosts,
+	type PostFrontmatter,
+	type Post as PostForUtil,
+	type RelatedPost,
+} from "../utils/relatedPosts";
+import RelatedPosts from "../components/RelatedPosts.astro";
 
-type Props = CollectionEntry<"blog">["data"] & { tags?: string[] };
+const frontmatterProps = Astro.props as CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate, heroImage, image, tags } =
-	Astro.props;
-
-// Use heroImage or fallback to image property
-const displayImage = heroImage || image;
-
-// Get the article content that will be rendered
-// This is needed to extract the headings for the TOC
+// Define these early as they are used in the template regardless of related posts
+const displayImage = frontmatterProps.heroImage;
 const articleContent = await Astro.slots.render("default");
+
+let relatedPostsData: RelatedPost[] = [];
+const currentSlugFromParams = Astro.params.slug;
+
+if (
+	typeof currentSlugFromParams === "string" &&
+	currentSlugFromParams.length > 0
+) {
+	const actualCurrentSlug = currentSlugFromParams;
+	const allBlogEntries = await getCollection("blog");
+
+	const allPostsForUtil: PostForUtil[] = allBlogEntries.map((entry) => ({
+		frontmatter: {
+			title: entry.data.title,
+			date: new Date(entry.data.date),
+			slug: entry.id,
+			description: entry.data.description,
+			category: entry.data.category as string | undefined,
+			tags: entry.data.tags,
+			heroImage: entry.data.heroImage,
+		},
+		url: `/blog/${entry.id}/`,
+	}));
+
+	const currentPostFrontmatter: PostFrontmatter = {
+		slug: actualCurrentSlug,
+		title: frontmatterProps.title,
+		description: frontmatterProps.description,
+		date: new Date(frontmatterProps.date),
+		category: frontmatterProps.category as string | undefined,
+		tags: frontmatterProps.tags,
+		heroImage: frontmatterProps.heroImage,
+	};
+
+	const currentPostForUtil: PostForUtil = {
+		frontmatter: currentPostFrontmatter,
+		url: Astro.url.pathname,
+	};
+
+	relatedPostsData = getRelatedPosts(currentPostForUtil, allPostsForUtil, 3);
+} else {
+	console.warn(
+		"Related posts: Current page slug is undefined or invalid. Skipping related posts.",
+	);
+}
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-				max-height: 70vh;
-				overflow: hidden;
-				margin-bottom: 2em;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: var(--theme-text);
-				font-size: clamp(
-					1em,
-					calc(
-						1em + 0.05 *
-							(
-								(100vw - var(--fluid-min-width) px) /
-									(
-										var(--fluid-max-width) -
-											var(--fluid-min-width)
-									)
-							)
-					),
-					1.05em
-				);
-				line-height: 1.75;
-				transition: var(--theme-transition);
-			}
-			.prose :global(h2) {
-				margin-top: 2em;
-				margin-bottom: 0.5em;
-			}
-			.prose :global(h3) {
-				margin-top: 1.5em;
-				margin-bottom: 0.5em;
-			}
-			.prose :global(img) {
-				margin: 2em auto;
-				border-radius: 8px;
-				box-shadow: 0 2px 6px rgba(var(--gray), 20%);
-			}
-			.prose :global(pre) {
-				border-radius: 8px;
-				padding: 1.2em 1.4em;
-				margin: 1.5em 0 2em;
-				background-color: var(--code-bg);
-				color: var(--code-fg);
-				transition: var(--theme-transition);
-			}
-			.prose :global(blockquote) {
-				margin: 2em 0;
-				padding: 1.5em 2em;
-				background: var(--theme-blockquote-bg);
-				border-radius: 8px;
-				font-style: italic;
-				line-height: 1.6;
-				transition: var(--theme-transition);
-			}
-			.prose :global(ul),
-			.prose :global(ol) {
-				margin: 1em 0 2em 2em;
-			}
-			.prose :global(li) {
-				margin-bottom: 0.5em;
-				line-height: 1.6;
-			}
-			.title {
-				margin-bottom: 1.5em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1.2;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-				letter-spacing: -0.02em;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: var(--theme-text);
-				opacity: 0.8;
-				font-size: clamp(
-					0.8em,
-					calc(
-						0.8em + 0.1 *
-							(
-								(100vw - var(--fluid-min-width) px) /
-									(
-										var(--fluid-max-width) -
-											var(--fluid-min-width)
-									)
-							)
-					),
-					0.9em
-				);
-				transition: var(--theme-transition);
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-			.tags {
-				margin-top: 1.2em;
-				font-size: clamp(
-					0.8em,
-					calc(
-						0.8em + 0.1 *
-							(
-								(100vw - var(--fluid-min-width) px) /
-									(
-										var(--fluid-max-width) -
-											var(--fluid-min-width)
-									)
-							)
-					),
-					0.9em
-				);
-				color: var(--theme-text);
-				opacity: 0.8;
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.5em;
-				justify-content: center;
-				transition: var(--theme-transition);
-			}
-			.tags span {
-				display: inline-block;
-				padding: 0.2em 0.6em;
-				background-color: var(--theme-code-bg);
-				border-radius: 4px;
-				transition: var(--theme-transition);
-			}
-
-			hr {
-				border: none;
-				border-top: 2px solid var(--theme-border);
-				margin: 1em 0;
-				transition: var(--theme-transition);
-			}
-
-			/* Add styling for table of contents appearance */
-			.blog-content {
-				display: flex;
-				flex-direction: column;
-				gap: 2rem;
-			}
-
-			/* On larger screens, we can show TOC in a sidebar */
-			@media (min-width: 1200px) {
-				.blog-content {
-					flex-direction: row;
-					align-items: flex-start;
-					gap: 3rem;
-				}
-
-				.toc-wrapper {
-					position: sticky;
-					top: 2rem;
-					width: 280px;
-					flex-shrink: 0;
-					align-self: flex-start;
-				}
-
-				.content-wrapper {
-					flex: 1;
-				}
-			}
-
-			/* Responsive adjustments */
-			@media (max-width: 768px) {
-				.prose {
-					padding: 0.8em;
-					line-height: 1.7;
-				}
-
-				.title {
-					padding: 0.8em 0;
-				}
-
-				.hero-image {
-					margin-bottom: 1.5em;
-				}
-
-				.prose :global(h2) {
-					margin-top: 1.8em;
-				}
-
-				.prose :global(h3) {
-					margin-top: 1.3em;
-				}
-
-				.prose :global(img) {
-					margin: 1.5em auto;
-				}
-
-				.prose :global(pre) {
-					margin: 1.2em 0 1.8em;
-				}
-			}
-
-			@media (max-width: 480px) {
-				.prose {
-					padding: 0.6em;
-					line-height: 1.65;
-				}
-
-				.title {
-					padding: 0.6em 0;
-					margin-bottom: 1.2em;
-				}
-
-				.hero-image {
-					margin-bottom: 1.2em;
-					max-height: 50vh;
-				}
-
-				.prose :global(blockquote) {
-					padding: 1.2em 1.4em;
-					margin: 1.5em 0;
-				}
-
-				.prose :global(ul),
-				.prose :global(ol) {
-					margin: 1em 0 1.5em 1.5em;
-				}
-
-				.prose :global(li) {
-					margin-bottom: 0.4em;
-				}
-
-				.tags {
-					margin-top: 1em;
-					gap: 0.4em;
-				}
-
-				.tags span {
-					padding: 0.15em 0.5em;
-				}
-			}
-		</style>
+		<BaseHead
+			title={frontmatterProps.title}
+			description={frontmatterProps.description}
+		/>
 	</head>
 
-	<body>
+	<body
+		class="bg-theme-bg text-theme-text transition-theme min-h-screen flex flex-col bg-[linear-gradient(var(--gray-gradient))] bg-no-repeat bg-[length:100%_600px]"
+	>
 		<Header />
-		<main>
+		<main class="flex-1 w-full max-w-full mx-0">
 			<article>
-				<div class="hero-image">
-					{
-						displayImage && (
+				{
+					displayImage && (
+						<div class="w-full max-h-[70vh] overflow-hidden mb-6 md:mb-8">
 							<Picture
 								src={displayImage}
-								alt={title}
+								alt={frontmatterProps.title}
 								width={1020}
 								height={510}
 								formats={["avif", "webp", "jpeg"]}
@@ -294,39 +96,67 @@ const articleContent = await Astro.slots.render("default");
 								fit="cover"
 								position="center"
 								layout="constrained"
+								class="mx-auto rounded-xl shadow-DEFAULT"
 							/>
-						)
-					}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
+						</div>
+					)
+				}
+
+				<div
+					class="max-w-[720px] mx-auto px-4 md:px-6 text-theme-text transition-theme"
+				>
+					<div class="mb-6 md:mb-8 py-4 md:py-6 text-center">
+						<div
+							class="text-theme-text opacity-80 text-sm md:text-base mb-2"
+						>
+							<FormattedDate
+								date={new Date(frontmatterProps.date)}
+							/>
 							{
-								updatedDate && (
-									<div class="last-updated-on">
+								frontmatterProps.updatedDate && (
+									<div class="italic mt-1">
 										Last updated on{" "}
-										<FormattedDate date={updatedDate} />
+										<FormattedDate
+											date={
+												new Date(
+													frontmatterProps.updatedDate,
+												)
+											}
+										/>
 									</div>
 								)
 							}
 						</div>
-						<h1>{title}</h1>
-						<hr />
+
+						<h1
+							class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
+						>
+							{frontmatterProps.title}
+						</h1>
+
+						<hr
+							class="border-0 border-t-2 border-theme-border my-4 w-1/2 mx-auto transition-theme"
+						/>
+
 						{
-							tags && tags.length > 0 && (
-								<div class="tags">
-									{tags.map((tag) => (
-										<span>#{tag}</span>
-									))}
-								</div>
-							)
+							frontmatterProps.tags &&
+								frontmatterProps.tags.length > 0 && (
+									<div class="flex flex-wrap gap-2 justify-center mt-4 text-sm text-theme-text opacity-80">
+										{frontmatterProps.tags.map((tag) => (
+											<span class="inline-block px-2 py-1 bg-theme-code-bg rounded-md transition-theme">
+												#{tag}
+											</span>
+										))}
+									</div>
+								)
 						}
 					</div>
 
-					<div class="blog-content">
+					<div class="flex flex-col xl:flex-row xl:gap-12">
 						{/* Table of Contents for desktop and larger screens */}
-						<div class="toc-wrapper">
+						<div
+							class="xl:w-64 xl:flex-shrink-0 xl:sticky xl:top-8 xl:self-start mb-8 xl:mb-0"
+						>
 							<TableOfContents
 								content={articleContent}
 								headingLevels={[2, 3]}
@@ -334,12 +164,20 @@ const articleContent = await Astro.slots.render("default");
 							/>
 						</div>
 
-						<div class="content-wrapper">
+						<div class="flex-1 prose dark:prose-invert max-w-none">
 							<slot />
 						</div>
 					</div>
 				</div>
 			</article>
+
+			{
+				relatedPostsData && relatedPostsData.length > 0 && (
+					<div class="max-w-[720px] mx-auto px-4 md:px-6 mt-8 mb-8">
+						<RelatedPosts relatedPosts={relatedPostsData} />
+					</div>
+				)
+			}
 		</main>
 		<Footer />
 	</body>

@@ -2,10 +2,10 @@
 ---
 title: "Automating Daily Tasks with Python: A Beginner's Guide"
 description: "Learn how to automate repetitive daily tasks using simple Python scripts to save time and reduce errors."
-pubDate: 2023-10-30T10:00:00Z
+date: 2023-10-30T10:00:00Z
 slug: "automating-daily-tasks"
 author: "Domdhi"
-section: "automate"
+category: "automate"
 tags: ["automation", "python", "productivity"]
 image: "/images/python-automation.png"
 ---

@@ -1,199 +1,105 @@
 ---
 import ContentPage from "../layouts/ContentPage.astro";
-import { getCollection } from "astro:content";
-import FormattedDate from "../components/FormattedDate.astro";
-import type { CollectionEntry } from "astro:content";
-import type { BlogSchema } from "../types";
+import { filterPostsBySection } from "../utils/blogFilters";
+import LatestArticlesFeed from "../components/LatestArticlesFeed.astro";
 
-// Get blog entries for the "create" section
-const allPosts = await getCollection("blog");
-// Type assertion for the schema
-interface BlogPost extends CollectionEntry<"blog"> {
-    data: BlogSchema;
-    slug: string;
-}
-// Filter by section and cast
-const createPosts = allPosts
-    .filter((post) => {
-        const data = post.data as BlogSchema;
-        return data.section === "create";
-    })
-    .sort(
-        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-    ) as BlogPost[];
+// Get create section posts using our utility function
+const createPosts = await filterPostsBySection("create");
+
+// Section description
+const sectionDescription =
+    "Explore creative tools, techniques, and resources for digital art, design, and content creation with a focus on AI-assisted creativity.";
 ---
 
-<ContentPage
-    title="Create"
-    description="Tools and resources to help you build your next digital creation."
->
-    <h2>Creation Tools & Resources</h2>
+<ContentPage title="Create" description={sectionDescription}>
+    <h2 class="text-3xl font-bold text-theme-text mb-6">
+        Creation Tools & Resources
+    </h2>
 
-    <p>
-        This section is dedicated to helping you build and create amazing
-        digital projects. Whether you're designing websites, crafting content,
-        or building applications, we've assembled resources to support your
-        creative journey.
-    </p>
+    <div class="my-6 leading-relaxed text-theme-text">
+        <p class="mb-4">
+            Welcome to the <strong class="font-semibold">Create</strong> section,
+            where I explore the intersection of technology and creativity. This space
+            is dedicated to sharing resources, techniques, and insights to help you
+            unleash your creative potential through digital tools.
+        </p>
 
-    <p>
-        Explore tools, tutorials, and templates that will streamline your
-        workflow and inspire your next creation.
-    </p>
+        <p class="mt-4">
+            In today's world, AI and digital technologies are transforming how
+            we approach creative work - from generating initial ideas to
+            executing complex designs. Here, I document my own creative journey
+            and the tools that make it possible.
+        </p>
+    </div>
 
-    <div class="creation-categories">
-        <div class="category">
-            <h3>Web Design</h3>
-            <p>Resources for creating beautiful, functional websites</p>
-            <ul>
-                <li>Design principles</li>
-                <li>UI/UX guidelines</li>
-                <li>Template resources</li>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 my-8">
+        <div
+            class="bg-theme-card-bg p-6 rounded-lg shadow-md border border-theme-border transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+        >
+            <h3 class="text-xl font-semibold text-theme-accent mt-0 mb-3">
+                Digital Art
+            </h3>
+            <p class="text-theme-text leading-relaxed mb-3">
+                Resources for creating visual artwork using digital tools
+            </p>
+            <ul class="list-disc pl-5 space-y-1 text-theme-text">
+                <li>AI image generation techniques</li>
+                <li>Digital painting workflows</li>
+                <li>Visual composition guidelines</li>
             </ul>
         </div>
 
-        <div class="category">
-            <h3>Content Creation</h3>
-            <p>Tools for developing engaging content</p>
-            <ul>
-                <li>Writing assistance</li>
-                <li>Media creation</li>
-                <li>Editorial guides</li>
+        <div
+            class="bg-theme-card-bg p-6 rounded-lg shadow-md border border-theme-border transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+        >
+            <h3 class="text-xl font-semibold text-theme-accent mt-0 mb-3">
+                Content Creation
+            </h3>
+            <p class="text-theme-text leading-relaxed mb-3">
+                Tools for developing engaging written and visual content
+            </p>
+            <ul class="list-disc pl-5 space-y-1 text-theme-text">
+                <li>AI writing assistance</li>
+                <li>Content planning strategies</li>
+                <li>Multimedia content workflows</li>
             </ul>
         </div>
 
-        <div class="category">
-            <h3>Development</h3>
-            <p>Resources for building robust applications</p>
-            <ul>
-                <li>Framework guides</li>
-                <li>Development environments</li>
-                <li>Code generators</li>
+        <div
+            class="bg-theme-card-bg p-6 rounded-lg shadow-md border border-theme-border transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+        >
+            <h3 class="text-xl font-semibold text-theme-accent mt-0 mb-3">
+                Design Systems
+            </h3>
+            <p class="text-theme-text leading-relaxed mb-3">
+                Resources for creating cohesive design experiences
+            </p>
+            <ul class="list-disc pl-5 space-y-1 text-theme-text">
+                <li>Component-based design</li>
+                <li>Design tokens and variables</li>
+                <li>Style guide creation</li>
             </ul>
         </div>
     </div>
 
-    <p class="cta">
-        Ready to start creating? Explore our resources above or <a
-            href="/contact">contact us</a
-        >
-        if you need specialized guidance for your project.
+    <p
+        class="text-center mt-8 font-semibold p-6 bg-theme-card-bg rounded-lg shadow-md border border-theme-border text-theme-text"
+    >
+        Ready to explore your creative potential with modern tools? Browse the
+        resources above or <a
+            href="/contact"
+            class="text-theme-accent no-underline hover:underline hover:text-theme-accent-dark"
+            >reach out</a
+        > if you have questions or suggestions.
     </p>
 
-    <h3>Latest Creation Articles</h3>
-    {
-        createPosts.length > 0 ? (
-            <ul class="post-list">
-                {createPosts.map((post) => (
-                    <li class="post-item">
-                        <a href={`/blog/${post.slug}`}>
-                            <h4>{post.data.title}</h4>
-                            <p class="post-date">
-                                <FormattedDate date={post.data.pubDate} />
-                            </p>
-                            <p class="post-description">
-                                {post.data.description}
-                            </p>
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        ) : (
-            <p>No creation articles yet. Check back soon!</p>
-        )
-    }
+    <!-- Use our new LatestArticlesFeed component -->
+    <LatestArticlesFeed
+        posts={createPosts}
+        title="Latest Creation Articles"
+        showImages={true}
+        limit={3}
+    />
 </ContentPage>
 
-<style>
-    .creation-categories {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        margin: 2rem 0;
-    }
-
-    .category {
-        background-color: var(--theme-card-bg);
-        border-radius: 8px;
-        padding: 1.5rem;
-        box-shadow: var(--box-shadow-small);
-        border: 1px solid var(--theme-border);
-        transition: var(--theme-transition);
-    }
-
-    .category:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--box-shadow-hover);
-    }
-
-    .category h3 {
-        margin-top: 0;
-        color: var(--theme-accent);
-    }
-
-    .cta {
-        text-align: center;
-        margin-top: 2rem;
-        font-weight: bold;
-        padding: 1.5rem;
-        background-color: var(--theme-card-bg);
-        border-radius: 8px;
-        box-shadow: var(--box-shadow);
-        border: 1px solid var(--theme-border);
-    }
-
-    .cta a {
-        color: var(--theme-accent);
-        text-decoration: none;
-    }
-
-    .cta a:hover {
-        text-decoration: underline;
-        color: var(--theme-accent-dark);
-    }
-
-    .post-list {
-        list-style-type: none;
-        padding: 0;
-        margin: 2rem 0;
-    }
-
-    .post-item {
-        margin-bottom: 2rem;
-        border-bottom: 1px solid var(--theme-border);
-        padding-bottom: 1rem;
-        transition: transform 0.2s ease;
-    }
-
-    .post-item:hover {
-        transform: translateY(-2px);
-    }
-
-    .post-item a {
-        text-decoration: none;
-        color: inherit;
-        display: block;
-        padding: 1rem;
-        border-radius: 8px;
-        transition: box-shadow 0.3s ease;
-    }
-
-    .post-item a:hover {
-        box-shadow: var(--box-shadow-small);
-        background-color: var(--theme-selection-bg);
-    }
-
-    .post-item a:hover h4 {
-        color: var(--theme-accent);
-    }
-
-    .post-date {
-        font-size: 0.9rem;
-        color: rgb(var(--gray));
-        margin: 0.25rem 0;
-    }
-
-    .post-description {
-        margin-top: 0.5rem;
-    }
-</style>
+<style></style>

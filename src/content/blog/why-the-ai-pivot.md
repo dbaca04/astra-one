@@ -1,10 +1,10 @@
 ---
 title: "Charting the Course: Beginning My AI Journey on Domdhi.com"
 description: "An introduction to Domdhi.com's new focus on AI exploration, my personal motivation, and what you can expect from this AI Hub."
-pubDate: 2023-10-29T10:00:00Z
+date: 2023-10-29T10:00:00Z
 slug: "beginning-my-ai-journey" # Renamed slug slightly to fit the new title better
 author: "Domdhi"
-section: "journal"
+category: "journal"
 tags: ["personal", "AI journey", "site update"]
 image: "/images/ai-journey.png"
 ---

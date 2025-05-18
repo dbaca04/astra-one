@@ -1,51 +1,45 @@
 ---
 import ContentPage from "../layouts/ContentPage.astro";
-import { getCollection } from "astro:content";
-import FormattedDate from "../components/FormattedDate.astro";
-import type { CollectionEntry } from "astro:content";
-import type { BlogSchema } from "../types";
+import { filterPostsBySection } from "../utils/blogFilters";
+import LatestArticlesFeed from "../components/LatestArticlesFeed.astro";
 
-// Get blog entries for the "automate" section
-const allPosts = await getCollection("blog");
-// Type assertion for the schema
-interface BlogPost extends CollectionEntry<"blog"> {
-    data: BlogSchema;
-    slug: string;
-}
-// Filter by section and cast
-const automatePosts = allPosts
-    .filter((post) => {
-        const data = post.data as BlogSchema;
-        return data.section === "automate";
-    })
-    .sort(
-        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-    ) as BlogPost[];
+// Get automate section posts using our utility function
+const automatePosts = await filterPostsBySection("automate");
+
+// Section description
+const sectionDescription =
+    "Discover tools, scripts, and techniques to automate repetitive tasks and streamline your digital workflows for increased productivity.";
 ---
 
-<ContentPage
-    title="Automate"
-    description="Discover automation solutions to streamline your workflow and increase productivity."
->
-    <h2>Automation Solutions</h2>
+<ContentPage title="Automate" description={sectionDescription}>
+    <h2 class="text-3xl font-bold text-theme-text mb-6">
+        Automation Solutions
+    </h2>
 
-    <p>
-        Automation allows you to work smarter, not harder. In this section, we
-        explore tools, techniques, and best practices to automate repetitive
-        tasks, workflows, and processes in your projects.
-    </p>
+    <div class="my-6 leading-relaxed text-theme-text">
+        <p class="mb-4">
+            Welcome to the <strong class="font-semibold">Automate</strong> section,
+            where I explore ways to eliminate repetitive tasks and build efficient
+            workflows. This space is dedicated to sharing automation solutions that
+            can save you time and reduce errors in your daily digital life.
+        </p>
 
-    <p>
-        Whether you're a developer looking to streamline your workflow, a
-        content creator seeking to optimize your publication process, or a
-        professional wanting to increase productivity, you'll find valuable
-        automation resources here.
-    </p>
+        <p class="mt-4">
+            From simple scripts to complex workflow systems, automation allows
+            you to focus on creative and strategic work while letting computers
+            handle the tedious tasks. Here, I document my automation journey and
+            share practical solutions you can implement yourself.
+        </p>
+    </div>
 
-    <div class="automation-types">
-        <div class="automation-type">
-            <h3>Development Automation</h3>
-            <ul>
+    <div class="grid md:grid-cols-2 gap-8 my-8">
+        <div
+            class="bg-theme-card-bg border-l-4 border-theme-accent p-6 rounded-r-lg shadow-md transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+        >
+            <h3 class="text-xl font-semibold text-theme-accent mt-2 mb-3">
+                Development Automation
+            </h3>
+            <ul class="list-disc pl-5 space-y-1 text-theme-text">
                 <li>CI/CD pipelines</li>
                 <li>Code generation tools</li>
                 <li>Testing automation</li>
@@ -53,202 +47,89 @@ const automatePosts = allPosts
             </ul>
         </div>
 
-        <div class="automation-type">
-            <h3>Content Automation</h3>
-            <ul>
-                <li>Scheduled publishing</li>
-                <li>Content transformation tools</li>
-                <li>Media processing</li>
-                <li>SEO automation</li>
+        <div
+            class="bg-theme-card-bg border-l-4 border-theme-accent p-6 rounded-r-lg shadow-md transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+        >
+            <h3 class="text-xl font-semibold text-theme-accent mt-2 mb-3">
+                Personal Productivity
+            </h3>
+            <ul class="list-disc pl-5 space-y-1 text-theme-text">
+                <li>Task scheduling</li>
+                <li>Email and notification management</li>
+                <li>Data aggregation and reporting</li>
+                <li>File organization scripts</li>
             </ul>
         </div>
     </div>
 
-    <h3>Getting Started with Automation</h3>
-    <ol class="steps">
-        <li>
-            <strong>Identify repetitive tasks</strong>
-            <p>
+    <h3 class="text-2xl font-bold text-theme-text mt-10 mb-5">
+        Getting Started with Automation
+    </h3>
+    <ol class="list-decimal pl-5 my-8 space-y-6 text-theme-text">
+        <li class="leading-relaxed">
+            <strong class="block font-semibold text-theme-accent mb-1"
+                >Identify repetitive tasks</strong
+            >
+            <p class="m-0">
                 Look for tasks you perform frequently that follow a predictable
                 pattern.
             </p>
         </li>
-        <li>
-            <strong>Choose the right tools</strong>
-            <p>
+        <li class="leading-relaxed">
+            <strong class="block font-semibold text-theme-accent mb-1"
+                >Choose the right tools</strong
+            >
+            <p class="m-0">
                 Select automation tools that integrate well with your existing
                 workflow.
             </p>
         </li>
-        <li>
-            <strong>Start small</strong>
-            <p>
+        <li class="leading-relaxed">
+            <strong class="block font-semibold text-theme-accent mb-1"
+                >Start small</strong
+            >
+            <p class="m-0">
                 Begin with simple automations and gradually tackle more complex
                 processes.
             </p>
         </li>
-        <li>
-            <strong>Monitor and refine</strong>
-            <p>
+        <li class="leading-relaxed">
+            <strong class="block font-semibold text-theme-accent mb-1"
+                >Monitor and refine</strong
+            >
+            <p class="m-0">
                 Regularly evaluate your automations and improve them over time.
             </p>
         </li>
     </ol>
 
-    <div class="featured-tool">
-        <h3>Featured Automation Tool: GitHub Actions</h3>
-        <p>
-            GitHub Actions makes it easy to automate all your software
-            workflows. Build, test, and deploy your code right from GitHub. Make
-            code reviews, branch management, and issue triaging work the way you
-            want.
+    <div
+        class="bg-theme-card-bg rounded-lg p-6 mt-8 shadow-md border border-theme-border transition-shadow duration-300 hover:shadow-lg text-theme-text"
+    >
+        <h3 class="text-xl font-semibold text-theme-accent mt-0 mb-3">
+            Featured Automation Tool: Python Scripts
+        </h3>
+        <p class="leading-relaxed mb-4">
+            Python provides a powerful yet accessible language for automation.
+            With its extensive standard library and third-party packages, you
+            can automate file operations, web interactions, data processing, and
+            much more without needing complex development environments.
         </p>
-        <a href="https://github.com/features/actions" target="_blank"
-            >Learn more about GitHub Actions →</a
+        <a
+            href="https://docs.python.org/3/library/index.html"
+            target="_blank"
+            class="inline-block mt-4 font-medium text-theme-accent no-underline hover:underline hover:text-theme-accent-dark transition-colors duration-200"
+            >Explore Python's Standard Library →</a
         >
     </div>
 
-    <h3>Latest Automation Articles</h3>
-    {
-        automatePosts.length > 0 ? (
-            <ul class="post-list">
-                {automatePosts.map((post) => (
-                    <li class="post-item">
-                        <a href={`/blog/${post.slug}`}>
-                            <h4>{post.data.title}</h4>
-                            <p class="post-date">
-                                <FormattedDate date={post.data.pubDate} />
-                            </p>
-                            <p class="post-description">
-                                {post.data.description}
-                            </p>
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        ) : (
-            <p>No automation articles yet. Check back soon!</p>
-        )
-    }
+    <!-- Use our new LatestArticlesFeed component -->
+    <LatestArticlesFeed
+        posts={automatePosts}
+        title="Latest Automation Articles"
+        showImages={true}
+        limit={3}
+    />
 </ContentPage>
 
-<style>
-    .automation-types {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        margin: 2rem 0;
-    }
-
-    .automation-type {
-        background-color: var(--theme-card-bg);
-        border-left: 4px solid var(--theme-accent);
-        padding: 1.5rem;
-        border-radius: 0 8px 8px 0;
-        box-shadow: var(--box-shadow-small);
-        transition: var(--theme-transition);
-    }
-
-    .automation-type:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--box-shadow-hover);
-    }
-
-    .automation-type h3 {
-        margin-top: 0.5rem;
-        color: var(--theme-accent);
-    }
-
-    .steps {
-        margin: 2rem 0;
-        padding-left: 1rem;
-    }
-
-    .steps li {
-        margin-bottom: 1.5rem;
-    }
-
-    .steps strong {
-        display: block;
-        margin-bottom: 0.25rem;
-        color: var(--theme-accent);
-    }
-
-    .steps p {
-        margin: 0;
-    }
-
-    .featured-tool {
-        background-color: var(--theme-card-bg);
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin-top: 2rem;
-        box-shadow: var(--box-shadow);
-        border: 1px solid var(--theme-border);
-        transition: var(--theme-transition);
-    }
-
-    .featured-tool h3 {
-        margin-top: 0;
-        color: var(--theme-accent);
-    }
-
-    .featured-tool a {
-        display: inline-block;
-        margin-top: 1rem;
-        font-weight: 500;
-        color: var(--theme-accent);
-        text-decoration: none;
-        transition: color 0.2s ease;
-    }
-
-    .featured-tool a:hover {
-        color: var(--theme-accent-dark);
-        text-decoration: underline;
-    }
-
-    .post-list {
-        list-style-type: none;
-        padding: 0;
-        margin: 2rem 0;
-    }
-
-    .post-item {
-        margin-bottom: 2rem;
-        border-bottom: 1px solid var(--theme-border);
-        padding-bottom: 1rem;
-        transition: transform 0.2s ease;
-    }
-
-    .post-item:hover {
-        transform: translateY(-2px);
-    }
-
-    .post-item a {
-        text-decoration: none;
-        color: inherit;
-        display: block;
-        padding: 1rem;
-        border-radius: 8px;
-        transition: box-shadow 0.3s ease;
-    }
-
-    .post-item a:hover {
-        box-shadow: var(--box-shadow-small);
-        background-color: var(--theme-selection-bg);
-    }
-
-    .post-item a:hover h4 {
-        color: var(--theme-accent);
-    }
-
-    .post-date {
-        font-size: 0.9rem;
-        color: rgb(var(--gray));
-        margin: 0.25rem 0;
-    }
-
-    .post-description {
-        margin-top: 0.5rem;
-    }
-</style>
+<style></style>

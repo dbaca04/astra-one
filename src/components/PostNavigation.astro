@@ -25,295 +25,94 @@ const getNextSection = () => {
 };
 ---
 
-<nav class="post-navigation" aria-label={title || "Post Navigation"}>
-    {title && <h3 class="nav-title">{title}</h3>}
+<nav
+    class="mt-12 pt-8 border-t border-theme-border"
+    aria-label={title || "Post Navigation"}
+>
+    {
+        title && (
+            <h3 class="text-center mb-6 text-xl text-theme-accent font-bold">
+                {title}
+            </h3>
+        )
+    }
 
-    <div class="nav-links">
+    <div class="flex justify-between gap-6 w-full">
         {
             prevPost ? (
-                <a href={`/blog/${prevPost.id}`} class="prev-post" rel="prev">
-                    <span class="nav-arrow" aria-hidden="true">
+                <a
+                    href={`/blog/${prevPost.id}`}
+                    class="group flex items-center flex-1 max-w-[calc(50%-0.75rem)] no-underline text-theme-text p-4 rounded-lg bg-theme-selection-bg dark:bg-gray-800 border border-theme-border dark:border-gray-700 transition-all duration-200 ease-in-out relative overflow-hidden shadow-sm hover:-translate-y-0.5 hover:shadow-lg hover:text-theme-accent hover:border-theme-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-theme-accent focus-visible:ring-offset-2"
+                    rel="prev"
+                >
+                    <div class="absolute top-0 left-0 h-full w-1 bg-theme-accent opacity-70 group-hover:opacity-100 transition-opacity duration-200" />
+                    <span
+                        class="text-2xl font-bold mx-2 flex-shrink-0 text-theme-accent transition-transform duration-300 ease-in-out group-hover:-translate-x-1"
+                        aria-hidden="true"
+                    >
                         ←
                     </span>
-                    <div class="nav-info">
-                        <span class="nav-label">
+                    <div class="flex flex-col min-w-0 flex-1">
+                        <span class="flex flex-col text-xs uppercase tracking-wider text-theme-text/80 dark:text-gray-400 mb-1 font-semibold">
                             <span class="nav-direction">Previous</span>
                             {isSectionNav && getPrevSection() && (
-                                <span class="nav-section">
+                                <span class="font-normal opacity-80">
                                     in {getPrevSection()}
                                 </span>
                             )}
                         </span>
-                        <span class="nav-post-title">
+                        <span class="font-medium w-full whitespace-nowrap overflow-hidden text-ellipsis text-sm group-hover:text-theme-accent text-theme-text">
                             {prevPost.data.title}
                         </span>
                     </div>
                 </a>
             ) : (
-                <div class="nav-empty prev-empty" aria-hidden="true" />
+                <div
+                    class="flex-1 max-w-[calc(50%-0.75rem)]"
+                    aria-hidden="true"
+                />
             )
         }
 
         {
             nextPost ? (
-                <a href={`/blog/${nextPost.id}`} class="next-post" rel="next">
-                    <div class="nav-info">
-                        <span class="nav-label">
+                <a
+                    href={`/blog/${nextPost.id}`}
+                    class="group flex items-center flex-row-reverse flex-1 max-w-[calc(50%-0.75rem)] no-underline text-theme-text p-4 rounded-lg bg-theme-selection-bg dark:bg-gray-800 border border-theme-border dark:border-gray-700 transition-all duration-200 ease-in-out relative overflow-hidden shadow-sm hover:-translate-y-0.5 hover:shadow-lg hover:text-theme-accent hover:border-theme-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-theme-accent focus-visible:ring-offset-2 text-right"
+                    rel="next"
+                >
+                    <div class="absolute top-0 right-0 h-full w-1 bg-theme-accent opacity-70 group-hover:opacity-100 transition-opacity duration-200" />
+                    <span
+                        class="text-2xl font-bold mx-2 flex-shrink-0 text-theme-accent transition-transform duration-300 ease-in-out group-hover:translate-x-1"
+                        aria-hidden="true"
+                    >
+                        →
+                    </span>
+                    <div class="flex flex-col min-w-0 flex-1 items-end">
+                        <span class="flex flex-col text-xs uppercase tracking-wider text-theme-text/80 dark:text-gray-400 mb-1 font-semibold">
                             <span class="nav-direction">Next</span>
                             {isSectionNav && getNextSection() && (
-                                <span class="nav-section">
+                                <span class="font-normal opacity-80">
                                     in {getNextSection()}
                                 </span>
                             )}
                         </span>
-                        <span class="nav-post-title">
+                        <span class="font-medium w-full whitespace-nowrap overflow-hidden text-ellipsis text-sm group-hover:text-theme-accent text-theme-text">
                             {nextPost.data.title}
                         </span>
                     </div>
-                    <span class="nav-arrow" aria-hidden="true">
-                        →
-                    </span>
                 </a>
             ) : (
-                <div class="nav-empty next-empty" aria-hidden="true" />
+                <div
+                    class="flex-1 max-w-[calc(50%-0.75rem)]"
+                    aria-hidden="true"
+                />
             )
         }
     </div>
 </nav>
 
 <style>
-    .post-navigation {
-        margin-top: 3rem;
-        padding-top: 2rem;
-        border-top: 1px solid var(--theme-border);
-    }
-
-    .nav-title {
-        text-align: center;
-        margin-bottom: 1.5rem;
-        font-size: 1.25rem;
-        color: var(--theme-accent);
-        font-weight: 700;
-    }
-
-    .nav-links {
-        display: flex;
-        justify-content: space-between;
-        gap: 1.5rem;
-        width: 100%;
-    }
-
-    .prev-post,
-    .next-post {
-        display: flex;
-        align-items: center;
-        flex: 1;
-        max-width: calc(50% - 0.75rem);
-        text-decoration: none;
-        color: var(--theme-text);
-        padding: 1rem;
-        border-radius: 0.5rem;
-        background-color: var(--theme-selection-bg);
-        border: 1px solid var(--theme-border);
-        transition: all 0.2s ease-in-out;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .prev-post::before,
-    .next-post::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        background-color: var(--theme-accent);
-        opacity: 0.7;
-        transition: opacity 0.2s ease;
-    }
-
-    .next-post::before {
-        left: auto;
-        right: 0;
-    }
-
-    .prev-post:hover,
-    .next-post:hover,
-    .prev-post:focus,
-    .next-post:focus {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        color: var(--theme-accent);
-        border-color: var(--theme-accent-secondary, var(--theme-accent));
-    }
-
-    .prev-post:hover::before,
-    .next-post:hover::before,
-    .prev-post:focus::before,
-    .next-post:focus::before {
-        opacity: 1;
-    }
-
-    .prev-post:focus-visible,
-    .next-post:focus-visible {
-        outline: 2px solid var(--theme-accent);
-        outline-offset: 2px;
-    }
-
-    .nav-arrow {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin: 0 0.5rem;
-        flex-shrink: 0;
-        color: var(--theme-accent);
-        transition: transform 0.3s ease;
-    }
-
-    .prev-post:hover .nav-arrow {
-        transform: translateX(-4px);
-    }
-
-    .next-post:hover .nav-arrow {
-        transform: translateX(4px);
-    }
-
-    .nav-info {
-        display: flex;
-        flex-direction: column;
-        min-width: 0; /* This helps with text-overflow in flex children */
-        flex: 1;
-    }
-
-    .nav-label {
-        display: flex;
-        flex-direction: column;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--theme-text-light, var(--theme-text));
-        opacity: 0.8;
-        margin-bottom: 0.25rem;
-        font-weight: 600;
-    }
-
-    .nav-section {
-        font-weight: normal;
-        opacity: 0.8;
-    }
-
-    .nav-post-title {
-        font-weight: 500;
-        width: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: 0.95rem;
-        color: var(--theme-accent);
-    }
-
-    .next-post {
-        text-align: right;
-        flex-direction: row-reverse;
-    }
-
-    .next-post .nav-info {
-        align-items: flex-end;
-    }
-
-    .nav-empty {
-        flex: 1;
-        max-width: calc(50% - 0.75rem);
-    }
-
-    /* Dark mode enhancements */
-    :global(.theme-dark) .prev-post,
-    :global(.theme-dark) .next-post {
-        background-color: var(--theme-code-bg, var(--theme-selection-bg));
-        border-color: var(--theme-code-border, var(--theme-border));
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    }
-
-    :global(.theme-dark) .prev-post:hover,
-    :global(.theme-dark) .next-post:hover,
-    :global(.theme-dark) .prev-post:focus,
-    :global(.theme-dark) .next-post:focus {
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        background-color: var(--theme-bg-offset);
-    }
-
-    :global(.theme-dark) .nav-title {
-        color: var(--theme-accent-secondary, var(--theme-accent));
-    }
-
-    :global(.theme-dark) .nav-post-title {
-        color: var(--theme-accent-secondary, var(--theme-accent));
-    }
-
-    :global(.theme-dark) .nav-arrow {
-        color: var(--theme-accent-secondary, var(--theme-accent));
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .nav-links {
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .prev-post,
-        .next-post,
-        .nav-empty {
-            max-width: 100%;
-            width: 100%;
-        }
-
-        .next-post .nav-info {
-            align-items: flex-start;
-        }
-
-        .next-post {
-            text-align: left;
-            flex-direction: row;
-        }
-
-        .nav-empty.prev-empty {
-            display: none;
-        }
-
-        .nav-empty.next-empty {
-            display: none;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .post-navigation {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-        }
-
-        .nav-title {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-
-        .prev-post,
-        .next-post {
-            padding: 0.75rem;
-        }
-
-        .nav-arrow {
-            font-size: 1.25rem;
-            margin: 0 0.3rem;
-        }
-
-        .nav-label {
-            font-size: 0.7rem;
-        }
-
-        .nav-post-title {
-            font-size: 0.85rem;
-        }
-    }
+    /* Minimal style if any truly custom behavior is needed that Tailwind can't cover easily */
+    /* For example, complex pseudo-element interactions not feasible with Tailwind alone */
 </style>

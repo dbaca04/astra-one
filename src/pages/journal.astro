@@ -19,7 +19,7 @@ const journalPosts = allPosts
         return data.section === "journal";
     })
     .sort(
-        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+        (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
     ) as BlogPost[];
 ---
 
@@ -27,9 +27,9 @@ const journalPosts = allPosts
     title="Journal"
     description="Thoughts, reflections, and insights on development, creativity, and technology."
 >
-    <h2>Journal Entries</h2>
+    <h2 class="text-3xl font-bold text-theme-text mb-6">Journal Entries</h2>
 
-    <p class="intro">
+    <p class="text-lg text-theme-text leading-relaxed mb-8">
         Welcome to the Journal section, where we share thoughts, reflections,
         and insights on various aspects of development, creativity, and
         technology. Unlike blog posts, these entries are more personal,
@@ -38,231 +38,152 @@ const journalPosts = allPosts
 
     {
         journalPosts.length > 0 ? (
-            <div class="journal-feed">
+            <div class="my-12">
                 {journalPosts.map((post) => (
-                    <article class="journal-entry">
-                        <div class="entry-meta">
+                    <article class="mb-12 pb-8 border-b border-theme-border last:border-b-0">
+                        <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-2">
                             <time
                                 datetime={
-                                    post.data.pubDate
-                                        .toISOString()
-                                        .split("T")[0]
+                                    post.data.date.toISOString().split("T")[0]
                                 }
                             >
-                                <FormattedDate date={post.data.pubDate} />
+                                <FormattedDate date={post.data.date} />
                             </time>
                             {post.data.tags && post.data.tags.length > 0 && (
-                                <span class="category">
+                                <span class="text-theme-accent font-medium">
                                     {post.data.tags[0]}
                                 </span>
                             )}
                         </div>
-                        <h3>{post.data.title}</h3>
-                        <p>{post.data.description}</p>
-                        <a href={`/blog/${post.slug}`} class="read-more">
-                            Continue reading
+                        <h3 class="text-2xl font-semibold text-theme-text my-2 hover:text-theme-accent transition-colors duration-200">
+                            <a
+                                href={`/blog/${post.slug}`}
+                                class="text-inherit no-underline"
+                            >
+                                {post.data.title}
+                            </a>
+                        </h3>
+                        <p class="text-theme-text leading-relaxed mb-3">
+                            {post.data.description}
+                        </p>
+                        <a
+                            href={`/blog/${post.slug}`}
+                            class="inline-block mt-1 font-medium text-theme-accent no-underline hover:underline hover:text-theme-accent-dark"
+                        >
+                            Continue reading →
                         </a>
                     </article>
                 ))}
             </div>
         ) : (
-            <div class="journal-feed">
-                <article class="journal-entry">
-                    <div class="entry-meta">
+            <div class="my-12">
+                <article class="mb-12 pb-8 border-b border-theme-border last:border-b-0">
+                    <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-2">
                         <time datetime="2023-12-15">December 15, 2023</time>
-                        <span class="category">Development</span>
+                        <span class="text-theme-accent font-medium">
+                            Development
+                        </span>
                     </div>
-                    <h3>Rethinking Component Architecture</h3>
-                    <p>
+                    <h3 class="text-2xl font-semibold text-theme-text my-2 hover:text-theme-accent transition-colors duration-200">
+                        <a href="#" class="text-inherit no-underline">
+                            Rethinking Component Architecture
+                        </a>
+                    </h3>
+                    <p class="text-theme-text leading-relaxed mb-3">
                         I've been experimenting with different approaches to
                         component architecture lately, particularly looking at
                         the intersection of atomic design principles and state
                         management. The challenge is finding the right balance
                         between reusability and maintainability...
                     </p>
-                    <a href="#" class="read-more">
-                        Continue reading
+                    <a
+                        href="#"
+                        class="inline-block mt-1 font-medium text-theme-accent no-underline hover:underline hover:text-theme-accent-dark"
+                    >
+                        Continue reading →
                     </a>
                 </article>
 
-                <article class="journal-entry">
-                    <div class="entry-meta">
+                <article class="mb-12 pb-8 border-b border-theme-border last:border-b-0">
+                    <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-2">
                         <time datetime="2023-12-08">December 8, 2023</time>
-                        <span class="category">Creativity</span>
+                        <span class="text-theme-accent font-medium">
+                            Creativity
+                        </span>
                     </div>
-                    <h3>The Space Between Tools and Creativity</h3>
-                    <p>
+                    <h3 class="text-2xl font-semibold text-theme-text my-2 hover:text-theme-accent transition-colors duration-200">
+                        <a href="#" class="text-inherit no-underline">
+                            The Space Between Tools and Creativity
+                        </a>
+                    </h3>
+                    <p class="text-theme-text leading-relaxed mb-3">
                         There's an interesting relationship between the tools we
                         use and our creative output. Sometimes a constraint or
                         limitation in our tools can spark creative solutions,
                         while other times it can stifle progress. I've been
                         reflecting on how to...
                     </p>
-                    <a href="#" class="read-more">
-                        Continue reading
+                    <a
+                        href="#"
+                        class="inline-block mt-1 font-medium text-theme-accent no-underline hover:underline hover:text-theme-accent-dark"
+                    >
+                        Continue reading →
                     </a>
                 </article>
 
-                <article class="journal-entry">
-                    <div class="entry-meta">
+                <article class="mb-12 pb-8 border-b border-theme-border last:border-b-0">
+                    <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-2">
                         <time datetime="2023-11-29">November 29, 2023</time>
-                        <span class="category">Technology</span>
+                        <span class="text-theme-accent font-medium">
+                            Technology
+                        </span>
                     </div>
-                    <h3>Exploring the Potential of AI in Content Creation</h3>
-                    <p>
+                    <h3 class="text-2xl font-semibold text-theme-text my-2 hover:text-theme-accent transition-colors duration-200">
+                        <a href="#" class="text-inherit no-underline">
+                            Exploring the Potential of AI in Content Creation
+                        </a>
+                    </h3>
+                    <p class="text-theme-text leading-relaxed mb-3">
                         AI tools have advanced rapidly, especially in the realm
                         of content creation. I've been testing various AI
                         assistants and exploring how they can enhance rather
                         than replace the creative process. The results have been
                         surprising...
                     </p>
-                    <a href="#" class="read-more">
-                        Continue reading
+                    <a
+                        href="#"
+                        class="inline-block mt-1 font-medium text-theme-accent no-underline hover:underline hover:text-theme-accent-dark"
+                    >
+                        Continue reading →
                     </a>
                 </article>
             </div>
         )
     }
 
-    <div class="subscribe-section">
-        <h3>Stay Updated</h3>
-        <p>
+    <div
+        class="mt-12 text-center bg-theme-card-bg p-8 rounded-lg border border-theme-border shadow-lg"
+    >
+        <h3 class="text-2xl font-bold text-theme-text mb-4">Stay Updated</h3>
+        <p class="text-theme-text mb-6">
             Get notified when new journal entries are published. No spam, just
             thoughtful content delivered to your inbox.
         </p>
-        <div class="subscribe-form">
+        <div class="flex flex-col sm:flex-row max-w-md mx-auto gap-2 sm:gap-0">
             <input
                 type="email"
                 placeholder="Your email address"
                 aria-label="Email for journal updates"
+                class="flex-grow p-3 border border-theme-border rounded-l-md sm:rounded-l-md sm:rounded-r-none text-base bg-theme-bg text-theme-text placeholder-gray-500 focus:outline-none focus:border-theme-accent focus:ring-2 focus:ring-theme-accent focus:ring-opacity-50"
             />
-            <button type="button">Subscribe</button>
+            <button
+                type="button"
+                class="p-3 bg-theme-accent text-white rounded-r-md sm:rounded-r-md sm:rounded-l-none text-base font-medium hover:bg-theme-accent-dark focus:outline-none focus:ring-2 focus:ring-theme-accent focus:ring-opacity-75 transition-colors duration-200"
+            >
+                Subscribe
+            </button>
         </div>
     </div>
 </ContentPage>
 
-<style>
-    /* Journal-specific styles */
-    .intro {
-        font-size: 1.1rem;
-        line-height: 1.6;
-        margin-bottom: 2rem;
-    }
-
-    .journal-feed {
-        margin: 3rem 0;
-    }
-
-    .journal-entry {
-        margin-bottom: 3rem;
-        padding-bottom: 2rem;
-        border-bottom: 1px solid var(--theme-border);
-    }
-
-    .journal-entry:last-child {
-        border-bottom: none;
-    }
-
-    .entry-meta {
-        display: flex;
-        gap: 1rem;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-        color: rgb(var(--gray));
-    }
-
-    .category {
-        color: var(--theme-accent);
-    }
-
-    .journal-entry h3 {
-        margin: 0.5rem 0;
-    }
-
-    .read-more {
-        display: inline-block;
-        margin-top: 0.5rem;
-        font-weight: 500;
-        color: var(--theme-accent);
-        text-decoration: none;
-    }
-
-    .read-more:hover {
-        text-decoration: underline;
-    }
-
-    /* Subscription section - scoped to journal page */
-    :global(.content) .subscribe-section {
-        background-color: var(--theme-card-bg);
-        padding: 2rem;
-        border-radius: 8px;
-        text-align: center;
-        border: 1px solid var(--theme-border);
-        box-shadow: var(--box-shadow);
-        margin-top: 3rem;
-        transition: var(--theme-transition);
-    }
-
-    :global(.content) .subscribe-form {
-        display: flex;
-        max-width: 500px;
-        margin: 1rem auto 0;
-    }
-
-    :global(.content) .subscribe-form input {
-        flex: 1;
-        padding: 0.75rem 1rem;
-        border: 1px solid var(--theme-border);
-        border-radius: 4px 0 0 4px;
-        font-size: 1rem;
-        background-color: var(--theme-bg);
-        color: var(--theme-text);
-    }
-
-    :global(.content) .subscribe-form input::placeholder {
-        color: rgba(var(--gray), 0.8);
-    }
-
-    :global(.content) .subscribe-form button {
-        padding: 0.75rem 1.5rem;
-        background-color: var(--theme-accent);
-        color: white;
-        border: none;
-        border-radius: 0 4px 4px 0;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-    }
-
-    :global(.content) .subscribe-form button:hover,
-    :global(.content) .subscribe-form button:focus {
-        background-color: var(--theme-accent-dark);
-        outline: none;
-    }
-
-    :global(.content) .subscribe-form input:focus {
-        outline: none;
-        border-color: var(--theme-accent);
-        box-shadow:
-            0 0 0 2px rgba(var(--accent), 0.25),
-            0 0 var(--glow-radius) var(--glow-spread) var(--glow-color);
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        :global(.content) .subscribe-section {
-            padding: 1.5rem;
-        }
-
-        :global(.content) .subscribe-form {
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        :global(.content) .subscribe-form input,
-        :global(.content) .subscribe-form button {
-            width: 100%;
-            border-radius: 4px;
-        }
-    }
-</style>
+<style></style>

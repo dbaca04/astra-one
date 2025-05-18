@@ -15,7 +15,7 @@ export async function getAdjacentPosts(currentPostId: string) {
 
     // Sort posts by publication date in descending order (newest first)
     const sortedPosts = allPosts.sort((a, b) =>
-        new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+        new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
     );
 
     // Find the index of the current post
@@ -63,7 +63,7 @@ export async function getAdjacentPostsInSection(currentPostId: string) {
 
     // Sort posts by publication date in descending order (newest first)
     const sortedSectionPosts = sectionPosts.sort((a, b) =>
-        new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+        new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
     );
 
     // Find the index of the current post within the filtered section posts

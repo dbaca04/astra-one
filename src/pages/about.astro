@@ -6,9 +6,9 @@ import ContentPage from "../layouts/ContentPage.astro";
 	title="About Domdhi"
 	description="Learn more about Domdhi's journey with AI tools and the purpose behind Domdhi."
 >
-	<h2>Hello, I'm Domdhi</h2>
+	<h2 class="text-3xl font-bold text-theme-text mb-4">Hello, I'm Domdhi</h2>
 
-	<p>
+	<p class="text-lg text-theme-text mb-6 leading-relaxed">
 		I created Domdhi as a personal space to document my journey exploring
 		the rapidly evolving world of AI tools and technologies. With a
 		background in software development and a passion for creative
@@ -16,15 +16,17 @@ import ContentPage from "../layouts/ContentPage.astro";
 		technical and creative workflows.
 	</p>
 
-	<p>
+	<p class="text-lg text-theme-text mb-8 leading-relaxed">
 		This site serves as both a journal of my experiences and a resource hub
 		for others interested in incorporating AI into their work and creative
 		processes.
 	</p>
 
-	<h2>The Domdhi Mission</h2>
+	<h2 class="text-3xl font-bold text-theme-text mb-4 mt-12">
+		The Domdhi Mission
+	</h2>
 
-	<p>
+	<p class="text-lg text-theme-text mb-8 leading-relaxed">
 		My goal with Domdhi is to bridge the gap between AI's technical
 		capabilities and practical, everyday applications. I believe that AI
 		tools should be accessible to everyone, not just technical specialists,
@@ -32,45 +34,63 @@ import ContentPage from "../layouts/ContentPage.astro";
 		and actionable.
 	</p>
 
-	<h2>What You'll Find Here</h2>
+	<h2 class="text-3xl font-bold text-theme-text mb-6 mt-12">
+		What You'll Find Here
+	</h2>
 
-	<div class="about-grid">
-		<div class="about-item">
-			<h3>Code Resources</h3>
-			<p>
+	<div class="grid md:grid-cols-2 gap-8 my-8">
+		<div
+			class="bg-theme-card-bg p-6 rounded-lg shadow-md border border-theme-border transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+		>
+			<h3 class="text-xl font-semibold text-theme-accent mt-0 mb-3">
+				Code Resources
+			</h3>
+			<p class="text-theme-text leading-relaxed">
 				Practical examples of AI-assisted coding, productivity
 				enhancements, and technical problem-solving approaches.
 			</p>
 		</div>
 
-		<div class="about-item">
-			<h3>Creative Tools</h3>
-			<p>
+		<div
+			class="bg-theme-card-bg p-6 rounded-lg shadow-md border border-theme-border transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+		>
+			<h3 class="text-xl font-semibold text-theme-accent mt-0 mb-3">
+				Creative Tools
+			</h3>
+			<p class="text-theme-text leading-relaxed">
 				Explorations of AI for creative applications — from content
 				generation to design assistance and beyond.
 			</p>
 		</div>
 
-		<div class="about-item">
-			<h3>Research & Insights</h3>
-			<p>
+		<div
+			class="bg-theme-card-bg p-6 rounded-lg shadow-md border border-theme-border transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+		>
+			<h3 class="text-xl font-semibold text-theme-accent mt-0 mb-3">
+				Research & Insights
+			</h3>
+			<p class="text-theme-text leading-relaxed">
 				Deep dives into emerging AI technologies, with a focus on
 				practical implications rather than theoretical applications.
 			</p>
 		</div>
 
-		<div class="about-item">
-			<h3>Automation Workflows</h3>
-			<p>
+		<div
+			class="bg-theme-card-bg p-6 rounded-lg shadow-md border border-theme-border transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+		>
+			<h3 class="text-xl font-semibold text-theme-accent mt-0 mb-3">
+				Automation Workflows
+			</h3>
+			<p class="text-theme-text leading-relaxed">
 				Strategies for automating repetitive tasks and streamlining
 				workflows using modern AI tools and techniques.
 			</p>
 		</div>
 	</div>
 
-	<h2>My AI Journey</h2>
+	<h2 class="text-3xl font-bold text-theme-text mb-4 mt-12">My AI Journey</h2>
 
-	<p>
+	<p class="text-lg text-theme-text mb-6 leading-relaxed">
 		My interest in AI began with simple productivity tools but quickly
 		expanded as I witnessed the rapid development of models like GPT and
 		Stable Diffusion. What started as curiosity has evolved into an ongoing
@@ -78,102 +98,57 @@ import ContentPage from "../layouts/ContentPage.astro";
 		work and creative hobbies.
 	</p>
 
-	<p>Along the way, I've developed a particular interest in:</p>
+	<p class="text-lg text-theme-text mb-4 leading-relaxed">
+		Along the way, I've developed a particular interest in:
+	</p>
 
-	<ul class="values-list">
-		<li>
-			<strong>AI-assisted coding:</strong> Using tools like Cursor, GitHub
-			Copilot, and similar assistants to streamline development workflows.
+	<ul class="list-disc pl-5 my-6 space-y-3">
+		<li class="text-lg text-theme-text leading-relaxed">
+			<strong class="font-semibold text-theme-accent"
+				>AI-assisted coding:</strong
+			> Using tools like Cursor, GitHub Copilot, and similar assistants to
+			streamline development workflows.
 		</li>
-		<li>
-			<strong>Content creation:</strong> Exploring the balance between AI-generated
-			content and human creativity and editorial judgment.
+		<li class="text-lg text-theme-text leading-relaxed">
+			<strong class="font-semibold text-theme-accent"
+				>Content creation:</strong
+			> Exploring the balance between AI-generated content and human creativity
+			and editorial judgment.
 		</li>
-		<li>
-			<strong>Workflow optimization:</strong> Finding ways to automate the
-			mundane and focus human energy on higher-value creative and strategic
-			thinking.
+		<li class="text-lg text-theme-text leading-relaxed">
+			<strong class="font-semibold text-theme-accent"
+				>Workflow optimization:</strong
+			> Finding ways to automate the mundane and focus human energy on higher-value
+			creative and strategic thinking.
 		</li>
-		<li>
-			<strong>Accessibility:</strong> Making advanced AI tools approachable
-			for non-technical users and small teams.
+		<li class="text-lg text-theme-text leading-relaxed">
+			<strong class="font-semibold text-theme-accent"
+				>Accessibility:</strong
+			> Making advanced AI tools approachable for non-technical users and small
+			teams.
 		</li>
 	</ul>
 
-	<h2>Connect With Me</h2>
+	<h2 class="text-3xl font-bold text-theme-text mb-4 mt-12">
+		Connect With Me
+	</h2>
 
-	<p>
+	<p class="text-lg text-theme-text mb-6 leading-relaxed">
 		Domdhi is as much about community as it is about content. I'm always
 		interested in hearing about your experiences with AI tools, answering
 		questions, or exploring potential collaborations.
 	</p>
 
-	<p class="cta">
-		Have questions or want to share your own AI journey? <a href="/contact"
+	<p
+		class="text-center mt-12 text-lg p-6 bg-theme-card-bg rounded-lg shadow-md border border-theme-border"
+	>
+		Have questions or want to share your own AI journey? <a
+			href="/contact"
+			class="text-theme-accent font-bold no-underline hover:underline hover:text-theme-accent-dark"
 			>Drop me a message</a
-		>.
+		>
+		.
 	</p>
 </ContentPage>
 
-<style>
-	.about-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-		gap: 2rem;
-		margin: 2rem 0;
-	}
-
-	.about-item {
-		background-color: var(--theme-card-bg);
-		padding: 1.5rem;
-		border-radius: 8px;
-		box-shadow: var(--box-shadow-small);
-		border: 1px solid var(--theme-border);
-		transition: var(--theme-transition);
-	}
-
-	.about-item:hover {
-		transform: translateY(-4px);
-		box-shadow: var(--box-shadow-hover);
-	}
-
-	.about-item h3 {
-		margin-top: 0;
-		color: var(--theme-accent);
-	}
-
-	.values-list {
-		margin: 1.5rem 0;
-		padding-left: 1.5rem;
-	}
-
-	.values-list li {
-		margin-bottom: 0.75rem;
-	}
-
-	.values-list strong {
-		color: var(--theme-accent);
-	}
-
-	.cta {
-		text-align: center;
-		margin-top: 3rem;
-		font-size: 1.1rem;
-		padding: 1.5rem;
-		background-color: var(--theme-card-bg);
-		border-radius: 8px;
-		box-shadow: var(--box-shadow);
-		border: 1px solid var(--theme-border);
-	}
-
-	.cta a {
-		color: var(--theme-accent);
-		font-weight: bold;
-		text-decoration: none;
-	}
-
-	.cta a:hover {
-		text-decoration: underline;
-		color: var(--theme-accent-dark);
-	}
-</style>
+<style></style>

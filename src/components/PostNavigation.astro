@@ -5,9 +5,10 @@ interface Props {
     prevPost?: CollectionEntry<"blog">;
     nextPost?: CollectionEntry<"blog">;
     isSectionNav?: boolean;
+    title?: string;
 }
 
-const { prevPost, nextPost, isSectionNav = false } = Astro.props;
+const { prevPost, nextPost, isSectionNav = false, title } = Astro.props;
 
 // Type-safe access to optional section property
 type BlogData = CollectionEntry<"blog">["data"];
@@ -24,102 +25,192 @@ const getNextSection = () => {
 };
 ---
 
-<nav class="post-navigation">
+<nav class="post-navigation" aria-label={title || "Post Navigation"}>
+    {title && <h3 class="nav-title">{title}</h3>}
+
     <div class="nav-links">
         {
-            prevPost && (
-                <a href={`/blog/${prevPost.id}`} class="prev-post">
-                    <span class="nav-arrow">←</span>
+            prevPost ? (
+                <a href={`/blog/${prevPost.id}`} class="prev-post" rel="prev">
+                    <span class="nav-arrow" aria-hidden="true">
+                        ←
+                    </span>
                     <div class="nav-info">
                         <span class="nav-label">
-                            Previous
-                            {isSectionNav && getPrevSection()
-                                ? " in " + getPrevSection()
-                                : ""}
+                            <span class="nav-direction">Previous</span>
+                            {isSectionNav && getPrevSection() && (
+                                <span class="nav-section">
+                                    in {getPrevSection()}
+                                </span>
+                            )}
                         </span>
-                        <span class="nav-title">{prevPost.data.title}</span>
+                        <span class="nav-post-title">
+                            {prevPost.data.title}
+                        </span>
                     </div>
                 </a>
+            ) : (
+                <div class="nav-empty prev-empty" aria-hidden="true" />
             )
         }
-
-        {!prevPost && <div class="nav-empty" />}
 
         {
-            nextPost && (
-                <a href={`/blog/${nextPost.id}`} class="next-post">
+            nextPost ? (
+                <a href={`/blog/${nextPost.id}`} class="next-post" rel="next">
                     <div class="nav-info">
                         <span class="nav-label">
-                            Next
-                            {isSectionNav && getNextSection()
-                                ? " in " + getNextSection()
-                                : ""}
+                            <span class="nav-direction">Next</span>
+                            {isSectionNav && getNextSection() && (
+                                <span class="nav-section">
+                                    in {getNextSection()}
+                                </span>
+                            )}
                         </span>
-                        <span class="nav-title">{nextPost.data.title}</span>
+                        <span class="nav-post-title">
+                            {nextPost.data.title}
+                        </span>
                     </div>
-                    <span class="nav-arrow">→</span>
+                    <span class="nav-arrow" aria-hidden="true">
+                        →
+                    </span>
                 </a>
+            ) : (
+                <div class="nav-empty next-empty" aria-hidden="true" />
             )
         }
-
-        {!nextPost && <div class="nav-empty" />}
     </div>
 </nav>
 
 <style>
     .post-navigation {
-        margin-top: 4rem;
+        margin-top: 3rem;
         padding-top: 2rem;
-        border-top: 1px solid rgba(var(--gray-light), 50%);
+        border-top: 1px solid var(--theme-border);
+    }
+
+    .nav-title {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 1.25rem;
+        color: var(--theme-accent);
+        font-weight: 700;
     }
 
     .nav-links {
         display: flex;
         justify-content: space-between;
-        gap: 1rem;
+        gap: 1.5rem;
+        width: 100%;
     }
 
     .prev-post,
     .next-post {
         display: flex;
         align-items: center;
-        max-width: 48%;
+        flex: 1;
+        max-width: calc(50% - 0.75rem);
         text-decoration: none;
-        color: var(--accent);
-        padding: 0.75rem;
-        border-radius: 8px;
-        transition: background-color 0.3s ease;
+        color: var(--theme-text);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        background-color: var(--theme-selection-bg);
+        border: 1px solid var(--theme-border);
+        transition: all 0.2s ease-in-out;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .prev-post::before,
+    .next-post::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background-color: var(--theme-accent);
+        opacity: 0.7;
+        transition: opacity 0.2s ease;
+    }
+
+    .next-post::before {
+        left: auto;
+        right: 0;
     }
 
     .prev-post:hover,
-    .next-post:hover {
-        background-color: rgba(var(--gray-light), 30%);
+    .next-post:hover,
+    .prev-post:focus,
+    .next-post:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        color: var(--theme-accent);
+        border-color: var(--theme-accent-secondary, var(--theme-accent));
+    }
+
+    .prev-post:hover::before,
+    .next-post:hover::before,
+    .prev-post:focus::before,
+    .next-post:focus::before {
+        opacity: 1;
+    }
+
+    .prev-post:focus-visible,
+    .next-post:focus-visible {
+        outline: 2px solid var(--theme-accent);
+        outline-offset: 2px;
     }
 
     .nav-arrow {
         font-size: 1.5rem;
         font-weight: bold;
         margin: 0 0.5rem;
+        flex-shrink: 0;
+        color: var(--theme-accent);
+        transition: transform 0.3s ease;
+    }
+
+    .prev-post:hover .nav-arrow {
+        transform: translateX(-4px);
+    }
+
+    .next-post:hover .nav-arrow {
+        transform: translateX(4px);
     }
 
     .nav-info {
         display: flex;
         flex-direction: column;
+        min-width: 0; /* This helps with text-overflow in flex children */
+        flex: 1;
     }
 
     .nav-label {
+        display: flex;
+        flex-direction: column;
         font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        color: rgb(var(--gray));
+        color: var(--theme-text-light, var(--theme-text));
+        opacity: 0.8;
+        margin-bottom: 0.25rem;
+        font-weight: 600;
     }
 
-    .nav-title {
+    .nav-section {
+        font-weight: normal;
+        opacity: 0.8;
+    }
+
+    .nav-post-title {
         font-weight: 500;
-        max-width: 100%;
+        width: 100%;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-size: 0.95rem;
+        color: var(--theme-accent);
     }
 
     .next-post {
@@ -132,16 +223,40 @@ const getNextSection = () => {
     }
 
     .nav-empty {
-        width: 48%;
+        flex: 1;
+        max-width: calc(50% - 0.75rem);
+    }
+
+    /* Dark mode enhancements */
+    :global(.theme-dark) .prev-post,
+    :global(.theme-dark) .next-post {
+        background-color: var(--theme-code-bg, var(--theme-selection-bg));
+        border-color: var(--theme-code-border, var(--theme-border));
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    :global(.theme-dark) .prev-post:hover,
+    :global(.theme-dark) .next-post:hover,
+    :global(.theme-dark) .prev-post:focus,
+    :global(.theme-dark) .next-post:focus {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        background-color: var(--theme-bg-offset);
+    }
+
+    :global(.theme-dark) .nav-title {
+        color: var(--theme-accent-secondary, var(--theme-accent));
+    }
+
+    :global(.theme-dark) .nav-post-title {
+        color: var(--theme-accent-secondary, var(--theme-accent));
+    }
+
+    :global(.theme-dark) .nav-arrow {
+        color: var(--theme-accent-secondary, var(--theme-accent));
     }
 
     /* Responsive adjustments */
-    @media (max-width: 640px) {
-        .post-navigation {
-            margin-top: 3rem;
-            padding-top: 1.5rem;
-        }
-
+    @media (max-width: 768px) {
         .nav-links {
             flex-direction: column;
             gap: 1rem;
@@ -154,12 +269,51 @@ const getNextSection = () => {
             width: 100%;
         }
 
+        .next-post .nav-info {
+            align-items: flex-start;
+        }
+
+        .next-post {
+            text-align: left;
+            flex-direction: row;
+        }
+
+        .nav-empty.prev-empty {
+            display: none;
+        }
+
+        .nav-empty.next-empty {
+            display: none;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .post-navigation {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+        }
+
+        .nav-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .prev-post,
+        .next-post {
+            padding: 0.75rem;
+        }
+
+        .nav-arrow {
+            font-size: 1.25rem;
+            margin: 0 0.3rem;
+        }
+
         .nav-label {
             font-size: 0.7rem;
         }
 
-        .nav-title {
-            font-size: 0.9rem;
+        .nav-post-title {
+            font-size: 0.85rem;
         }
     }
 </style>

@@ -41,7 +41,7 @@ const displayImage = heroImage || image;
 				max-width: calc(100% - 2em);
 				margin: auto;
 				padding: 1em;
-				color: rgb(var(--gray-dark));
+				color: var(--theme-text);
 				font-size: clamp(
 					1em,
 					calc(
@@ -57,6 +57,7 @@ const displayImage = heroImage || image;
 					1.05em
 				);
 				line-height: 1.75;
+				transition: var(--theme-transition);
 			}
 			.prose :global(h2) {
 				margin-top: 2em;
@@ -77,14 +78,16 @@ const displayImage = heroImage || image;
 				margin: 1.5em 0 2em;
 				background-color: var(--code-bg);
 				color: var(--code-fg);
+				transition: var(--theme-transition);
 			}
 			.prose :global(blockquote) {
 				margin: 2em 0;
 				padding: 1.5em 2em;
-				background: var(--blockquote-bg);
+				background: var(--theme-blockquote-bg);
 				border-radius: 8px;
 				font-style: italic;
 				line-height: 1.6;
+				transition: var(--theme-transition);
 			}
 			.prose :global(ul),
 			.prose :global(ol) {
@@ -106,7 +109,8 @@ const displayImage = heroImage || image;
 			}
 			.date {
 				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
+				color: var(--theme-text);
+				opacity: 0.8;
 				font-size: clamp(
 					0.8em,
 					calc(
@@ -121,6 +125,7 @@ const displayImage = heroImage || image;
 					),
 					0.9em
 				);
+				transition: var(--theme-transition);
 			}
 			.last-updated-on {
 				font-style: italic;
@@ -141,17 +146,27 @@ const displayImage = heroImage || image;
 					),
 					0.9em
 				);
-				color: rgb(var(--gray));
+				color: var(--theme-text);
+				opacity: 0.8;
 				display: flex;
 				flex-wrap: wrap;
 				gap: 0.5em;
 				justify-content: center;
+				transition: var(--theme-transition);
 			}
 			.tags span {
 				display: inline-block;
 				padding: 0.2em 0.6em;
-				background-color: rgba(var(--gray-light), 70%);
+				background-color: var(--theme-code-bg);
 				border-radius: 4px;
+				transition: var(--theme-transition);
+			}
+
+			hr {
+				border: none;
+				border-top: 2px solid var(--theme-border);
+				margin: 1em 0;
+				transition: var(--theme-transition);
 			}
 
 			/* Responsive adjustments */

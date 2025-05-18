@@ -20,7 +20,8 @@ const { title, description } = Astro.props;
                 max-width: calc(100% - 2em);
                 margin: auto;
                 padding: 1em;
-                color: rgb(var(--gray-dark));
+                color: var(--theme-text);
+                transition: var(--theme-transition);
             }
             .title {
                 margin-bottom: 1em;
@@ -30,6 +31,13 @@ const { title, description } = Astro.props;
             }
             .title h1 {
                 margin: 0 0 0.5em 0;
+            }
+
+            hr {
+                border: none;
+                border-top: 2px solid var(--theme-border);
+                margin: 1em 0;
+                transition: var(--theme-transition);
             }
 
             /* Responsive adjustments */

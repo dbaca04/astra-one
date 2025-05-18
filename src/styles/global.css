@@ -23,7 +23,7 @@ html {
 }
 
 :root {
-  /* Colors */
+  /* Light mode Colors */
   --accent: #2337ff;
   --accent-dark: #000d8a;
   --black: 15, 18, 25;
@@ -37,6 +37,22 @@ html {
   --code-bg: #1e1e1e;
   --code-fg: #d4d4d4;
   --blockquote-bg: rgba(var(--gray-light), 50%);
+
+  /* Theme colors - light mode default */
+  --theme-bg: #ffffff;
+  --theme-text: rgb(var(--gray-dark));
+  --theme-accent: var(--accent);
+  --theme-accent-dark: var(--accent-dark);
+  --theme-code-bg: rgba(var(--gray-light), 70%);
+  --theme-code-text: var(--accent-dark);
+  --theme-selection-bg: rgba(var(--gray-light), 70%);
+  --theme-header-bg: #ffffff;
+  --theme-header-text: rgb(var(--black));
+  --theme-border: rgba(var(--gray), 20%);
+  --theme-blockquote-bg: rgba(var(--gray-light), 50%);
+  --theme-card-bg: #ffffff;
+  --theme-table-header-bg: rgba(var(--gray-light), 50%);
+  --theme-table-row-even: rgba(var(--gray-light), 20%);
 
   /* Base typography values */
   --base-font-size: 20px;
@@ -63,6 +79,48 @@ html {
   --h4-max-size: 25;
   --h5-min-size: 18;
   --h5-max-size: 20;
+
+  /* Theme transition */
+  --theme-transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode Theme */
+html.dark {
+  --theme-bg: #121212;
+  --theme-text: rgba(255, 255, 255, 0.87);
+  --theme-accent: #6d7bff;
+  --theme-accent-dark: #a3adff;
+  --theme-code-bg: #2d2d2d;
+  --theme-code-text: #e2e2e2;
+  --theme-selection-bg: rgba(255, 255, 255, 0.15);
+  --theme-header-bg: #1a1a1a;
+  --theme-header-text: rgba(255, 255, 255, 0.9);
+  --theme-border: rgba(255, 255, 255, 0.15);
+  --theme-blockquote-bg: rgba(255, 255, 255, 0.1);
+  --theme-card-bg: #1e1e1e;
+  --theme-table-header-bg: rgba(255, 255, 255, 0.1);
+  --theme-table-row-even: rgba(255, 255, 255, 0.05);
+  --gray-gradient: #1a1a1a, #121212;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --theme-bg: #121212;
+    --theme-text: rgba(255, 255, 255, 0.87);
+    --theme-accent: #6d7bff;
+    --theme-accent-dark: #a3adff;
+    --theme-code-bg: #2d2d2d;
+    --theme-code-text: #e2e2e2;
+    --theme-selection-bg: rgba(255, 255, 255, 0.15);
+    --theme-header-bg: #1a1a1a;
+    --theme-header-text: rgba(255, 255, 255, 0.9);
+    --theme-border: rgba(255, 255, 255, 0.15);
+    --theme-blockquote-bg: rgba(255, 255, 255, 0.1);
+    --theme-card-bg: #1e1e1e;
+    --theme-table-header-bg: rgba(255, 255, 255, 0.1);
+    --theme-table-row-even: rgba(255, 255, 255, 0.05);
+    --gray-gradient: #1a1a1a, #121212;
+  }
 }
 
 @font-face {
@@ -81,19 +139,9 @@ html {
   font-display: swap;
 }
 
-/* Fluid typography calculation function
-   Usage: calc(--min-size + (--max-size - --min-size) * ((100vw - --min-width) / (--max-width - --min-width)))
+/* CSS Variable-based fluid typography calculation
+   Using calc() directly instead of @function (which is Sass/SCSS specific)
 */
-@function fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size) {
-  $u1: unit($min-vw);
-  $u2: unit($max-vw);
-  $u3: unit($min-font-size);
-  $u4: unit($max-font-size);
-
-  @if $u1 ==$u2 and $u1 ==$u3 and $u1 ==$u4 {
-    @return calc(#{$min-font-size}px + #{($max-font-size - $min-font-size)} * ((100vw - #{$min-vw}px) / #{($max-vw - $min-vw)}));
-  }
-}
 
 body {
   font-family: "Atkinson", sans-serif;
@@ -104,12 +152,14 @@ body {
   background-size: 100% 600px;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  color: rgb(var(--gray-dark));
+  color: var(--theme-text);
   font-size: clamp(var(--fluid-min-size)px, calc(var(--fluid-min-size)px + (var(--fluid-max-size) - var(--fluid-min-size)) * ((100vw - var(--fluid-min-width)px) / (var(--fluid-max-width) - var(--fluid-min-width)))), var(--fluid-max-size)px);
   line-height: var(--base-line-height);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--theme-bg);
+  transition: var(--theme-transition);
 }
 
 main {
@@ -127,8 +177,9 @@ h4,
 h5,
 h6 {
   margin: 0 0 0.5rem 0;
-  color: rgb(var(--black));
+  color: var(--theme-header-text);
   line-height: 1.2;
+  transition: var(--theme-transition);
 }
 
 h1 {
@@ -169,16 +220,16 @@ b {
 }
 
 a {
-  color: var(--accent);
+  color: var(--theme-accent);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 a:hover {
-  color: var(--accent-dark);
+  color: var(--theme-accent-dark);
   text-decoration: none;
-  border-bottom: 1px solid var(--accent-dark);
+  border-bottom: 1px solid var(--theme-accent-dark);
 }
 
 p {
@@ -215,17 +266,18 @@ table {
 table th,
 table td {
   padding: 0.75em;
-  border: 1px solid rgba(var(--gray), 20%);
+  border: 1px solid var(--theme-border);
+  transition: var(--theme-transition);
 }
 
 table th {
-  background-color: rgba(var(--gray-light), 50%);
+  background-color: var(--theme-table-header-bg);
   font-weight: 700;
   text-align: left;
 }
 
 table tr:nth-child(even) {
-  background-color: rgba(var(--gray-light), 20%);
+  background-color: var(--theme-table-row-even);
 }
 
 img {
@@ -251,9 +303,10 @@ code {
   font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, Consolas, Monaco, 'Courier New', monospace;
   font-size: 0.9em;
   padding: 0.2em 0.4em;
-  background-color: rgba(var(--gray-light), 70%);
+  background-color: var(--theme-code-bg);
   border-radius: 4px;
-  color: var(--accent-dark);
+  color: var(--theme-code-text);
+  transition: var(--theme-transition);
 }
 
 pre {
@@ -266,6 +319,7 @@ pre {
   font-size: 0.9em;
   line-height: 1.5;
   box-shadow: 0 2px 8px rgba(var(--black), 0.1);
+  transition: var(--theme-transition);
 }
 
 pre>code {
@@ -277,13 +331,14 @@ blockquote {
   position: relative;
   margin: 2em 0;
   padding: 1.5em 2em;
-  background: var(--blockquote-bg);
+  background: var(--theme-blockquote-bg);
   border-radius: 8px;
   font-size: clamp(0.95em, calc(0.95em + 0.15 * ((100vw - var(--fluid-min-width)px) / (var(--fluid-max-width) - var(--fluid-min-width)))), 1.1em);
   font-style: italic;
   line-height: 1.6;
   box-shadow: 0 2px 8px rgba(var(--black), 0.05);
-  border-left: 4px solid var(--accent);
+  border-left: 4px solid var(--theme-accent);
+  transition: var(--theme-transition);
 }
 
 blockquote::before {

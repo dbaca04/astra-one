@@ -1,7 +1,7 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
-import '../styles/global.css';
+import "../styles/global.css";
 
 interface Props {
 	title: string;
@@ -11,18 +11,47 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
+const { title, description, image = "/blog-placeholder-1.jpg" } = Astro.props;
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta
+	name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"
+/>
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta
+	name="theme-color"
+	content="#ffffff"
+	media="(prefers-color-scheme: light)"
+/>
+<meta
+	name="theme-color"
+	content="#121212"
+	media="(prefers-color-scheme: dark)"
+/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Font preloads -->
-<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
-<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+<link
+	rel="preload"
+	href="/fonts/atkinson-regular.woff"
+	as="font"
+	type="font/woff"
+	crossorigin
+/>
+<link
+	rel="preload"
+	href="/fonts/atkinson-bold.woff"
+	as="font"
+	type="font/woff"
+	crossorigin
+/>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -45,3 +74,41 @@ const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<!-- Theme color change script -->
+<script is:inline>
+	// Update theme color meta tag when theme changes
+	const updateThemeColor = () => {
+		const themeColor = document.documentElement.classList.contains("dark")
+			? "#121212"
+			: "#ffffff";
+
+		// Remove existing theme-color meta tags
+		document
+			.querySelectorAll('meta[name="theme-color"]')
+			.forEach((tag) => tag.remove());
+
+		// Add a new meta tag with the current theme color
+		const metaTag = document.createElement("meta");
+		metaTag.name = "theme-color";
+		metaTag.content = themeColor;
+		document.head.appendChild(metaTag);
+	};
+
+	// Set up listener for theme changes
+	window.addEventListener("DOMContentLoaded", () => {
+		updateThemeColor();
+
+		// Create a mutation observer to watch for class changes on the html element
+		const observer = new MutationObserver((mutations) => {
+			mutations.forEach((mutation) => {
+				if (mutation.attributeName === "class") {
+					updateThemeColor();
+				}
+			});
+		});
+
+		// Start observing
+		observer.observe(document.documentElement, { attributes: true });
+	});
+</script>

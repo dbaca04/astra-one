@@ -17,19 +17,27 @@ const isActive = href === pathname || href === "/" + (subpath?.[0] || "");
 		display: inline-block;
 		text-decoration: none;
 		padding: 0.5rem 0.75rem;
-		color: rgb(var(--gray-dark));
+		color: var(--theme-header-text);
 		font-weight: 500;
 		transition: all 0.2s ease;
 		position: relative;
+		border-radius: 4px;
 	}
 
-	a:hover {
-		color: var(--accent);
+	a:hover,
+	a:focus {
+		color: var(--theme-accent);
+		background-color: var(--theme-selection-bg);
+	}
+
+	a:focus-visible {
+		outline: 2px solid var(--theme-accent);
+		outline-offset: 2px;
 	}
 
 	a.active {
 		font-weight: 700;
-		color: var(--accent);
+		color: var(--theme-accent);
 	}
 
 	@media (min-width: calc(var(--tablet) + 1px)) {
@@ -40,7 +48,7 @@ const isActive = href === pathname || href === "/" + (subpath?.[0] || "");
 			left: 0.75rem;
 			right: 0.75rem;
 			height: 3px;
-			background-color: var(--accent);
+			background-color: var(--theme-accent);
 			border-radius: 3px 3px 0 0;
 		}
 	}

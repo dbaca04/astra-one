@@ -1,33 +1,40 @@
-# Astro Starter Kit: Blog
+# Domdhi: AI-Powered Content Hub
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/astra-one)
-
-![Astro Template Preview](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+![Domdhi Website Preview](https://github.com/dbaca04/domdhi/assets/preview.jpg)
 
 <!-- dash-content-start -->
 
-Create a blog with Astro and deploy it on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
+Domdhi is a personal space exploring the intersection of AI tools, creativity, and productivity. Built with Astro and deployed on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
 
 Features:
 
-- ✅ Minimal styling (make it your own!)
+- ✅ Clean, accessible design with dark/light mode support
 - ✅ 100/100 Lighthouse performance
 - ✅ SEO-friendly with canonical URLs and OpenGraph data
 - ✅ Sitemap support
 - ✅ RSS Feed support
-- ✅ Markdown & MDX support
+- ✅ Markdown & MDX support for content
+- ✅ Organized content sections (Code, Create, Automate, Journal)
 
 <!-- dash-content-end -->
 
 ## Getting Started
 
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+To run this project locally:
 
 ```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/astra-one
-```
+# Clone the repository
+git clone https://github.com/dbaca04/domdhi.git
 
-A live public deployment of this template is available at [https://astra-one.templates.workers.dev](https://astra-one.templates.workers.dev)
+# Navigate to the project directory
+cd domdhi
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
 
 ## 🚀 Project Structure
 
@@ -53,10 +60,6 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 | `npm run deploy`          | Deploy your production site to Cloudflare        |
 
-## 👀 Want to learn more?
+## Connect
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+Follow Domdhi on [Twitter](https://twitter.com/iDomdhi) or check out the [GitHub repository](https://github.com/dbaca04/).

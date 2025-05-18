@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the changes made to improve contrast ratios across the Astra One website, ensuring better accessibility and compliance with WCAG (Web Content Accessibility Guidelines) standards.
+This document outlines the changes made to improve contrast ratios across the Domdhi website, ensuring better accessibility and compliance with WCAG (Web Content Accessibility Guidelines) standards.
 
 ## WCAG Contrast Requirements
 

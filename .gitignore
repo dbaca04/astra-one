@@ -50,3 +50,8 @@ tasks/
 # Cursor configuration (contains API keys)
 .cursor/
 .roo/
+
+# Additional config files not needed for build
+.taskmasterconfig
+.roomodes
+remove-sensitive-file.sh

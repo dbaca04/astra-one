@@ -46,3 +46,7 @@ dev-debug.log
 # Task files
 tasks.json
 tasks/ 
+
+# Cursor configuration (contains API keys)
+.cursor/
+.roo/

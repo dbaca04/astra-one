@@ -1,0 +1,64 @@
+import { Picture } from 'astro:assets';
+
+interface Props {
+    src: string;
+    alt: string;
+    width?: number;
+    height?: number;
+    class?: string;
+    sizes?: string;
+    quality?: number;
+    formats?: ('webp' | 'avif' | 'png' | 'jpeg')[];
+    fit?: 'cover' | 'contain' | 'fill' | 'none';
+    position?: string;
+    layout?: 'constrained' | 'full-width' | 'fixed' | 'none';
+}
+
+const {
+    src,
+    alt,
+    width = 800,
+    height = 600,
+    class: className,
+    sizes = '(max-width: 720px) 100vw, 800px',
+    quality = 80,
+    formats = ['webp', 'avif'],
+    fit = 'cover',
+    position = 'center',
+    layout = 'constrained',
+} = Astro.props;
+
+// Determine if the image is remote (starts with http:// or https://) or from the public folder (starts with /)
+const isRemoteOrPublic = src.startsWith('http') || src.startsWith('/');
+
+{isRemoteOrPublic && (
+    <Picture
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        class={className}
+        sizes={sizes}
+        formats={formats}
+        quality={quality}
+        fit={fit}
+        position={position}
+        layout={layout}
+    />
+)}
+
+{!isRemoteOrPublic && (
+    <Picture
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        class={className}
+        sizes={sizes}
+        formats={formats}
+        quality={quality}
+        fit={fit}
+        position={position}
+        layout={layout}
+    />
+)} 

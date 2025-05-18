@@ -4,10 +4,15 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import { Picture } from "astro:assets";
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<"blog">["data"] & { tags?: string[] };
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, image, tags } =
+	Astro.props;
+
+// Use heroImage or fallback to image property
+const displayImage = heroImage || image;
 ---
 
 <html lang="en">
@@ -51,6 +56,11 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			.last-updated-on {
 				font-style: italic;
 			}
+			.tags {
+				margin-top: 1em;
+				font-size: 0.9em;
+				color: rgb(var(--gray-light));
+			}
 		</style>
 	</head>
 
@@ -59,7 +69,22 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<main>
 			<article>
 				<div class="hero-image">
-					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
+					{
+						displayImage && (
+							<Picture
+								src={displayImage}
+								alt={title}
+								width={1020}
+								height={510}
+								formats={["avif", "webp", "jpeg"]}
+								quality={80}
+								sizes="(max-width: 720px) 100vw, 1020px"
+								fit="cover"
+								position="center"
+								layout="constrained"
+							/>
+						)
+					}
 				</div>
 				<div class="prose">
 					<div class="title">
@@ -68,13 +93,22 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 							{
 								updatedDate && (
 									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
+										Last updated on{" "}
+										<FormattedDate date={updatedDate} />
 									</div>
 								)
 							}
 						</div>
 						<h1>{title}</h1>
 						<hr />
+						{
+							tags && tags.length > 0 && (
+								<div class="tags">
+									Tags:{" "}
+									{tags.map((tag) => `#${tag}`).join(" ")}
+								</div>
+							)
+						}
 					</div>
 					<slot />
 				</div>

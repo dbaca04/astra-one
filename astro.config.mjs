@@ -14,4 +14,12 @@ export default defineConfig({
       enabled: true,
     },
   }),
+  experimental: {
+    responsiveImages: true,
+  },
+  image: {
+    experimentalLayout: 'constrained', // Default layout for images
+    experimentalObjectFit: 'cover', // Default object-fit style
+    experimentalObjectPosition: 'center', // Default object-position style
+  },
 });

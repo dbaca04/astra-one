@@ -1,21 +1,37 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
-import { render } from 'astro:content';
+import {
+    getCollection,
+    getEntry,
+    render,
+    type CollectionEntry,
+} from "astro:content";
+import BlogPost from "../../layouts/BlogPost.astro";
 
+// This function is required for Astro to know which paths to generate
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+    const allblog = await getCollection("blog");
+    return allblog.map((post) => ({
+        params: { slug: post.id },
+        props: { entryId: post.id },
+    }));
 }
-type Props = CollectionEntry<'blog'>;
 
-const post = Astro.props;
+// Get the entryId from the props
+const { entryId } = Astro.props;
+
+// Fetch the full entry using getEntry
+const post = await getEntry("blog", entryId);
+
+// Handle case where entry is not found (shouldn't happen with getStaticPaths, but good practice)
+if (!post) {
+    // You might want to render a 404 page here
+    // Astro.redirect('/404'); // Example redirect (requires SSR or a client-side approach)
+    throw new Error(`Blog post with id ${entryId} not found.`);
+}
+
 const { Content } = await render(post);
 ---
 
 <BlogPost {...post.data}>
-	<Content />
+    <Content />
 </BlogPost>

@@ -1,0 +1,173 @@
+---
+import HeaderLink from "./HeaderLink.astro";
+---
+
+<div class="mobile-nav">
+    <button
+        id="mobile-menu-toggle"
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+    >
+        <span class="hamburger"></span>
+    </button>
+
+    <div id="mobile-menu" class="mobile-menu">
+        <div class="menu-container">
+            <HeaderLink href="/discover">Discover</HeaderLink>
+            <HeaderLink href="/code">Code</HeaderLink>
+            <HeaderLink href="/create">Create</HeaderLink>
+            <HeaderLink href="/automate">Automate</HeaderLink>
+            <HeaderLink href="/journal">Journal</HeaderLink>
+            <HeaderLink href="/about">About</HeaderLink>
+            <HeaderLink href="/contact">Contact</HeaderLink>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript for the mobile menu toggle
+    document.addEventListener("astro:page-load", () => {
+        const menuButton = document.getElementById("mobile-menu-toggle");
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        if (menuButton && mobileMenu) {
+            menuButton.addEventListener("click", () => {
+                const expanded =
+                    menuButton.getAttribute("aria-expanded") === "true";
+
+                // Toggle menu visibility
+                menuButton.setAttribute(
+                    "aria-expanded",
+                    expanded ? "false" : "true",
+                );
+                mobileMenu.classList.toggle("is-active");
+                document.body.classList.toggle("menu-open");
+
+                // Toggle hamburger icon
+                menuButton.classList.toggle("is-active");
+            });
+
+            // Close menu when clicking on a link
+            const menuLinks = mobileMenu.querySelectorAll("a");
+            menuLinks.forEach((link) => {
+                link.addEventListener("click", () => {
+                    mobileMenu.classList.remove("is-active");
+                    menuButton.classList.remove("is-active");
+                    menuButton.setAttribute("aria-expanded", "false");
+                    document.body.classList.remove("menu-open");
+                });
+            });
+        }
+    });
+</script>
+
+<style>
+    .mobile-nav {
+        display: none;
+    }
+
+    /* Only show mobile nav on smaller screens */
+    @media (max-width: var(--tablet)) {
+        .mobile-nav {
+            display: block;
+        }
+
+        /* Hamburger button styles */
+        #mobile-menu-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            position: relative;
+        }
+
+        .hamburger {
+            display: block;
+            position: relative;
+            width: 24px;
+            height: 2px;
+            background-color: rgb(var(--black));
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .hamburger::before,
+        .hamburger::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: rgb(var(--black));
+            left: 0;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .hamburger::before {
+            top: -8px;
+        }
+
+        .hamburger::after {
+            bottom: -8px;
+        }
+
+        /* Hamburger button active state */
+        #mobile-menu-toggle.is-active .hamburger {
+            background-color: transparent;
+        }
+
+        #mobile-menu-toggle.is-active .hamburger::before {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        #mobile-menu-toggle.is-active .hamburger::after {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Mobile menu styles */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: white;
+            z-index: 1000;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.is-active {
+            transform: translateY(0);
+        }
+
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        .menu-container a {
+            font-size: 1.25rem;
+            padding: 0.5rem;
+            width: 100%;
+            border-bottom: 1px solid rgba(var(--gray-light), 0.5);
+        }
+
+        /* Prevent background scrolling when menu is open */
+        :global(body.menu-open) {
+            overflow: hidden;
+        }
+    }
+</style>

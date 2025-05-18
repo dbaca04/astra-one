@@ -1,5 +1,26 @@
 ---
 import ContentPage from "../layouts/ContentPage.astro";
+import { getCollection } from "astro:content";
+import FormattedDate from "../components/FormattedDate.astro";
+import type { CollectionEntry } from "astro:content";
+import type { BlogSchema } from "../types";
+
+// Get blog entries for the "automate" section
+const allPosts = await getCollection("blog");
+// Type assertion for the schema
+interface BlogPost extends CollectionEntry<"blog"> {
+    data: BlogSchema;
+    slug: string;
+}
+// Filter by section and cast
+const automatePosts = allPosts
+    .filter((post) => {
+        const data = post.data as BlogSchema;
+        return data.section === "automate";
+    })
+    .sort(
+        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+    ) as BlogPost[];
 ---
 
 <ContentPage
@@ -86,6 +107,29 @@ import ContentPage from "../layouts/ContentPage.astro";
             >Learn more about GitHub Actions →</a
         >
     </div>
+
+    <h3>Latest Automation Articles</h3>
+    {
+        automatePosts.length > 0 ? (
+            <ul class="post-list">
+                {automatePosts.map((post) => (
+                    <li class="post-item">
+                        <a href={`/blog/${post.slug}`}>
+                            <h4>{post.data.title}</h4>
+                            <p class="post-date">
+                                <FormattedDate date={post.data.pubDate} />
+                            </p>
+                            <p class="post-description">
+                                {post.data.description}
+                            </p>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        ) : (
+            <p>No automation articles yet. Check back soon!</p>
+        )
+    }
 </ContentPage>
 
 <style>
@@ -140,5 +184,32 @@ import ContentPage from "../layouts/ContentPage.astro";
         display: inline-block;
         margin-top: 1rem;
         font-weight: 500;
+    }
+
+    .post-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 2rem 0;
+    }
+    .post-item {
+        margin-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+    }
+    .post-item a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+    .post-item a:hover h4 {
+        color: var(--accent);
+    }
+    .post-date {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0.25rem 0;
+    }
+    .post-description {
+        margin-top: 0.5rem;
     }
 </style>

@@ -1,5 +1,26 @@
 ---
 import ContentPage from "../layouts/ContentPage.astro";
+import { getCollection } from "astro:content";
+import FormattedDate from "../components/FormattedDate.astro";
+import type { CollectionEntry } from "astro:content";
+import type { BlogSchema } from "../types";
+
+// Get blog entries for the "code" section
+const allPosts = await getCollection("blog");
+// Type assertion for the schema
+interface BlogPost extends CollectionEntry<"blog"> {
+    data: BlogSchema;
+    slug: string;
+}
+// Filter by section and cast
+const codePosts = allPosts
+    .filter((post) => {
+        const data = post.data as BlogSchema;
+        return data.section === "code";
+    })
+    .sort(
+        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+    ) as BlogPost[];
 ---
 
 <ContentPage
@@ -56,6 +77,29 @@ const &#123; title, items = [] &#125; = Astro.props;
         Have a specific code challenge you'd like help with?
         <a href="/contact">Let us know</a>!
     </p>
+
+    <h3>Latest Code Articles</h3>
+    {
+        codePosts.length > 0 ? (
+            <ul class="post-list">
+                {codePosts.map((post) => (
+                    <li class="post-item">
+                        <a href={`/blog/${post.slug}`}>
+                            <h4>{post.data.title}</h4>
+                            <p class="post-date">
+                                <FormattedDate date={post.data.pubDate} />
+                            </p>
+                            <p class="post-description">
+                                {post.data.description}
+                            </p>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        ) : (
+            <p>No code articles yet. Check back soon!</p>
+        )
+    }
 </ContentPage>
 
 <style>
@@ -75,5 +119,32 @@ const &#123; title, items = [] &#125; = Astro.props;
 
     code {
         font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    }
+
+    .post-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 2rem 0;
+    }
+    .post-item {
+        margin-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+    }
+    .post-item a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+    .post-item a:hover h4 {
+        color: var(--accent);
+    }
+    .post-date {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0.25rem 0;
+    }
+    .post-description {
+        margin-top: 0.5rem;
     }
 </style>

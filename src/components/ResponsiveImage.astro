@@ -1,4 +1,5 @@
-import { Picture } from 'astro:assets';
+---
+import { Picture } from "astro:assets";
 
 // Define the props
 const {
@@ -7,13 +8,14 @@ const {
     width = 800,
     height = 600,
     class: className,
-    sizes = '(max-width: 720px) 100vw, 800px',
+    sizes = "(max-width: 720px) 100vw, 800px",
     quality = 80,
-    formats = ['webp', 'avif'],
-    fit = 'cover',
-    position = 'center',
-    layout = 'constrained',
+    formats = ["webp", "avif"],
+    fit = "cover",
+    position = "center",
+    layout = "constrained",
 } = Astro.props;
+---
 
 <Picture
     src={src}
@@ -27,4 +29,4 @@ const {
     fit={fit}
     position={position}
     layout={layout}
-/> 
+/>

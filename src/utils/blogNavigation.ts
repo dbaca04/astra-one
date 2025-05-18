@@ -1,5 +1,9 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
+// Define a type that includes the section property
+type BlogData = CollectionEntry<'blog'>['data'];
+type BlogDataWithSection = BlogData & { section?: string };
+
 /**
  * Get the previous and next blog posts based on chronological order
  * @param currentPostId The ID of the current blog post
@@ -43,15 +47,19 @@ export async function getAdjacentPostsInSection(currentPostId: string) {
     // Find the current post to get its section
     const currentPost = allPosts.find(post => post.id === currentPostId);
 
+    // Use type assertion to access section property
+    const currentPostData = currentPost?.data as BlogDataWithSection;
+
     // If the post is not found or has no section, return undefined for both previous and next
-    if (!currentPost || !currentPost.data.section) {
+    if (!currentPost || !currentPostData.section) {
         return { prev: undefined, next: undefined };
     }
 
     // Filter posts to only include those in the same section
-    const sectionPosts = allPosts.filter(post =>
-        post.data.section === currentPost.data.section
-    );
+    const sectionPosts = allPosts.filter(post => {
+        const postData = post.data as BlogDataWithSection;
+        return postData.section === currentPostData.section;
+    });
 
     // Sort posts by publication date in descending order (newest first)
     const sortedSectionPosts = sectionPosts.sort((a, b) =>

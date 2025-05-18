@@ -1,5 +1,26 @@
 ---
 import ContentPage from "../layouts/ContentPage.astro";
+import { getCollection } from "astro:content";
+import FormattedDate from "../components/FormattedDate.astro";
+import type { CollectionEntry } from "astro:content";
+import type { BlogSchema } from "../types";
+
+// Get blog entries for the "journal" section
+const allPosts = await getCollection("blog");
+// Type assertion for the schema
+interface BlogPost extends CollectionEntry<"blog"> {
+    data: BlogSchema;
+    slug: string;
+}
+// Filter by section and cast
+const journalPosts = allPosts
+    .filter((post) => {
+        const data = post.data as BlogSchema;
+        return data.section === "journal";
+    })
+    .sort(
+        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+    ) as BlogPost[];
 ---
 
 <ContentPage
@@ -15,53 +36,93 @@ import ContentPage from "../layouts/ContentPage.astro";
         exploratory, and often capture work-in-progress ideas.
     </p>
 
-    <div class="journal-feed">
-        <article class="journal-entry">
-            <div class="entry-meta">
-                <time datetime="2023-12-15">December 15, 2023</time>
-                <span class="category">Development</span>
+    {
+        journalPosts.length > 0 ? (
+            <div class="journal-feed">
+                {journalPosts.map((post) => (
+                    <article class="journal-entry">
+                        <div class="entry-meta">
+                            <time
+                                datetime={
+                                    post.data.pubDate
+                                        .toISOString()
+                                        .split("T")[0]
+                                }
+                            >
+                                <FormattedDate date={post.data.pubDate} />
+                            </time>
+                            {post.data.tags && post.data.tags.length > 0 && (
+                                <span class="category">
+                                    {post.data.tags[0]}
+                                </span>
+                            )}
+                        </div>
+                        <h3>{post.data.title}</h3>
+                        <p>{post.data.description}</p>
+                        <a href={`/blog/${post.slug}`} class="read-more">
+                            Continue reading
+                        </a>
+                    </article>
+                ))}
             </div>
-            <h3>Rethinking Component Architecture</h3>
-            <p>
-                I've been experimenting with different approaches to component
-                architecture lately, particularly looking at the intersection of
-                atomic design principles and state management. The challenge is
-                finding the right balance between reusability and
-                maintainability...
-            </p>
-            <a href="#" class="read-more">Continue reading</a>
-        </article>
+        ) : (
+            <div class="journal-feed">
+                <article class="journal-entry">
+                    <div class="entry-meta">
+                        <time datetime="2023-12-15">December 15, 2023</time>
+                        <span class="category">Development</span>
+                    </div>
+                    <h3>Rethinking Component Architecture</h3>
+                    <p>
+                        I've been experimenting with different approaches to
+                        component architecture lately, particularly looking at
+                        the intersection of atomic design principles and state
+                        management. The challenge is finding the right balance
+                        between reusability and maintainability...
+                    </p>
+                    <a href="#" class="read-more">
+                        Continue reading
+                    </a>
+                </article>
 
-        <article class="journal-entry">
-            <div class="entry-meta">
-                <time datetime="2023-12-08">December 8, 2023</time>
-                <span class="category">Creativity</span>
-            </div>
-            <h3>The Space Between Tools and Creativity</h3>
-            <p>
-                There's an interesting relationship between the tools we use and
-                our creative output. Sometimes a constraint or limitation in our
-                tools can spark creative solutions, while other times it can
-                stifle progress. I've been reflecting on how to...
-            </p>
-            <a href="#" class="read-more">Continue reading</a>
-        </article>
+                <article class="journal-entry">
+                    <div class="entry-meta">
+                        <time datetime="2023-12-08">December 8, 2023</time>
+                        <span class="category">Creativity</span>
+                    </div>
+                    <h3>The Space Between Tools and Creativity</h3>
+                    <p>
+                        There's an interesting relationship between the tools we
+                        use and our creative output. Sometimes a constraint or
+                        limitation in our tools can spark creative solutions,
+                        while other times it can stifle progress. I've been
+                        reflecting on how to...
+                    </p>
+                    <a href="#" class="read-more">
+                        Continue reading
+                    </a>
+                </article>
 
-        <article class="journal-entry">
-            <div class="entry-meta">
-                <time datetime="2023-11-29">November 29, 2023</time>
-                <span class="category">Technology</span>
+                <article class="journal-entry">
+                    <div class="entry-meta">
+                        <time datetime="2023-11-29">November 29, 2023</time>
+                        <span class="category">Technology</span>
+                    </div>
+                    <h3>Exploring the Potential of AI in Content Creation</h3>
+                    <p>
+                        AI tools have advanced rapidly, especially in the realm
+                        of content creation. I've been testing various AI
+                        assistants and exploring how they can enhance rather
+                        than replace the creative process. The results have been
+                        surprising...
+                    </p>
+                    <a href="#" class="read-more">
+                        Continue reading
+                    </a>
+                </article>
             </div>
-            <h3>Exploring the Potential of AI in Content Creation</h3>
-            <p>
-                AI tools have advanced rapidly, especially in the realm of
-                content creation. I've been testing various AI assistants and
-                exploring how they can enhance rather than replace the creative
-                process. The results have been surprising...
-            </p>
-            <a href="#" class="read-more">Continue reading</a>
-        </article>
-    </div>
+        )
+    }
 
     <div class="subscribe-section">
         <h3>Stay Updated</h3>

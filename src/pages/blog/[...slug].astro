@@ -6,6 +6,10 @@ import {
     type CollectionEntry,
 } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
+import {
+    getAdjacentPosts,
+    getAdjacentPostsInSection,
+} from "../../utils/blogNavigation";
 
 // This function is required for Astro to know which paths to generate
 export async function getStaticPaths() {
@@ -29,9 +33,216 @@ if (!post) {
     throw new Error(`Blog post with id ${entryId} not found.`);
 }
 
+// Get the previous and next posts chronologically
+const { prev: prevPost, next: nextPost } = await getAdjacentPosts(entryId);
+
+// Type-safe access to section
+type BlogData = CollectionEntry<"blog">["data"];
+type BlogDataWithSection = BlogData & { section?: string };
+const postData = post.data as BlogDataWithSection;
+
+// Get the previous and next posts within the same section if section is defined
+const { prev: prevSectionPost, next: nextSectionPost } = postData.section
+    ? await getAdjacentPostsInSection(entryId)
+    : { prev: undefined, next: undefined };
+
+// Determine if we have section-specific navigation
+const hasSectionNav = Boolean(
+    postData.section && (prevSectionPost || nextSectionPost),
+);
+
 const { Content } = await render(post);
 ---
 
 <BlogPost {...post.data}>
     <Content />
+
+    {/* Add navigation after the content */}
+    {
+        (prevPost || nextPost) && (
+            <div class="post-navigation-container">
+                {hasSectionNav && (
+                    <div class="section-nav">
+                        <h3>Navigate within {postData.section}</h3>
+                        <div class="nav-links">
+                            {prevSectionPost && (
+                                <a
+                                    href={`/blog/${prevSectionPost.id}`}
+                                    class="prev-post"
+                                >
+                                    <span class="nav-arrow">←</span>
+                                    <div class="nav-info">
+                                        <span class="nav-label">
+                                            Previous in {postData.section}
+                                        </span>
+                                        <span class="nav-title">
+                                            {prevSectionPost.data.title}
+                                        </span>
+                                    </div>
+                                </a>
+                            )}
+
+                            {!prevSectionPost && <div class="nav-empty" />}
+
+                            {nextSectionPost && (
+                                <a
+                                    href={`/blog/${nextSectionPost.id}`}
+                                    class="next-post"
+                                >
+                                    <div class="nav-info">
+                                        <span class="nav-label">
+                                            Next in {postData.section}
+                                        </span>
+                                        <span class="nav-title">
+                                            {nextSectionPost.data.title}
+                                        </span>
+                                    </div>
+                                    <span class="nav-arrow">→</span>
+                                </a>
+                            )}
+
+                            {!nextSectionPost && <div class="nav-empty" />}
+                        </div>
+                    </div>
+                )}
+
+                <div class="chrono-nav">
+                    <h3>Chronological Navigation</h3>
+                    <div class="nav-links">
+                        {prevPost && (
+                            <a href={`/blog/${prevPost.id}`} class="prev-post">
+                                <span class="nav-arrow">←</span>
+                                <div class="nav-info">
+                                    <span class="nav-label">Previous</span>
+                                    <span class="nav-title">
+                                        {prevPost.data.title}
+                                    </span>
+                                </div>
+                            </a>
+                        )}
+
+                        {!prevPost && <div class="nav-empty" />}
+
+                        {nextPost && (
+                            <a href={`/blog/${nextPost.id}`} class="next-post">
+                                <div class="nav-info">
+                                    <span class="nav-label">Next</span>
+                                    <span class="nav-title">
+                                        {nextPost.data.title}
+                                    </span>
+                                </div>
+                                <span class="nav-arrow">→</span>
+                            </a>
+                        )}
+
+                        {!nextPost && <div class="nav-empty" />}
+                    </div>
+                </div>
+            </div>
+        )
+    }
 </BlogPost>
+
+<style>
+    .post-navigation-container {
+        margin-top: 4rem;
+    }
+
+    .section-nav,
+    .chrono-nav {
+        margin-bottom: 2rem;
+    }
+
+    .section-nav h3,
+    .chrono-nav h3 {
+        text-align: center;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        color: var(--accent);
+    }
+
+    .nav-links {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .prev-post,
+    .next-post {
+        display: flex;
+        align-items: center;
+        max-width: 48%;
+        text-decoration: none;
+        color: var(--accent);
+        padding: 0.75rem;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+    .prev-post:hover,
+    .next-post:hover {
+        background-color: rgba(var(--gray-light), 30%);
+    }
+
+    .nav-arrow {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0 0.5rem;
+    }
+
+    .nav-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nav-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: rgb(var(--gray));
+    }
+
+    .nav-title {
+        font-weight: 500;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .next-post {
+        text-align: right;
+        flex-direction: row-reverse;
+    }
+
+    .next-post .nav-info {
+        align-items: flex-end;
+    }
+
+    .nav-empty {
+        width: 48%;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+        .nav-links {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .prev-post,
+        .next-post,
+        .nav-empty {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+        }
+
+        .nav-title {
+            font-size: 0.9rem;
+        }
+    }
+</style>

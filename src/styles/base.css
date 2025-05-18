@@ -1,0 +1,276 @@
+/* Base CSS file that combines Tailwind with custom CSS variables */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    /* Import existing CSS variables and base styles */
+    :root {
+        /* Light mode Colors */
+        --accent: #2337ff;
+        --accent-dark: #000d8a;
+        --black: 15, 18, 25;
+        --gray: 70, 85, 120;
+        --gray-light: 220, 225, 235;
+        --gray-dark: 34, 41, 57;
+        --gray-gradient: rgba(var(--gray-light), 50%), #fff;
+
+        /* Glow effects for consistent UI */
+        --glow-color: rgba(35, 55, 255, 0.15);
+        --glow-radius: 16px;
+        --glow-spread: 4px;
+
+        /* Box shadows with glow effect */
+        --box-shadow:
+            0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
+            0 16px 32px rgba(var(--gray), 33%), 0 0 var(--glow-radius) var(--glow-spread) var(--glow-color);
+        --box-shadow-small:
+            0 2px 4px rgba(var(--gray), 20%), 0 4px 8px rgba(var(--gray), 25%),
+            0 0 calc(var(--glow-radius) / 2) calc(var(--glow-spread) / 2) var(--glow-color);
+        --box-shadow-hover:
+            0 4px 12px rgba(var(--gray), 30%), 0 12px 32px rgba(var(--gray), 35%),
+            0 0 calc(var(--glow-radius) * 1.5) calc(var(--glow-spread) * 1.2) var(--glow-color);
+
+        --code-bg: #1e1e1e;
+        --code-fg: #d4d4d4;
+        --blockquote-bg: rgba(var(--gray-light), 60%);
+
+        /* Theme colors - light mode default */
+        --theme-bg: #ffffff;
+        --theme-text: rgb(var(--gray-dark));
+        --theme-accent: var(--accent);
+        --theme-accent-dark: var(--accent-dark);
+        --theme-code-bg: rgba(var(--gray-light), 80%);
+        --theme-code-text: var(--accent-dark);
+        --theme-selection-bg: rgba(var(--gray-light), 80%);
+        --theme-header-bg: #ffffff;
+        --theme-header-text: rgb(var(--black));
+        --theme-border: rgba(var(--gray), 30%);
+        --theme-blockquote-bg: rgba(var(--gray-light), 60%);
+        --theme-card-bg: #ffffff;
+        --theme-table-header-bg: rgba(var(--gray-light), 60%);
+        --theme-table-row-even: rgba(var(--gray-light), 30%);
+
+        /* Base typography values */
+        --base-font-size: 20px;
+        --base-line-height: 1.7;
+        --scale-ratio: 1.25;
+
+        /* Fluid typography variables - min and max values across viewport widths */
+        --fluid-min-width: 320;
+        --fluid-max-width: 1200;
+        --fluid-min-size: 16;
+        --fluid-max-size: 20;
+
+        /* Heading font sizes using the fluid typography technique */
+        --h1-min-size: 32;
+        --h1-max-size: 48;
+        --h2-min-size: 28;
+        --h2-max-size: 38;
+        --h3-min-size: 24;
+        --h3-max-size: 31;
+        --h4-min-size: 20;
+        --h4-max-size: 25;
+        --h5-min-size: 18;
+        --h5-max-size: 20;
+
+        /* Theme transition */
+        --theme-transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+
+        /* Standard breakpoint variables */
+        --mobile-sm: 320px;
+        --mobile: 480px;
+        --tablet-sm: 640px;
+        --tablet: 768px;
+        --desktop-sm: 960px;
+        --desktop: 1024px;
+        --desktop-lg: 1280px;
+        --desktop-xl: 1440px;
+    }
+
+    /* Dark Mode Theme */
+    html.dark {
+        --theme-bg: #121212;
+        --theme-text: rgba(255, 255, 255, 1);
+        --theme-accent: #a3adff;
+        --theme-accent-dark: #c5cbff;
+        --theme-code-bg: #2d2d2d;
+        --theme-code-text: #ffffff;
+        --theme-selection-bg: rgba(255, 255, 255, 0.25);
+        --theme-header-bg: #1a1a1a;
+        --theme-header-text: rgba(255, 255, 255, 1);
+        --theme-border: rgba(255, 255, 255, 0.35);
+        --theme-blockquote-bg: rgba(255, 255, 255, 0.15);
+        --theme-card-bg: #1e1e1e;
+        --theme-table-header-bg: rgba(255, 255, 255, 0.2);
+        --theme-table-row-even: rgba(255, 255, 255, 0.1);
+        --gray-gradient: #1a1a1a, #121212;
+
+        /* Dark mode glow effect */
+        --glow-color: rgba(163, 173, 255, 0.15);
+
+        /* Dark mode box shadows with glow */
+        --box-shadow:
+            0 2px 6px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.4),
+            0 16px 32px rgba(0, 0, 0, 0.3), 0 0 var(--glow-radius) var(--glow-spread) var(--glow-color);
+        --box-shadow-small:
+            0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.35),
+            0 0 calc(var(--glow-radius) / 2) calc(var(--glow-spread) / 2) var(--glow-color);
+        --box-shadow-hover:
+            0 4px 12px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.45),
+            0 0 calc(var(--glow-radius) * 1.5) calc(var(--glow-spread) * 1.2) var(--glow-color);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not(.light) {
+            --theme-bg: #121212;
+            --theme-text: rgba(255, 255, 255, 1);
+            --theme-accent: #a3adff;
+            --theme-accent-dark: #c5cbff;
+            --theme-code-bg: #2d2d2d;
+            --theme-code-text: #ffffff;
+            --theme-selection-bg: rgba(255, 255, 255, 0.25);
+            --theme-header-bg: #1a1a1a;
+            --theme-header-text: rgba(255, 255, 255, 1);
+            --theme-border: rgba(255, 255, 255, 0.35);
+            --theme-blockquote-bg: rgba(255, 255, 255, 0.15);
+            --theme-card-bg: #1e1e1e;
+            --theme-table-header-bg: rgba(255, 255, 255, 0.2);
+            --theme-table-row-even: rgba(255, 255, 255, 0.1);
+            --gray-gradient: #1a1a1a, #121212;
+
+            /* Dark mode glow effect */
+            --glow-color: rgba(163, 173, 255, 0.15);
+
+            /* Dark mode box shadows with glow */
+            --box-shadow:
+                0 2px 6px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.4),
+                0 16px 32px rgba(0, 0, 0, 0.3), 0 0 var(--glow-radius) var(--glow-spread) var(--glow-color);
+            --box-shadow-small:
+                0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.35),
+                0 0 calc(var(--glow-radius) / 2) calc(var(--glow-spread) / 2) var(--glow-color);
+            --box-shadow-hover:
+                0 4px 12px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.45),
+                0 0 calc(var(--glow-radius) * 1.5) calc(var(--glow-spread) * 1.2) var(--glow-color);
+        }
+    }
+
+    /* Basic element styles that Tailwind reset might override */
+    body {
+        @apply bg-theme-bg text-theme-text;
+        font-family: 'Atkinson', sans-serif;
+        font-size: var(--base-font-size);
+        line-height: var(--base-line-height);
+        transition: var(--theme-transition);
+    }
+
+    ::selection {
+        @apply bg-theme-selection-bg;
+    }
+}
+
+/* Common component patterns */
+@layer components {
+
+    /* Card component */
+    .card {
+        @apply bg-theme-card-bg p-6 rounded-lg shadow-DEFAULT;
+        transition: var(--theme-transition);
+    }
+
+    /* Button styles */
+    .btn {
+        @apply inline-flex items-center justify-center px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2;
+        transition: var(--theme-transition);
+    }
+
+    .btn-primary {
+        @apply btn bg-accent text-white hover:bg-accent-dark focus:ring-accent;
+    }
+
+    .btn-secondary {
+        @apply btn bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600;
+    }
+
+    /* Container class with responsive padding */
+    .container-responsive {
+        @apply w-full mx-auto px-4 sm:px-6 lg:px-8;
+        max-width: calc(100% - 2rem);
+    }
+
+    /* Prose content styles for markdown/content areas */
+    .prose-custom {
+        @apply max-w-none text-theme-text;
+    }
+
+    .prose-custom h1,
+    .prose-custom h2,
+    .prose-custom h3,
+    .prose-custom h4,
+    .prose-custom h5 {
+        @apply font-bold text-theme-text;
+    }
+
+    .prose-custom h1 {
+        @apply text-4xl mb-6 mt-8;
+    }
+
+    .prose-custom h2 {
+        @apply text-3xl mb-4 mt-8;
+    }
+
+    .prose-custom h3 {
+        @apply text-2xl mb-4 mt-6;
+    }
+
+    .prose-custom p {
+        @apply mb-6;
+    }
+
+    .prose-custom a {
+        @apply text-theme-accent underline hover:text-theme-accent-dark;
+        transition: var(--theme-transition);
+    }
+
+    .prose-custom blockquote {
+        @apply p-4 my-6 bg-theme-blockquote-bg rounded-lg border-l-4 border-theme-accent;
+    }
+
+    .prose-custom code {
+        @apply bg-theme-code-bg text-theme-code-text px-1.5 py-0.5 rounded-md text-sm;
+    }
+
+    .prose-custom pre {
+        @apply p-4 my-6 bg-code-bg text-code-fg rounded-lg overflow-x-auto;
+    }
+}
+
+/* Common utility classes that aren't included in Tailwind by default */
+@layer utilities {
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+    }
+
+    /* Responsive visibility utilities */
+    .hide-on-mobile {
+        @apply hidden md:block;
+    }
+
+    .show-on-mobile {
+        @apply block md:hidden;
+    }
+
+    /* Theme transition utility */
+    .transition-theme {
+        transition: var(--theme-transition);
+    }
+}

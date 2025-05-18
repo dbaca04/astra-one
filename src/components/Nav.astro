@@ -2,7 +2,7 @@
 import HeaderLink from "./HeaderLink.astro";
 ---
 
-<div class="internal-links">
+<div class="flex flex-wrap gap-x-4 gap-y-2 md:gap-x-2">
     <HeaderLink href="/code">Code</HeaderLink>
     <HeaderLink href="/create">Create</HeaderLink>
     <HeaderLink href="/automate">Automate</HeaderLink>
@@ -10,17 +10,3 @@ import HeaderLink from "./HeaderLink.astro";
     <HeaderLink href="/about">About</HeaderLink>
     <HeaderLink href="/contact">Contact</HeaderLink>
 </div>
-
-<style>
-    .internal-links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem 1rem;
-    }
-
-    @media (max-width: 1024px) {
-        .internal-links {
-            gap: 0.25rem 0.5rem;
-        }
-    }
-</style>

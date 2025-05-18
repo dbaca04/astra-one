@@ -2,30 +2,66 @@
 import HeaderLink from "./HeaderLink.astro";
 ---
 
-<div class="mobile-nav">
+<div class="mobile-nav block md:hidden">
     <button
         id="mobile-menu-toggle"
         aria-label="Menu"
         aria-expanded="false"
         aria-controls="mobile-menu"
+        class="bg-transparent border-0 cursor-pointer p-2.5 flex items-center justify-center z-[1001] relative rounded-full transition-colors duration-200 hover:bg-theme-selection-bg focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-accent"
     >
-        <span class="hamburger"></span>
+        <span
+            class="hamburger-icon relative block w-6 h-0.5 bg-theme-header-text transition-colors duration-200"
+        ></span>
     </button>
 
-    <div id="mobile-menu" class="mobile-menu">
-        <div class="menu-container">
-            <HeaderLink href="/code">Code</HeaderLink>
-            <HeaderLink href="/create">Create</HeaderLink>
-            <HeaderLink href="/automate">Automate</HeaderLink>
-            <HeaderLink href="/journal">Journal</HeaderLink>
-            <HeaderLink href="/about">About</HeaderLink>
-            <HeaderLink href="/contact">Contact</HeaderLink>
+    <div
+        id="mobile-menu"
+        class="mobile-menu fixed inset-0 z-[1000] flex items-center justify-center bg-theme-bg bg-opacity-95 backdrop-blur-sm transform translate-x-full transition-transform duration-300"
+    >
+        <div
+            class="menu-container w-full max-w-md p-6 flex flex-col items-center gap-6"
+        >
+            <HeaderLink
+                href="/code"
+                class="text-xl font-medium py-2 w-full text-center"
+                >Code</HeaderLink
+            >
+            <HeaderLink
+                href="/create"
+                class="text-xl font-medium py-2 w-full text-center"
+                >Create</HeaderLink
+            >
+            <HeaderLink
+                href="/automate"
+                class="text-xl font-medium py-2 w-full text-center"
+                >Automate</HeaderLink
+            >
+            <HeaderLink
+                href="/journal"
+                class="text-xl font-medium py-2 w-full text-center"
+                >Journal</HeaderLink
+            >
+            <HeaderLink
+                href="/about"
+                class="text-xl font-medium py-2 w-full text-center"
+                >About</HeaderLink
+            >
+            <HeaderLink
+                href="/contact"
+                class="text-xl font-medium py-2 w-full text-center"
+                >Contact</HeaderLink
+            >
 
-            <div class="theme-toggle-mobile">
-                <button id="mobile-theme-toggle" aria-label="Toggle Dark Mode">
-                    <span class="toggle-icon">
+            <div class="theme-toggle-mobile mt-6">
+                <button
+                    id="mobile-theme-toggle"
+                    aria-label="Toggle Dark Mode"
+                    class="flex items-center gap-3 bg-transparent border-0 cursor-pointer p-3 rounded-md hover:bg-theme-selection-bg transition-colors duration-200"
+                >
+                    <span class="toggle-icon flex items-center justify-center">
                         <svg
-                            class="sun-icon"
+                            class="sun-icon block dark:hidden"
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
                             height="24"
@@ -51,7 +87,7 @@ import HeaderLink from "./HeaderLink.astro";
                             ></line>
                         </svg>
                         <svg
-                            class="moon-icon"
+                            class="moon-icon hidden dark:block"
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
                             height="24"
@@ -90,8 +126,9 @@ import HeaderLink from "./HeaderLink.astro";
     function setupMobileMenu() {
         const menuButton = document.getElementById("mobile-menu-toggle");
         const mobileMenu = document.getElementById("mobile-menu");
+        const hamburger = menuButton?.querySelector(".hamburger-icon");
 
-        if (!menuButton || !mobileMenu) return;
+        if (!menuButton || !mobileMenu || !hamburger) return;
 
         menuButton.addEventListener("click", function () {
             const expanded =
@@ -102,21 +139,37 @@ import HeaderLink from "./HeaderLink.astro";
                 "aria-expanded",
                 expanded ? "false" : "true",
             );
-            mobileMenu.classList.toggle("is-active");
-            document.body.classList.toggle("menu-open");
+
+            // Toggle menu transform
+            if (expanded) {
+                mobileMenu.classList.remove("translate-x-0");
+                mobileMenu.classList.add("translate-x-full");
+                document.body.classList.remove("overflow-hidden");
+            } else {
+                mobileMenu.classList.add("translate-x-0");
+                mobileMenu.classList.remove("translate-x-full");
+                document.body.classList.add("overflow-hidden");
+            }
 
             // Toggle hamburger icon
-            menuButton.classList.toggle("is-active");
+            hamburger.classList.toggle("before:rotate-45");
+            hamburger.classList.toggle("after:-rotate-45");
+            hamburger.classList.toggle("bg-transparent");
         });
 
         // Close menu when clicking on links
         const menuLinks = mobileMenu.querySelectorAll("a");
         menuLinks.forEach(function (link) {
             link.addEventListener("click", function () {
-                mobileMenu.classList.remove("is-active");
-                menuButton.classList.remove("is-active");
+                mobileMenu.classList.remove("translate-x-0");
+                mobileMenu.classList.add("translate-x-full");
                 menuButton.setAttribute("aria-expanded", "false");
-                document.body.classList.remove("menu-open");
+                document.body.classList.remove("overflow-hidden");
+                hamburger.classList.remove(
+                    "before:rotate-45",
+                    "after:-rotate-45",
+                    "bg-transparent",
+                );
             });
         });
     }
@@ -149,204 +202,57 @@ import HeaderLink from "./HeaderLink.astro";
 </script>
 
 <style>
-    .mobile-nav {
-        display: none;
+    /* Styles for hamburger animation that are hard to do with just Tailwind */
+    .hamburger-icon::before,
+    .hamburger-icon::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2.5px;
+        background-color: currentColor;
+        left: 0;
+        transition:
+            transform 0.3s ease,
+            top 0.3s ease,
+            bottom 0.3s ease,
+            background-color 0.3s ease;
     }
 
-    /* Only show mobile nav on smaller screens */
-    @media (max-width: 768px) {
-        .mobile-nav {
-            display: block !important;
-        }
+    .hamburger-icon::before {
+        top: -8px;
+    }
 
-        /* Hamburger button styles */
-        #mobile-menu-toggle {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1001;
-            position: relative;
-            border-radius: 50%;
-            transition: background-color 0.2s ease;
-        }
+    .hamburger-icon::after {
+        bottom: -8px;
+    }
 
-        #mobile-menu-toggle:hover,
-        #mobile-menu-toggle:focus {
-            background-color: var(--theme-selection-bg);
-        }
+    /* Hamburger animation on menu open */
+    [aria-expanded="true"] .hamburger-icon {
+        background-color: transparent;
+    }
 
-        #mobile-menu-toggle:focus-visible {
-            outline: 2px solid var(--theme-accent);
-            outline-offset: 2px;
-        }
+    [aria-expanded="true"] .hamburger-icon::before {
+        transform: rotate(45deg);
+        top: 0;
+    }
 
-        .hamburger {
-            display: block;
-            position: relative;
-            width: 24px;
-            height: 2.5px; /* Slightly thicker for better visibility */
-            background-color: var(--theme-header-text);
-            transition: background-color 0.2s ease-in-out;
-        }
+    [aria-expanded="true"] .hamburger-icon::after {
+        transform: rotate(-45deg);
+        bottom: 0;
+    }
 
-        .hamburger::before,
-        .hamburger::after {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 2.5px; /* Slightly thicker for better visibility */
-            background-color: var(--theme-header-text);
-            left: 0;
-            transition: transform 0.2s ease-in-out;
-        }
+    /* Fix for transitions */
+    .mobile-menu {
+        visibility: hidden;
+        transition:
+            transform 0.3s ease,
+            visibility 0s linear 0.3s;
+    }
 
-        .hamburger::before {
-            top: -8px;
-        }
-
-        .hamburger::after {
-            bottom: -8px;
-        }
-
-        /* Hamburger button active state */
-        #mobile-menu-toggle.is-active .hamburger {
-            background-color: transparent;
-        }
-
-        #mobile-menu-toggle.is-active .hamburger::before {
-            transform: translateY(8px) rotate(45deg);
-        }
-
-        #mobile-menu-toggle.is-active .hamburger::after {
-            transform: translateY(-8px) rotate(-45deg);
-        }
-
-        /* Mobile menu styles */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--theme-bg);
-            color: var(--theme-text);
-            z-index: 1000;
-            transform: translateY(-100%);
-            transition: transform 0.3s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            overflow-y: auto;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .mobile-menu.is-active {
-            transform: translateY(0);
-        }
-
-        .menu-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            text-align: center;
-            width: 100%;
-        }
-
-        .menu-container a {
-            font-size: 1.25rem;
-            padding: 0.75rem;
-            width: 100%;
-            border-bottom: 1px solid var(--theme-border);
-            color: var(--theme-text);
-            border-radius: 6px;
-            transition:
-                background-color 0.2s ease,
-                color 0.2s ease,
-                border-left 0.2s ease;
-            font-weight: 500;
-        }
-
-        .menu-container a:hover,
-        .menu-container a:focus {
-            background-color: var(--theme-selection-bg);
-            color: var(--theme-accent);
-        }
-
-        .menu-container a:focus-visible {
-            outline: 2px solid var(--theme-accent);
-            outline-offset: 2px;
-        }
-
-        .menu-container a.active {
-            background-color: var(--theme-selection-bg);
-            font-weight: 700;
-            border-left: 3px solid var(--theme-accent);
-            color: var(--theme-accent);
-            padding-left: calc(0.75rem - 3px);
-        }
-
-        /* Theme toggle mobile styles */
-        .theme-toggle-mobile {
-            margin-top: 1rem;
-            width: 100%;
-        }
-
-        #mobile-theme-toggle {
-            background-color: var(--theme-selection-bg);
-            border: none;
-            border-radius: 8px;
-            color: var(--theme-text);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            width: 100%;
-            transition: background-color 0.2s ease;
-        }
-
-        #mobile-theme-toggle:hover {
-            background-color: var(--theme-selection-bg);
-            color: var(--theme-accent);
-        }
-
-        .toggle-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .sun-icon {
-            display: block;
-        }
-
-        .moon-icon {
-            display: none;
-        }
-
-        html.dark .sun-icon {
-            display: none;
-        }
-
-        html.dark .moon-icon {
-            display: block;
-        }
-
-        .toggle-text {
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        /* Prevent background scrolling when menu is open */
-        :global(body.menu-open) {
-            overflow: hidden;
-        }
+    .mobile-menu.translate-x-0 {
+        visibility: visible;
+        transition:
+            transform 0.3s ease,
+            visibility 0s linear 0s;
     }
 </style>

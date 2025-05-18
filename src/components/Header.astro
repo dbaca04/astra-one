@@ -5,17 +5,23 @@ import MobileNav from "./MobileNav.astro";
 import { SITE_TITLE } from "../consts";
 ---
 
-<header>
-	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
+<header class="bg-theme-header-bg shadow-sm transition-theme">
+	<nav class="flex items-center justify-between px-4 py-4">
+		<h2 class="text-base m-0">
+			<a href="/" class="no-underline">{SITE_TITLE}</a>
+		</h2>
 		<div class="desktop-nav hide-on-mobile">
 			<Nav />
 		</div>
 		<MobileNav />
-		<div class="theme-toggle hide-on-mobile">
-			<button id="theme-toggle" aria-label="Toggle Dark Mode">
+		<div class="hide-on-mobile flex items-center">
+			<button
+				id="theme-toggle"
+				aria-label="Toggle Dark Mode"
+				class="bg-transparent border-0 p-0 cursor-pointer flex items-center justify-center w-8 h-8 rounded-full text-theme-header-text hover:bg-gray-10 focus:outline-accent-dark focus:outline-2 focus:outline-offset-2"
+			>
 				<svg
-					class="sun-icon"
+					class="sun-icon block dark:hidden"
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
 					height="24"
@@ -37,7 +43,7 @@ import { SITE_TITLE } from "../consts";
 					<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
 				</svg>
 				<svg
-					class="moon-icon"
+					class="moon-icon hidden dark:block"
 					xmlns="http://www.w3.org/2000/svg"
 					width="24"
 					height="24"
@@ -122,83 +128,3 @@ import { SITE_TITLE } from "../consts";
 		setupThemeToggle();
 	});
 </script>
-
-<style>
-	header {
-		margin: 0;
-		padding: 0 1em;
-		background: var(--theme-header-bg);
-		box-shadow: var(--box-shadow-small);
-		transition: var(--theme-transition);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
-	nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 1rem 0;
-	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--theme-header-text);
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
-		transition: var(--theme-transition);
-	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--theme-accent);
-	}
-	.theme-toggle {
-		display: flex;
-		align-items: center;
-	}
-
-	/* Theme toggle button styles */
-	#theme-toggle {
-		background: none;
-		border: none;
-		padding: 0;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
-		color: var(--theme-header-text);
-		transition:
-			color 0.2s ease,
-			background-color 0.2s ease,
-			box-shadow 0.3s ease;
-	}
-	#theme-toggle:hover {
-		background-color: rgba(var(--gray), 10%);
-		box-shadow: 0 0 calc(var(--glow-radius) / 3)
-			calc(var(--glow-spread) / 3) var(--glow-color);
-	}
-	#theme-toggle:focus {
-		outline: 2px solid var(--theme-accent);
-		outline-offset: 2px;
-	}
-	.moon-icon {
-		display: none;
-	}
-	.sun-icon {
-		display: block;
-	}
-	html.dark .moon-icon {
-		display: block;
-	}
-	html.dark .sun-icon {
-		display: none;
-	}
-</style>

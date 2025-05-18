@@ -31,6 +31,43 @@ const { title, description } = Astro.props;
             .title h1 {
                 margin: 0 0 0.5em 0;
             }
+
+            /* Responsive adjustments */
+            @media (max-width: var(--tablet)) {
+                .content {
+                    padding: 0.8em;
+                }
+
+                .title {
+                    padding: 0.8em 0;
+                    margin-bottom: 0.8em;
+                }
+            }
+
+            @media (max-width: var(--mobile)) {
+                .content {
+                    padding: 0.6em;
+                }
+
+                .title {
+                    padding: 0.6em 0;
+                    margin-bottom: 0.6em;
+                }
+
+                /* Apply responsive typography to content children */
+                .content :global(p) {
+                    margin-bottom: 1.2em;
+                }
+
+                .content :global(ul),
+                .content :global(ol) {
+                    margin: 1em 0 1.5em 1.5em;
+                }
+
+                .content :global(li) {
+                    margin-bottom: 0.4em;
+                }
+            }
         </style>
     </head>
 

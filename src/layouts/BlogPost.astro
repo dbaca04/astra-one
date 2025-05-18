@@ -42,7 +42,20 @@ const displayImage = heroImage || image;
 				margin: auto;
 				padding: 1em;
 				color: rgb(var(--gray-dark));
-				font-size: 1.05em;
+				font-size: clamp(
+					1em,
+					calc(
+						1em + 0.05 *
+							(
+								(100vw - var(--fluid-min-width) px) /
+									(
+										var(--fluid-max-width) -
+											var(--fluid-min-width)
+									)
+							)
+					),
+					1.05em
+				);
 				line-height: 1.75;
 			}
 			.prose :global(h2) {
@@ -94,14 +107,40 @@ const displayImage = heroImage || image;
 			.date {
 				margin-bottom: 0.5em;
 				color: rgb(var(--gray));
-				font-size: 0.9em;
+				font-size: clamp(
+					0.8em,
+					calc(
+						0.8em + 0.1 *
+							(
+								(100vw - var(--fluid-min-width) px) /
+									(
+										var(--fluid-max-width) -
+											var(--fluid-min-width)
+									)
+							)
+					),
+					0.9em
+				);
 			}
 			.last-updated-on {
 				font-style: italic;
 			}
 			.tags {
 				margin-top: 1.2em;
-				font-size: 0.9em;
+				font-size: clamp(
+					0.8em,
+					calc(
+						0.8em + 0.1 *
+							(
+								(100vw - var(--fluid-min-width) px) /
+									(
+										var(--fluid-max-width) -
+											var(--fluid-min-width)
+									)
+							)
+					),
+					0.9em
+				);
 				color: rgb(var(--gray));
 				display: flex;
 				flex-wrap: wrap;
@@ -113,6 +152,78 @@ const displayImage = heroImage || image;
 				padding: 0.2em 0.6em;
 				background-color: rgba(var(--gray-light), 70%);
 				border-radius: 4px;
+			}
+
+			/* Responsive adjustments */
+			@media (max-width: var(--tablet)) {
+				.prose {
+					padding: 0.8em;
+					line-height: 1.7;
+				}
+
+				.title {
+					padding: 0.8em 0;
+				}
+
+				.hero-image {
+					margin-bottom: 1.5em;
+				}
+
+				.prose :global(h2) {
+					margin-top: 1.8em;
+				}
+
+				.prose :global(h3) {
+					margin-top: 1.3em;
+				}
+
+				.prose :global(img) {
+					margin: 1.5em auto;
+				}
+
+				.prose :global(pre) {
+					margin: 1.2em 0 1.8em;
+				}
+			}
+
+			@media (max-width: var(--mobile)) {
+				.prose {
+					padding: 0.6em;
+					line-height: 1.65;
+				}
+
+				.title {
+					padding: 0.6em 0;
+					margin-bottom: 1.2em;
+				}
+
+				.hero-image {
+					margin-bottom: 1.2em;
+					max-height: 50vh;
+				}
+
+				.prose :global(blockquote) {
+					padding: 1.2em 1.4em;
+					margin: 1.5em 0;
+				}
+
+				.prose :global(ul),
+				.prose :global(ol) {
+					margin: 1em 0 1.5em 1.5em;
+				}
+
+				.prose :global(li) {
+					margin-bottom: 0.4em;
+				}
+
+				.tags {
+					margin-top: 1em;
+					gap: 0.4em;
+				}
+
+				.tags span {
+					padding: 0.15em 0.5em;
+				}
 			}
 		</style>
 	</head>

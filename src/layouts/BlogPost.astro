@@ -4,6 +4,7 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import TableOfContents from "../components/TableOfContents.astro";
 import { Picture } from "astro:assets";
 
 type Props = CollectionEntry<"blog">["data"] & { tags?: string[] };
@@ -13,6 +14,10 @@ const { title, description, pubDate, updatedDate, heroImage, image, tags } =
 
 // Use heroImage or fallback to image property
 const displayImage = heroImage || image;
+
+// Get the article content that will be rendered
+// This is needed to extract the headings for the TOC
+const articleContent = await Astro.slots.render("default");
 ---
 
 <html lang="en">
@@ -169,6 +174,34 @@ const displayImage = heroImage || image;
 				transition: var(--theme-transition);
 			}
 
+			/* Add styling for table of contents appearance */
+			.blog-content {
+				display: flex;
+				flex-direction: column;
+				gap: 2rem;
+			}
+
+			/* On larger screens, we can show TOC in a sidebar */
+			@media (min-width: 1200px) {
+				.blog-content {
+					flex-direction: row;
+					align-items: flex-start;
+					gap: 3rem;
+				}
+
+				.toc-wrapper {
+					position: sticky;
+					top: 2rem;
+					width: 280px;
+					flex-shrink: 0;
+					align-self: flex-start;
+				}
+
+				.content-wrapper {
+					flex: 1;
+				}
+			}
+
 			/* Responsive adjustments */
 			@media (max-width: 768px) {
 				.prose {
@@ -290,7 +323,21 @@ const displayImage = heroImage || image;
 							)
 						}
 					</div>
-					<slot />
+
+					<div class="blog-content">
+						{/* Table of Contents for desktop and larger screens */}
+						<div class="toc-wrapper">
+							<TableOfContents
+								content={articleContent}
+								headingLevels={[2, 3]}
+								showOnMobile={false}
+							/>
+						</div>
+
+						<div class="content-wrapper">
+							<slot />
+						</div>
+					</div>
 				</div>
 			</article>
 		</main>

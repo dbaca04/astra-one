@@ -155,7 +155,7 @@ const journalPosts = allPosts
     .journal-entry {
         margin-bottom: 3rem;
         padding-bottom: 2rem;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--theme-border);
     }
 
     .journal-entry:last-child {
@@ -167,11 +167,11 @@ const journalPosts = allPosts
         gap: 1rem;
         font-size: 0.9rem;
         margin-bottom: 0.5rem;
-        color: #666;
+        color: rgb(var(--gray));
     }
 
     .category {
-        color: var(--accent);
+        color: var(--theme-accent);
     }
 
     .journal-entry h3 {
@@ -182,7 +182,7 @@ const journalPosts = allPosts
         display: inline-block;
         margin-top: 0.5rem;
         font-weight: 500;
-        color: var(--accent);
+        color: var(--theme-accent);
         text-decoration: none;
     }
 
@@ -191,10 +191,12 @@ const journalPosts = allPosts
     }
 
     .subscribe-section {
-        background-color: #f7f7f7;
+        background-color: var(--theme-card-bg);
         padding: 2rem;
         border-radius: 8px;
         text-align: center;
+        border: 1px solid var(--theme-border);
+        box-shadow: var(--box-shadow);
     }
 
     .subscribe-form {
@@ -206,18 +208,37 @@ const journalPosts = allPosts
     .subscribe-form input {
         flex: 1;
         padding: 0.75rem 1rem;
-        border: 1px solid #ddd;
+        border: 1px solid var(--theme-border);
         border-radius: 4px 0 0 4px;
         font-size: 1rem;
+        background-color: var(--theme-bg);
+        color: var(--theme-text);
+    }
+
+    .subscribe-form input::placeholder {
+        color: rgba(var(--gray), 0.8);
     }
 
     .subscribe-form button {
         padding: 0.75rem 1.5rem;
-        background-color: var(--accent);
+        background-color: var(--theme-accent);
         color: white;
         border: none;
         border-radius: 0 4px 4px 0;
         font-size: 1rem;
         cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .subscribe-form button:hover,
+    .subscribe-form button:focus {
+        background-color: var(--theme-accent-dark);
+        outline: none;
+    }
+
+    .subscribe-form input:focus {
+        outline: none;
+        border-color: var(--theme-accent);
+        box-shadow: 0 0 0 2px rgba(var(--accent), 0.25);
     }
 </style>

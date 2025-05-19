@@ -37,8 +37,23 @@ Once I have a concept, I think about which AI image generator will best bring it
 
 My choice often depends on the desired style, level of detail, and how much control I want over the generation process. Sometimes, I even use multiple tools – generating a base in one and then using another for variations or upscaling.
 
-![Conceptual diagram of AI tools](/images/ai-tool-selection.png)
-*(Imagine a simple diagram here showing logos of Midjourney, Stable Diffusion, DALL-E with arrows pointing to "Your Idea")*
+<!-- ![Conceptual diagram of AI tools](/images/ai-tool-selection.jpg) -->
+<!-- *(Imagine a simple diagram here showing logos of Midjourney, Stable Diffusion, DALL-E with arrows pointing to "Your Idea")* -->
+
+```mermaid
+graph TD
+    subgraph AI Image Generators
+        A["Midjourney"]
+        B["Stable Diffusion"]
+        D["DALL-E"]
+    end
+
+    C(("💡 <br/> Your Idea"))
+
+    A -- Generates visuals for --> C
+    B -- Generates visuals for --> C
+    D -- Generates visuals for --> C
+```
 
 ### Phase 3: Crafting the Perfect Prompt - The Art and Science
 
@@ -75,7 +90,7 @@ Then, I iterate:
 
 This is a loop: generate, evaluate, refine, repeat. It's not uncommon for me to go through dozens of iterations before I land on something I'm truly happy with.
 
-![Example of iterative AI image generation](/images/ai-iteration-example.png)
+![Example of iterative AI image generation](/images/ai-iteration-example.jpg)
 *(Imagine a 2x2 grid here showing an initial generation and then 3 improved iterations based on prompt tweaks)*
 
 ### Phase 5: Refining and Upscaling - Adding the Polish

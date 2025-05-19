@@ -31,7 +31,7 @@ There are many fantastic AI image generators out there, each with its own interf
 
 **My Tip for Beginners:** Don't get bogged down in choosing the "perfect" tool right away. Pick one that looks inviting and easy to access, and just start! You can always explore others later. For this guide, let's assume you're using a tool with a simple text box for your prompt.
 
-![Screenshot of a generic AI image generator UI](/images/generic-ai-tool-ui.png)
+![Screenshot of a generic AI image generator UI](/images/generic-ai-tool-ui.jpg)
 *(Imagine a simple UI here: a text input box labeled "Enter your prompt," and a "Generate" button.)*
 
 ### Step 2: Crafting Your First Prompt - Keep it Simple!
@@ -78,7 +78,7 @@ Don't worry if it's not perfect. AI interpretation can be quirky, especially wit
 
 **Example Output for "A happy golden retriever playing in a park":**
 
-![Example AI image of a golden retriever in a park](/images/first-dog-generation.png)
+![Example AI image of a golden retriever in a park](/images/first-dog-generation.jpg)
 *(Imagine an AI-generated image here showing a reasonably good depiction of a golden retriever in a park, looking happy.)*
 
 ### Step 5: Iterate and Experiment (The Fun Continues!)

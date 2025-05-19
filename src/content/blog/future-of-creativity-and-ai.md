@@ -26,7 +26,7 @@ This is perhaps one of the most exciting aspects for me. For so long, certain cr
 
 AI tools are starting to lower these barriers. I have friends who never considered themselves "artistic" in the traditional sense who are now generating incredible images, crafting imaginative stories, or even composing simple melodies. This "democratization" doesn't devalue expertise, but it *does* broaden the pool of who gets to express themselves creatively. It's empowering, and I think it will lead to a richer, more diverse creative tapestry.
 
-![A diverse group of people collaborating on a creative project with AI tools](/images/ai-democratization-creativity.png)
+![A diverse group of people collaborating on a creative project with AI tools](/images/ai-democratization-creativity.jpg)
 *(Imagine a diverse group of people of different ages and backgrounds happily working on tablets and computers, with abstract creative elements floating around them, symbolizing AI-assisted creation.)*
 
 ### Uncharted Creative Territories

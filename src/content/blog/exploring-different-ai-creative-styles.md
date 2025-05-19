@@ -53,7 +53,7 @@ This is a personal favorite. I aim for that rain-slicked, neon-drenched, slightl
 *   **Key Prompt Elements:** "cyberpunk city," "neon signs," "rainy streets," "futuristic technology," "trench coats," "holographic advertisements," "style of Blade Runner and Ghost in the Shell," "cinematic lighting," "deep shadows," "vibrant blues, purples, and pinks."
 *   **What I Look For:** Strong contrasts, atmospheric haze, reflections, a sense of scale and often, loneliness.
 
-![AI generated image in Cyberpunk Neon Noir style](/images/style-cyberpunk-example.png)
+![AI generated image in Cyberpunk Neon Noir style](/images/style-cyberpunk-example.jpg)
 *(Imagine a dark, rainy street in a futuristic city, lit by glowing neon signs, with a lone figure walking.)*
 
 #### 2. Whimsical Storybook Illustration
@@ -63,7 +63,7 @@ Moving to something completely different, I love trying to capture the charm of 
 *   **Key Prompt Elements:** "gentle watercolor style," "soft pastels," "charming animal characters," "cozy forest scene," "friendly expressions," "style of Beatrix Potter or Mary Blair," "detailed but not overly realistic," "warm and inviting."
 *   **What I Look For:** Soft edges, expressive characters, a narrative quality, and a sense of wonder.
 
-![AI generated image in Whimsical Storybook Illustration style](/images/style-storybook-example.png)
+![AI generated image in Whimsical Storybook Illustration style](/images/style-storybook-example.jpg)
 *(Imagine a cute, anthropomorphic animal character in a soft, painterly forest setting.)*
 
 #### 3. Gritty Dark Fantasy Concept Art
@@ -73,7 +73,7 @@ For epic, moody scenes with a sense of ancient power or impending doom.
 *   **Key Prompt Elements:** "dark fantasy," "epic scale," "weathered hero," "ancient ruins," "glowing runes," "style of Frank Frazetta or Brom," "dramatic lighting," "highly detailed armor/creatures," "textured brushstrokes," "muted color palette with pops of intense color (e.g., fire, magic)."
 *   **What I Look For:** A sense of weight and history, dynamic compositions, strong silhouettes, and intricate details that tell a story.
 
-![AI generated image in Gritty Dark Fantasy style](/images/style-dark-fantasy-example.png)
+![AI generated image in Gritty Dark Fantasy style](/images/style-dark-fantasy-example.jpg)
 *(Imagine a heavily armored warrior facing a colossal, shadowy beast in a dramatic, rocky landscape.)*
 
 #### 4. Retro Sci-Fi Pulp Cover Art
@@ -83,7 +83,7 @@ Channeling the vibrant, imaginative, and sometimes wonderfully cheesy aesthetic 
 *   **Key Prompt Elements:** "1950s sci-fi pulp art," "vintage retrofuturism," "ray guns," "flying saucers," "alien landscapes," "bold primary colors," "style of Chesley Bonestell or Frank R. Paul," "sense of adventure and wonder," "slightly grainy texture."
 *   **What I Look For:** Dynamic action, optimistic (or naive) depictions of technology, distinctive typography (though AI struggles with text!), and a bright, almost posterized look.
 
-![AI generated image in Retro Sci-Fi Pulp style](/images/style-retroscifi-example.png)
+![AI generated image in Retro Sci-Fi Pulp style](/images/style-retroscifi-example.jpg)
 *(Imagine a rocket ship blasting off from a colorful alien planet, with astronauts in bubble helmets.)*
 
 ### Tips for Chasing That Perfect Style

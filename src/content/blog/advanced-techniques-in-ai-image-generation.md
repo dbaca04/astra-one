@@ -38,7 +38,7 @@ We all know about telling the AI what we *want*, but telling it what we *don't* 
 
 I often build up a standard set of negative prompts and then add specific ones based on unwanted elements appearing in my generations.
 
-![Example of negative prompts effect](/images/negative-prompt-example.png)
+![Example of negative prompts effect](/images/negative-prompt-example.jpg)
 *(Imagine a side-by-side comparison: one image with artifacts/unwanted elements, the other cleaner due to negative prompts.)*
 
 ### Mastering the Canvas: Composition and Camera Control
@@ -67,7 +67,7 @@ Most AI image generation tools have a set of parameters you can tweak. Understan
 *   **`--stylize <0-1000>` (default is 100):** This determines how much of Midjourney's inherent artistic training is applied. Lower values stick closer to your prompt with less "opinion" from MJ, while higher values lean more into its strong aesthetic.
 *   **`--weird <0-3000>`:** As the name suggests, this parameter injects a dose of the bizarre and unconventional. It's fantastic for surreal or abstract art.
 
-![Screenshot of parameter settings UI](/images/ai-parameter-settings.png)
+![Screenshot of parameter settings UI](/images/ai-parameter-settings.jpg)
 *(Imagine a mock-up UI showing sliders or input fields for CFG, Steps, Chaos, Stylize.)*
 
 ### The Next Level: Image-to-Image and ControlNet (A Glimpse)

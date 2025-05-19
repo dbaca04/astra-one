@@ -36,7 +36,7 @@ My initial approach was, admittedly, quite basic. I started with very open-ended
     ```
 *   **My Reaction:** This one gave me chills! The "E-flat major chord" was such an unexpected and specific detail. It immediately created mystery and a sense of foreboding. The AI also introduced characters and a setting with remarkable efficiency.
 
-![A visual representation of an AI generating story text](/images/ai-story-generation-process.png)
+![A visual representation of an AI generating story text](/images/ai-story-generation-process.jpg)
 *(Imagine a graphic showing a brain icon connected to a computer keyboard, with text flowing out to form a storybook page.)*
 
 ### Learning to Steer: Adding Constraints and Detail

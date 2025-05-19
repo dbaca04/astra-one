@@ -65,7 +65,7 @@ Now, write a description of a haunted house in a similar gothic, atmospheric sty
 ```
 The AI learns from the patterns in your examples.
 
-![Conceptual graphic of AI learning from example prompts](/images/few-shot-prompting-example.png)
+![Conceptual graphic of AI learning from example prompts](/images/few-shot-prompting-example.jpg)
 *(Imagine a graphic: a prompt with an "Example:" section, an arrow pointing to an AI brain icon, then an arrow to "Desired Output.")*
 
 #### 5. Iterative Refinement: The Conversational Approach

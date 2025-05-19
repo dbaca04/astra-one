@@ -20,7 +20,7 @@ Every time I witness an AI generate a breathtaking piece of art from a simple pr
 
 But with great power comes great responsibility – a cliché, perhaps, but one that rings truer than ever in the age of AI. The same technologies can be used to create convincing deepfakes, automate jobs without a social safety net, perpetuate and amplify biases, or even, in more speculative scenarios, lead to outcomes we can't fully control. This duality is something I constantly keep in mind.
 
-![A visual metaphor: a balance scale with "AI Potential" on one side and "Ethical Risks" on the other](/images/ai-ethics-balance.png)
+![A visual metaphor: a balance scale with "AI Potential" on one side and "Ethical Risks" on the other](/images/ai-ethics-balance.jpg)
 *(Imagine a stylized balance scale. One side, slightly higher, is labeled "AI Potential" with icons like a lightbulb, a helping hand, and a connected globe. The other side, "Ethical Risks," has icons like a shadowy figure, a broken chain, and a question mark.)*
 
 ### Key Ethical Areas I Find Myself Pondering

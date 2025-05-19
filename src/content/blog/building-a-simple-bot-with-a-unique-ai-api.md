@@ -111,7 +111,7 @@ I'm envisioning the ChronoSentiment API would return something like this:
 ```
 This response gives us the current state and a glimpse into a potential future, along with a rationale.
 
-![Mockup of API JSON response structure](/images/chronosentiment-response-mockup.png)
+![Mockup of API JSON response structure](/images/chronosentiment-response-mockup.jpg)
 *(Imagine an image here visually representing the JSON structure above, perhaps with callouts explaining each field).*
 
 ### Building the Simple Interactive Bot Logic

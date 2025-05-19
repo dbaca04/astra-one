@@ -37,7 +37,7 @@ I then craft a detailed "seed prompt" that incorporates these elements.
 **Example Seed Prompt:**
 `Portrait of Elara, a young female space pirate, fiery red hair in a messy short bob, piercing emerald green eyes, a small silver hoop earring in her left ear, mischievous smirk, wearing a worn leather jacket over a dark t-shirt, cyberpunk neon-lit alley background, cinematic lighting, detailed, concept art style.`
 
-![Example of an initial character generation](/images/character-seed-elara.png)
+![Example of an initial character generation](/images/character-seed-elara.jpg)
 *(Imagine an AI-generated portrait based on the prompt above for "Elara".)*
 
 #### 2. Locking Down the "Look" with Iteration and Variations
@@ -68,7 +68,7 @@ For trying different poses or outfits, I often create a series of prompts based 
 
 The key is to change only one major aspect (pose, outfit, setting) at a time while keeping the core character description identical.
 
-![Example of a character in different poses/outfits](/images/elara-character-sheet.png)
+![Example of a character in different poses/outfits](/images/elara-character-sheet.jpg)
 *(Imagine a 2x2 grid showing "Elara" from the seed prompt, then Elara in an action pose, a different outfit, and maybe a close-up focusing on her eyes and earring.)*
 
 #### 5. Advanced Techniques (A Glimpse)

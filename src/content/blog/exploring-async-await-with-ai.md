@@ -139,7 +139,7 @@ This was a big one for me. How does `try...catch` interact with `await`?
 
 The AI would then generate an example similar to the `try...catch` block in the refactored code above, explaining that `await` will propagate rejections, which can then be caught by a standard `try...catch` block, just like synchronous code. This demystified error handling significantly.
 
-![Diagram of async/await error handling with try/catch](/images/async-try-catch.png)
+![Diagram of async/await error handling with try/catch](/images/async-try-catch.jpg)
 *(Imagine a simple diagram here showing an async function with an await call inside a try block, and an error being caught in the catch block.)*
 
 ### Practical Implementation: Building with AI Assistance

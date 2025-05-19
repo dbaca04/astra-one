@@ -25,7 +25,7 @@ The problem it's trying to solve is a familiar one:
 
 CogniSort AI claims to use natural language processing (NLP) to understand the *content* of your notes and suggest connections and categorizations you might have missed.
 
-![Conceptual graphic of scattered notes becoming organized](/images/cognisort-concept.png)
+![Conceptual graphic of scattered notes becoming organized](/images/cognisort-concept.jpg)
 *(Imagine a visual: messy, disconnected notes on one side, transforming into neatly categorized and linked notes on the other, with the CogniSort AI logo in the middle.)*
 
 ### My Initial Experience and Setup

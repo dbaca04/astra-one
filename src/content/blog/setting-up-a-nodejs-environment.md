@@ -59,7 +59,7 @@ This should print the installed NPM version (e.g., `9.6.7`).
 
 If you see version numbers, congratulations! Node.js and NPM are ready to go.
 
-![Terminal showing successful node -v and npm -v commands](/images/node-npm-version-check.png)
+![Terminal showing successful node -v and npm -v commands](/images/node-npm-version-check.jpg)
 *(Imagine a screenshot of a terminal window displaying version numbers after running `node -v` and `npm -v`.)*
 
 ### Step 2: Your First Node.js Script ("Hello, AI World!")

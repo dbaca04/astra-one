@@ -57,7 +57,7 @@ The quality of your prompt significantly impacts the AI's response. Here are som
 *   **"Suggest alternative ways to write this Python function to achieve `[desired outcome]` if you think my current approach is flawed."**
     *   Sometimes, the bug is a symptom of a deeper design issue.
 
-![AI Debugging Example](/images/ai-debugging-chat.png)
+![AI Debugging Example](/images/ai-debugging-chat.jpg)
 *(Imagine a screenshot here showing a chat interface with a user pasting Python code and an error, and the AI responding with a suggestion or explanation.)*
 
 ### Common Pitfalls and How to Avoid Them

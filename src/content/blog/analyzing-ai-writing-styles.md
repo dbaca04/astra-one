@@ -55,7 +55,7 @@ When I analyze an AI's attempt at a specific style, I look for several key compo
 *   **Use of Literary Devices:** For more creative styles, I look for things like metaphors, similes, personification, alliteration, and vivid imagery. Can the AI weave these in naturally, or do they feel forced?
 *   **Consistency:** Does the AI maintain the style throughout the generated text, or does it "drift" into a more generic voice or even mix styles inappropriately?
 
-![Diagram of writing style elements](/images/writing-style-elements.png)
+![Diagram of writing style elements](/images/writing-style-elements.jpg)
 *(Imagine a conceptual graphic here showing "Writing Style" in the center, with radiating lines to "Vocabulary," "Sentence Structure," "Tone," "Literary Devices," etc.)*
 
 ### Tips for Prompting Specific Creative Styles

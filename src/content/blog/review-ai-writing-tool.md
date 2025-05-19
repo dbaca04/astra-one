@@ -26,7 +26,7 @@ The first thing that struck me about Lex is its **simplicity**. The interface is
 
 The AI features are primarily invoked using a simple command: typing `+++` on a new line. This brings up a prompt where you can ask Lex to perform various actions.
 
-![Screenshot of Lex.page interface showing the '+++' command](/images/lex-page-interface.png)
+![Screenshot of Lex.page interface showing the '+++' command](/images/lex-page-interface.jpg)
 *(Imagine a clean text editor interface. A user has typed "+++", and a small input field has appeared where they can type a command for the AI.)*
 
 ### Key AI Features I Explored

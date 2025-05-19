@@ -25,7 +25,7 @@ Artbreeder isn't your typical text-to-image generator where you type a detailed 
 
 The core experience is very interactive and visual. It feels less like commanding an AI with text and more like sculpting or genetically engineering an image.
 
-![Screenshot of the Artbreeder interface showing "gene" sliders](/images/artbreeder-interface-genes.png)
+![Screenshot of the Artbreeder interface showing "gene" sliders](/images/artbreeder-interface-genes.jpg)
 *(Imagine a screenshot of the Artbreeder UI, highlighting the "genes" panel with sliders for attributes like age, ethnicity, art style, etc., next to a portrait.)*
 
 ### My Experience: Diving into Portraits and Characters

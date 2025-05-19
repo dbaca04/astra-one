@@ -21,7 +21,7 @@ This isn't meant to be an exhaustive list of everything that happened, but rathe
 *   **My plan:** I'm hoping to dive back into AudioCraft (or its latest iteration if the update is real) next week to test out these new capabilities. The idea of composing a unique soundtrack for a short animation using AI is very appealing!
 *   *(Disclaimer: This is a hypothetical update for the sake of a "discovery" post. Always check official sources for actual tool updates!)*
 
-![Conceptual image representing AI audio generation](/images/audiocraft-discovery.png)
+![Conceptual image representing AI audio generation](/images/audiocraft-discovery.jpg)
 *(Imagine a visual with soundwaves transforming into musical notes and environmental sounds, with a sleek "AudioCraft" logo.)*
 
 ### 2. Fascinating Read: "The Human Element in AI-Powered Research" (Fictional Article)

@@ -8,7 +8,7 @@ import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com",
+  site: "https://Domdhi.com",
   integrations: [mdx(), sitemap(), tailwind()],
 
   adapter: cloudflare({
@@ -19,6 +19,7 @@ export default defineConfig({
 
   experimental: {
     responsiveImages: true,
+    viewTransitions: true,
   },
 
   image: {

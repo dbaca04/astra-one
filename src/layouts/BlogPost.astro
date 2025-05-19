@@ -8,8 +8,10 @@ import FormattedDate from "../components/FormattedDate.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import JsonLdSchema from "../components/JsonLdSchema.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { ClientRouter } from "astro:transitions";
 import { Picture } from "astro:assets";
 import "../styles/base.css";
+import "../styles/transitions.css";
 import {
 	getRelatedPosts,
 	type PostFrontmatter,
@@ -118,6 +120,7 @@ const blogTitleMappings = {
 			description={frontmatterProps.description}
 		/>
 		<JsonLdSchema schema={jsonLdSchema} />
+		<ClientRouter />
 	</head>
 
 	<body
@@ -129,10 +132,13 @@ const blogTitleMappings = {
 				<Breadcrumbs titleMappings={blogTitleMappings} />
 			</div>
 
-			<article>
+			<article transition:animate="fade">
 				{
 					displayImage && (
-						<div class="w-full max-h-[70vh] overflow-hidden mb-6 md:mb-8">
+						<div
+							class="w-full max-h-[70vh] overflow-hidden mb-6 md:mb-8"
+							transition:name={`hero-image-${currentSlugFromParams}`}
+						>
 							<Picture
 								src={displayImage}
 								alt={frontmatterProps.title}
@@ -178,6 +184,8 @@ const blogTitleMappings = {
 
 						<h1
 							class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
+							transition:animate="slide"
+							transition:name={`title-${currentSlugFromParams}`}
 						>
 							{frontmatterProps.title}
 						</h1>
@@ -212,7 +220,10 @@ const blogTitleMappings = {
 							/>
 						</div>
 
-						<div class="flex-1 prose dark:prose-invert max-w-none">
+						<div
+							class="flex-1 prose dark:prose-invert max-w-none"
+							transition:animate="fade"
+						>
 							<slot />
 						</div>
 					</div>
@@ -221,7 +232,10 @@ const blogTitleMappings = {
 
 			{
 				relatedPostsData && relatedPostsData.length > 0 && (
-					<div class="max-w-[720px] mx-auto px-4 md:px-6 mt-8 mb-8">
+					<div
+						class="max-w-[720px] mx-auto px-4 md:px-6 mt-8 mb-8"
+						transition:animate="slide"
+					>
 						<RelatedPosts relatedPosts={relatedPostsData} />
 					</div>
 				)

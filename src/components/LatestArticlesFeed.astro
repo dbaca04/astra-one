@@ -41,13 +41,19 @@ const limitedPosts = posts.slice(0, limit);
                     const imageSource = post.data.heroImage;
 
                     return (
-                        <li class="rounded-lg overflow-hidden bg-theme-card-bg border border-theme-border/30 shadow-sm transition-all duration-300 ease-in-out hover:shadow-md hover:-translate-y-1 flex flex-col h-full">
+                        <li
+                            class="rounded-lg overflow-hidden bg-theme-card-bg border border-theme-border/30 shadow-sm transition-all duration-300 ease-in-out hover:shadow-md hover:-translate-y-1 flex flex-col h-full"
+                            transition:animate="fade"
+                        >
                             <a
                                 href={`/blog/${postSlug}/`}
                                 class="no-underline text-inherit flex flex-col h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-theme-accent/70 rounded-lg"
                             >
                                 {showImages && imageSource && (
-                                    <div class="overflow-hidden relative aspect-video">
+                                    <div
+                                        class="overflow-hidden relative aspect-video"
+                                        transition:name={`hero-image-${postSlug}`}
+                                    >
                                         <Picture
                                             src={imageSource}
                                             alt={post.data.title}
@@ -64,7 +70,10 @@ const limitedPosts = posts.slice(0, limit);
                                 )}
                                 <div class="p-3 sm:p-4 md:p-5 flex-grow flex flex-col justify-between gap-2">
                                     <div class="space-y-2">
-                                        <h4 class="text-base sm:text-lg font-semibold text-theme-text leading-tight group-hover:text-theme-accent group-focus:text-theme-accent transition-colors duration-300 tracking-tight">
+                                        <h4
+                                            class="text-base sm:text-lg font-semibold text-theme-text leading-tight group-hover:text-theme-accent group-focus:text-theme-accent transition-colors duration-300 tracking-tight"
+                                            transition:name={`title-${postSlug}`}
+                                        >
                                             {post.data.title}
                                         </h4>
                                         <p class="text-xs text-gray-500 dark:text-gray-400 flex items-center">

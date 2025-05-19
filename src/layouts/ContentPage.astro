@@ -3,7 +3,9 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { ClientRouter } from "astro:transitions";
 import "../styles/base.css";
+import "../styles/transitions.css";
 
 const { title, description } = Astro.props;
 
@@ -17,6 +19,7 @@ const contentTitleMappings = {
 <html lang="en">
     <head>
         <BaseHead title={title} description={description} />
+        <ClientRouter />
     </head>
 
     <body
@@ -26,10 +29,16 @@ const contentTitleMappings = {
         <main class="flex-1">
             <div
                 class="max-w-[720px] mx-auto px-4 py-8 md:px-6 md:py-12 lg:px-8"
+                transition:animate="fade"
             >
                 <Breadcrumbs titleMappings={contentTitleMappings} />
                 <div class="mb-6 md:mb-8 text-center">
-                    <h1 class="text-3xl md:text-4xl font-bold mb-4">{title}</h1>
+                    <h1
+                        class="text-3xl md:text-4xl font-bold mb-4"
+                        transition:animate="slide"
+                    >
+                        {title}
+                    </h1>
                     <hr
                         class="border-0 border-t-2 border-theme-border my-4 w-1/2 mx-auto transition-theme"
                     />

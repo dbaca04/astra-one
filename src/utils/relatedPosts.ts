@@ -19,6 +19,7 @@ export interface RelatedPost {
     title: string;
     url: string;
     date?: Date; // Optional, for display or further sorting if needed
+    heroImage?: any; // Include heroImage for view transitions
 }
 
 /**
@@ -98,6 +99,7 @@ export function getRelatedPosts(
             title: post.frontmatter.title,
             // Prefer post.url if available (from Astro.glob), otherwise construct from slug
             url: post.url || `/blog/${post.frontmatter.slug}/`,
-            date: new Date(post.frontmatter.date) // Ensure date is a Date object
+            date: new Date(post.frontmatter.date), // Ensure date is a Date object
+            heroImage: post.frontmatter.heroImage // Include heroImage for view transitions
         }));
 } 

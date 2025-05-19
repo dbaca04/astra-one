@@ -6,7 +6,7 @@ date: 2025-05-18T16:00:00Z
 author: "Domdhi"
 category: "create"
 tags: ["digital art", "creativity", "image generation", "prompting", "techniques"]
-heroImage: "/images/advanced-techniques.png"
+heroImage: "/images/advanced-techniques.jpg"
 ---
 ## Advanced Techniques in AI Image Generation
 

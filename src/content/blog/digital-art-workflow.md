@@ -6,7 +6,7 @@ slug: "digital-art-workflow"
 author: "Domdhi"
 category: "create"
 tags: ["digital art", "creativity", "workflow"]
-image: "/images/digital-art-process.png"
+heroImage: "/images/digital-art-process.jpg"
 ---
 
 ## The Digital Canvas: My Creative Process

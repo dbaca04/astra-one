@@ -6,7 +6,7 @@ date: 2025-05-17T10:00:00Z
 author: "Domdhi"
 category: "create"
 tags: ["digital art", "creativity", "image generation", "prompting", "workflow"]
-heroImage: "/images/ai-image-workflow.png"
+heroImage: "/images/ai-image-workflow.jpg"
 ---
 ## My Full AI Image Workflow
 

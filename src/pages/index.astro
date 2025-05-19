@@ -7,17 +7,11 @@ import type { BlogSchema } from "../types";
 
 // Get all blog entries and sort them by date
 const allPosts = await getCollection("blog");
-// Type assertion for the schema
-interface BlogPost extends CollectionEntry<"blog"> {
-	data: BlogSchema;
-	slug: string;
-}
-// Cast and sort by date (newest first)
+
+// Sort by date (newest first)
 const latestPosts = allPosts
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-	.slice(0, 5) as BlogPost[]; // Get only the 5 most recent posts
-
-// console.log("Latest Posts:", latestPosts); // Removed debugging console log
+	.slice(0, 5); // Get only the 5 most recent posts
 
 // Define the main sections of the site
 const sections = [
@@ -102,13 +96,29 @@ const sections = [
 							<a
 								href={`/blog/${post.id}`}
 								class="text-inherit no-underline block group"
+								transition:animate="fade"
 							>
-								<h4 class="text-xl font-semibold text-theme-text group-hover:text-theme-accent transition-colors duration-200">
+								{post.data.heroImage && (
+									<div
+										class="mb-4 overflow-hidden rounded-lg"
+										transition:name={`hero-image-${post.id}`}
+									>
+										<img
+											src={post.data.heroImage}
+											alt={post.data.title}
+											class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+										/>
+									</div>
+								)}
+								<h4
+									class="text-xl font-semibold text-theme-text group-hover:text-theme-accent transition-colors duration-200"
+									transition:name={`title-${post.id}`}
+								>
 									{post.data.title}
 								</h4>
 								<div class="flex items-center gap-4 text-sm my-2">
 									<span class="uppercase bg-theme-selection-bg text-theme-accent px-2 py-1 rounded shadow-sm transition-shadow duration-300">
-										{post.data.section}
+										{post.data.category}
 									</span>
 									<span class="text-theme-text opacity-80">
 										<FormattedDate date={post.data.date} />

@@ -13,7 +13,7 @@ export async function filterPostsBySection(section: string): Promise<BlogPost[]>
 
     // Filter posts by the provided section and sort by date (newest first)
     return allPosts
-        .filter(post => post.data.section === section)
+        .filter(post => post.data.category === section)
         .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 }
 
@@ -39,7 +39,7 @@ export async function getAllSections(): Promise<string[]> {
 
     // Extract all sections and filter out undefined/null values
     const sections = allPosts
-        .map(post => post.data.section)
+        .map(post => post.data.category)
         .filter((section): section is string => !!section);
 
     // Return unique section names

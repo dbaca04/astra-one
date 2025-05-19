@@ -6,7 +6,7 @@ date: 2025-05-18T09:00:00Z
 author: "Domdhi"
 category: "discover"
 tags: ["tool review", "productivity", "note-taking", "AI tools", "organization"]
-heroImage: "/images/unrelated-cognisort.png"
+heroImage: "/images/unrelated-cognisort.jpg"
 ---
 ## Another Unrelated Post: Unearthing CogniSort AI for Smarter Note Organization
 

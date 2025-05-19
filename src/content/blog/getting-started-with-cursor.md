@@ -6,8 +6,8 @@ slug: "getting-started-with-cursor"
 category: "code"
 tags: ["AI coding", "Cursor", "workflow"]
 author: "Domdhi"
-image: "/images/cursor-screenshot.png"
----
+heroImage: "/images/cursor-screenshot.jpg"
+---             
 
 ## Getting Started with AI Pair Programming
 

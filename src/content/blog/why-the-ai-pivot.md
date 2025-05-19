@@ -6,7 +6,7 @@ slug: "beginning-my-ai-journey" # Renamed slug slightly to fit the new title bet
 author: "Domdhi"
 category: "journal"
 tags: ["personal", "AI journey", "site update"]
-image: "/images/ai-journey.png"
+heroImage: "/images/ai-journey.jpg"
 ---
 
 ## Charting the Course: Beginning My AI Journey on Domdhi.com

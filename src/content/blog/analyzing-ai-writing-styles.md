@@ -6,7 +6,7 @@ date: 2025-05-17T10:00:00Z
 author: "Domdhi"
 category: "create"
 tags: ["AI writing", "creativity", "analysis", "LLMs", "natural language processing", "prompt engineering"]
-heroImage: "/images/ai-writing-styles.png"
+heroImage: "/images/ai-writing-styles.jpg"
 ---
 ## Analyzing AI Writing Styles
 

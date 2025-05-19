@@ -6,7 +6,7 @@ date: 2025-05-18T11:00:00Z
 author: "Domdhi"
 category: "automate"
 tags: ["automation", "API", "bots", "python", "sentiment analysis", "ai tools", "unique"]
-heroImage: "/images/api-bot-chronosentiment.png"
+heroImage: "/images/api-bot-chronosentiment.jpg"
 ---
 ## Building a Simple Bot with the (Fictional) ChronoSentiment AI API
 

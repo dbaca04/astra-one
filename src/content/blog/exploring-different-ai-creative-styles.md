@@ -6,7 +6,7 @@ date: 2025-05-14T15:00:00Z
 author: "Domdhi"
 category: "create"
 tags: ["creativity", "image generation", "styles", "AI art", "prompting", "artistic styles"]
-heroImage: "/images/creative-styles.png"
+heroImage: "/images/creative-styles.jpg"
 ---
 ## Exploring Different AI Creative Styles: My Journey into Artistic Mimicry
 

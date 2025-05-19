@@ -6,7 +6,7 @@ date: 2025-05-17T14:00:00Z
 author: "Domdhi"
 category: "create"
 tags: ["digital art", "image generation", "creativity", "characters", "AI art", "prompting"]
-heroImage: "/images/character-art.png"
+heroImage: "/images/character-art.jpg"
 ---
 ## Creating Character Art with AI: My Quest for Consistency
 

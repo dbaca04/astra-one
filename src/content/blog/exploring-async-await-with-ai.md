@@ -6,7 +6,7 @@ date: 2025-05-18T10:00:00Z
 author: "Domdhi"
 category: "code"
 tags: ["AI coding", "javascript", "async", "await", "promises", "web development", "learning to code", "cursor ai"]
-heroImage: "/images/exploring-async-await-with-ai.png"
+heroImage: "/images/exploring-async-await-with-ai.jpg"
 ---
 ## Exploring Async/Await with AI: How I Got a Handle on Asynchronous JavaScript
 

@@ -6,7 +6,7 @@ date: 2025-05-16T12:00:00Z
 author: "Domdhi"
 category: "code"
 tags: ["AI coding", "python", "debugging", "code assistance", "developer tools", "troubleshooting"]
-heroImage: "/images/debugging-ai.png"
+heroImage: "/images/debugging-ai.jpg"
 ---
 ## Debugging Python with AI: My New Favorite Coding Buddy
 

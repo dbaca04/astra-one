@@ -2,6 +2,8 @@
 // Import the base.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import "../styles/base.css";
+import JsonLdSchema from "./JsonLdSchema.astro";
+import { generateWebsiteSchema } from "../utils/schema";
 
 interface Props {
 	title: string;
@@ -12,6 +14,24 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = "/og-image.png" } = Astro.props;
+
+// Generate site-wide Schema.org data
+const siteUrl = import.meta.env.SITE || "https://domdhi.com";
+const siteName = "Domdhi.com";
+const logoUrl = "/favicon.svg";
+const sameAs = [
+	"https://twitter.com/domdhi",
+	"https://github.com/domdhi",
+	"https://linkedin.com/in/domdhi",
+];
+
+const websiteSchema = generateWebsiteSchema({
+	siteUrl,
+	siteName,
+	description,
+	logoUrl,
+	sameAs,
+});
 ---
 
 <!-- Global Metadata -->
@@ -74,6 +94,9 @@ const { title, description, image = "/og-image.png" } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<!-- Schema.org JSON-LD -->
+<JsonLdSchema schema={websiteSchema} />
 
 <!-- Theme color change script -->
 <script is:inline>

@@ -1,0 +1,12 @@
+---
+/**
+ * JsonLdSchema component adds structured data to pages
+ */
+interface Props {
+    schema: string;
+}
+
+const { schema } = Astro.props;
+---
+
+<script type="application/ld+json" set:html={schema} />

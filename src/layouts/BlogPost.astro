@@ -6,6 +6,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import TableOfContents from "../components/TableOfContents.astro";
+import JsonLdSchema from "../components/JsonLdSchema.astro";
 import { Picture } from "astro:assets";
 import "../styles/base.css";
 import {
@@ -14,6 +15,8 @@ import {
 	type Post as PostForUtil,
 	type RelatedPost,
 } from "../utils/relatedPosts";
+import { generateBlogPostSchema } from "../utils/schema";
+// @ts-ignore - Component exists but TypeScript doesn't recognize it
 import RelatedPosts from "../components/RelatedPosts.astro";
 
 const frontmatterProps = Astro.props as CollectionEntry<"blog">["data"];
@@ -66,6 +69,39 @@ if (
 		"Related posts: Current page slug is undefined or invalid. Skipping related posts.",
 	);
 }
+
+// Generate Schema.org JSON-LD structured data
+const siteUrl = import.meta.env.SITE || "https://domdhi.com";
+const siteName = "Domdhi.com";
+const logoUrl = "/favicon.svg";
+
+// Handle the heroImage which might be complex or a string
+let heroImageSrc = "";
+if (frontmatterProps.heroImage) {
+	if (typeof frontmatterProps.heroImage === "string") {
+		heroImageSrc = frontmatterProps.heroImage;
+	} else if (typeof frontmatterProps.heroImage === "object") {
+		// Try to get src property if it exists
+		heroImageSrc = (frontmatterProps.heroImage as any).src || "";
+	}
+}
+
+const jsonLdSchema = generateBlogPostSchema({
+	title: frontmatterProps.title,
+	description: frontmatterProps.description,
+	publishDate: new Date(frontmatterProps.date),
+	updateDate: frontmatterProps.updatedDate
+		? new Date(frontmatterProps.updatedDate)
+		: undefined,
+	author: frontmatterProps.author || "David Bacaian",
+	slug: currentSlugFromParams as string,
+	tags: frontmatterProps.tags,
+	image: heroImageSrc,
+	imageAlt: frontmatterProps.title,
+	siteUrl,
+	siteName,
+	logoUrl,
+});
 ---
 
 <html lang="en">
@@ -74,6 +110,7 @@ if (
 			title={frontmatterProps.title}
 			description={frontmatterProps.description}
 		/>
+		<JsonLdSchema schema={jsonLdSchema} />
 	</head>
 
 	<body
@@ -152,7 +189,7 @@ if (
 						}
 					</div>
 
-					<div class="flex flex-col xl:flex-row xl:gap-12">
+					<div class="flex flex-col">
 						{/* Table of Contents for desktop and larger screens */}
 						<div
 							class="xl:w-64 xl:flex-shrink-0 xl:sticky xl:top-8 xl:self-start mb-8 xl:mb-0"

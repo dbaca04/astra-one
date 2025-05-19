@@ -132,7 +132,7 @@ const blogTitleMappings = {
 				<Breadcrumbs titleMappings={blogTitleMappings} />
 			</div>
 
-			<article transition:animate="fade">
+			<article>
 				{
 					displayImage && (
 						<div
@@ -157,7 +157,7 @@ const blogTitleMappings = {
 				}
 
 				<div
-					class="max-w-[720px] mx-auto px-4 md:px-6 text-theme-text transition-theme"
+					class="max-w-[720px] mx-auto px-4 md:px-6 text-theme-text transition-theme xl:max-w-5xl"
 				>
 					<div class="mb-6 md:mb-8 py-4 md:py-6 text-center">
 						<div
@@ -208,10 +208,10 @@ const blogTitleMappings = {
 						}
 					</div>
 
-					<div class="flex flex-col">
+					<div class="flex flex-col xl:flex-row xl:gap-8">
 						{/* Table of Contents for desktop and larger screens */}
 						<div
-							class="xl:w-64 xl:flex-shrink-0 xl:sticky xl:top-8 xl:self-start mb-8 xl:mb-0"
+							class="xl:w-64 xl:flex-shrink-0 xl:self-start mb-8 xl:mb-0 xl:h-fit xl:sticky xl:top-8"
 						>
 							<TableOfContents
 								content={articleContent}
@@ -242,5 +242,9 @@ const blogTitleMappings = {
 			}
 		</main>
 		<Footer />
+		<script type="module">
+			import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+			mermaid.initialize({ startOnLoad: true });
+		</script>
 	</body>
 </html>

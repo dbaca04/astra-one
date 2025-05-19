@@ -1,0 +1,164 @@
+---
+/**
+ * Breadcrumbs component
+ * Generates a dynamic breadcrumb navigation based on the current URL path
+ * Includes proper Schema.org BreadcrumbList markup for SEO
+ */
+import JsonLdSchema from "./JsonLdSchema.astro";
+
+interface BreadcrumbItem {
+    text: string;
+    url: string;
+    isCurrentPage?: boolean;
+}
+
+interface Props {
+    /**
+     * If provided, uses this current path instead of Astro.url
+     */
+    currentPath?: string;
+
+    /**
+     * Custom title mappings for path segments - useful for dynamic routes or special case titles
+     */
+    titleMappings?: Record<string, string>;
+
+    /**
+     * Hide breadcrumbs on certain pages
+     */
+    excludeOnHome?: boolean;
+}
+
+const { currentPath, titleMappings = {}, excludeOnHome = true } = Astro.props;
+
+// Use provided path or get from Astro.url
+const path = currentPath || Astro.url.pathname;
+
+// Skip breadcrumbs on homepage if excludeOnHome is true
+if (excludeOnHome && (path === "/" || path === "")) {
+    // Return nothing to prevent rendering
+    Astro.response.status = 204;
+    return;
+}
+
+// Segment creator with utils for formatting
+const createSegment = (
+    segment: string,
+    fullPath: string,
+    isCurrent = false,
+): BreadcrumbItem => {
+    // Split on hyphens and capitalize each word
+    let formattedText = segment
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+
+    // Use custom mapping if available
+    if (titleMappings[segment]) {
+        formattedText = titleMappings[segment];
+    } else if (segment.match(/^\[\.\.\.(.*)\]$/)) {
+        // Handle [...slug] style dynamic routes
+        formattedText = "Entry";
+    } else if (segment.match(/^\[(.*)\]$/)) {
+        // Handle [id] style dynamic routes
+        formattedText = "Detail";
+    }
+
+    return {
+        text: formattedText,
+        url: fullPath,
+        isCurrentPage: isCurrent,
+    };
+};
+
+// Generate the breadcrumb items
+const breadcrumbs: BreadcrumbItem[] = [];
+
+// Always add Home as first item
+breadcrumbs.push({
+    text: "Home",
+    url: "/",
+});
+
+// Process the path segments
+const segments = path.split("/").filter(Boolean);
+
+// Build URLs cumulatively and create breadcrumb items
+if (segments.length > 0) {
+    let currentPath = "";
+
+    segments.forEach((segment, index) => {
+        currentPath += `/${segment}`;
+        const isLast = index === segments.length - 1;
+
+        breadcrumbs.push(createSegment(segment, currentPath, isLast));
+    });
+}
+
+// Remove .html extension from the last breadcrumb if it has one
+if (breadcrumbs.length > 0) {
+    const lastItem = breadcrumbs[breadcrumbs.length - 1];
+    if (lastItem.text.endsWith(".html")) {
+        lastItem.text = lastItem.text.replace(".html", "");
+    }
+}
+
+// Generate JSON-LD schema for breadcrumbs
+const siteUrl = import.meta.env.SITE || "https://domdhi.com";
+
+const breadcrumbsSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: item.text,
+        item: `${siteUrl}${item.url}`,
+    })),
+};
+
+const breadcrumbsSchemaString = JSON.stringify(breadcrumbsSchema);
+---
+
+{
+    breadcrumbs.length > 0 && (
+        <nav
+            aria-label="Breadcrumb"
+            class="breadcrumb-nav py-2 px-4 md:px-6 bg-theme-selection-bg bg-opacity-30 rounded-md mb-6"
+        >
+            <ol class="flex flex-wrap items-center text-sm">
+                {breadcrumbs.map((item, index) => (
+                    <li class="breadcrumb-item flex items-center">
+                        {index > 0 && (
+                            <span
+                                class="mx-2 text-theme-text opacity-50"
+                                aria-hidden="true"
+                            >
+                                /
+                            </span>
+                        )}
+
+                        {item.isCurrentPage ? (
+                            <span
+                                class="text-theme-accent font-medium"
+                                aria-current="page"
+                            >
+                                {item.text}
+                            </span>
+                        ) : (
+                            <a
+                                href={item.url}
+                                class="text-theme-text hover:text-theme-accent transition-colors"
+                            >
+                                {item.text}
+                            </a>
+                        )}
+                    </li>
+                ))}
+            </ol>
+        </nav>
+    )
+}
+
+<JsonLdSchema schema={breadcrumbsSchemaString} />
+

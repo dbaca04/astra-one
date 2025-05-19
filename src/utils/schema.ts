@@ -25,6 +25,17 @@ export interface WebsiteSchemaData {
     sameAs?: string[]; // Social media URLs
 }
 
+export interface BreadcrumbItem {
+    text: string;
+    url: string;
+    position?: number;
+}
+
+export interface BreadcrumbSchemaData {
+    items: BreadcrumbItem[];
+    siteUrl: string;
+}
+
 interface SchemaData {
     "@context": string;
     "@type": string;
@@ -193,4 +204,25 @@ export function generateWebsiteSchema(data: WebsiteSchemaData): string {
 
     // Return both schemas as an array
     return JSON.stringify([websiteSchema, organizationSchema]);
+}
+
+/**
+ * Generates Schema.org JSON-LD structured data for breadcrumbs
+ */
+export function generateBreadcrumbSchema(data: BreadcrumbSchemaData): string {
+    const { items, siteUrl } = data;
+
+    // Create the JSON-LD structured data for BreadcrumbList
+    const breadcrumbSchema: SchemaData = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": items.map((item, index) => ({
+            "@type": "ListItem",
+            "position": item.position || index + 1,
+            "name": item.text,
+            "item": item.url.startsWith('http') ? item.url : `${siteUrl}${item.url}`
+        }))
+    };
+
+    return JSON.stringify(breadcrumbSchema);
 } 

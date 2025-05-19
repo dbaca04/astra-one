@@ -3,10 +3,10 @@ import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
+import rehypeMermaid from "rehype-mermaid";
 // import react from '@astrojs/react';
 
 // Removing cloudflare adapter as it's not needed
-import rehypeMermaidPre from './scripts/rehype-mermaid-pre.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -29,6 +29,6 @@ export default defineConfig({
 
   markdown: {
     syntaxHighlight: false,
-    rehypePlugins: [rehypeMermaidPre],
+    rehypePlugins: [rehypeMermaid],
   },
 });

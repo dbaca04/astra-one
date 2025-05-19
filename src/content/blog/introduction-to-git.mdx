@@ -8,6 +8,8 @@ category: "code"
 tags: ["git", "workflow", "basics", "version control", "developer tools", "coding fundamentals"]
 heroImage: "/images/git-intro.jpg"
 ---
+import Mermaid from '../../components/Mermaid.jsx';
+
 ## My Journey into Git: Demystifying Version Control for Every Explorer
 
 If you've ever found yourself with a project folder looking like `my_project_final.py`, `my_project_final_v2.py`, `my_project_final_REALLY_final_I_swear.py`, then you, my friend, have unknowingly yearned for something like Git. For a long time, especially when I was just starting out with coding and my various AI experiments, that was precisely my "version control system" – a chaotic mess of duplicated files and hopeful naming conventions. It was... stressful, to say the least.
@@ -50,20 +52,7 @@ The terminology can be the most intimidating part. Here are a few key concepts e
 *   **Remote (e.g., GitHub, GitLab, Bitbucket):** A copy of your repository that lives on a server somewhere else (like the internet). This is essential for backing up your work and collaborating with others.
     *   *My Analogy:* A secure, cloud-based duplicate of your treasure chest and logbook.
 
-```mermaid
-graph TD
-    A["Working Directory <br/> (Files you edit)"] -- "1. Modify files" --> A
-    A -- "2. git add <files>" --> B["Staging Area (Index) <br/> (Changes to be committed)"]
-    B -- "3. git commit -m 'message'" --> C["Local Repository (.git) <br/> (Project history & versions)"]
-    C -- "6. git checkout <branch/commit> <br/> (Updates Working Directory)" --> A
-    C -- "4. git push" --> D["Remote Repository <br/> (e.g., GitHub, GitLab)"]
-    D -- "5. git pull / git fetch" --> C
-```
-
-<!-- ![Simple diagram of Git concepts: Repo -> Staging -> Commit, with a Branch off to the side](/images/git-concepts-diagram.jpg) -->
-<!-- *(Imagine a simple visual diagram here illustrating these basic Git components and their flow.)* -->
-
-
+<Mermaid chart={`graph TD\n    A[\"Working Directory <br/> (Files you edit)\"] -- \"1. Modify files\" --> A\n    A -- \"2. git add <files>\" --> B[\"Staging Area (Index) <br/> (Changes to be committed)\"]\n    B -- \"3. git commit -m 'message'\" --> C[\"Local Repository (.git) <br/> (Project history & versions)\"]\n    C -- \"6. git checkout <branch/commit> <br/> (Updates Working Directory)\" --> A\n    C -- \"4. git push\" --> D[\"Remote Repository <br/> (e.g., GitHub, GitLab)\"]\n    D -- \"5. git pull / git fetch\" --> C\n`} />
 
 ### A Super Simple Local Workflow (Just You and Your Computer)
 
@@ -122,4 +111,4 @@ My advice? Don't try to learn everything at once. Initialize Git in your next sm
 
 Git has truly transformed how I manage my projects, big and small. It brings a sense of order and safety to the often-chaotic process of creation and experimentation, especially in the fast-moving world of AI.
 
-What was your "aha!" moment with Git, or what's holding you back from trying it? Share your thoughts or favorite learning resources in the comments below!
+What was your "aha!" moment with Git, or what's holding you back from trying it? Share your thoughts or favorite learning resources in the comments below! 

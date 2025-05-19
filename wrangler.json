@@ -5,6 +5,9 @@
     "nodejs_compat"
   ],
   "main": "./dist/_worker.js/index.js",
+  "site": {
+    "bucket": "./dist"
+  },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"

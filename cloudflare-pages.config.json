@@ -1,6 +1,6 @@
 {
     "build": {
-        "command": "npm install -D @playwright/test@latest && npx playwright install chromium --with-deps && npm run deploy",
+        "command": "npm run deploy",
         "output_directory": "dist",
         "root_directory": ""
     }

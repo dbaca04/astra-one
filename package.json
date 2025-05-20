@@ -38,7 +38,7 @@
     "build": "astro build",
     "cf-typegen": "wrangler types",
     "check": "astro build && tsc && wrangler pages deployment --dry-run",
-    "deploy": "npx playwright install chromium --with-deps && astro build",
+    "deploy": "astro build",
     "dev": "astro dev",
     "preview": "astro build && wrangler pages dev dist"
   },

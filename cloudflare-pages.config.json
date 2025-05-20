@@ -1,6 +1,6 @@
 {
     "build": {
-        "command": "npm run build",
+        "command": "npx playwright install chromium && npm run build",
         "output_directory": "dist",
         "root_directory": ""
     }

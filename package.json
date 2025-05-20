@@ -16,14 +16,11 @@
   "dependencies": {
     "@astrojs/cloudflare": "^12.5.3",
     "@astrojs/mdx": "^4.2.6",
-    "@astrojs/react": "^3.1.0",
     "@astrojs/rss": "4.0.11",
     "@astrojs/sitemap": "^3.4.0",
     "@astrojs/tailwind": "^6.0.2",
     "astro": "^5.7.13",
     "mermaid": "^11.6.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "rehype-mermaid": "^3.0.0",
     "remark-mermaidjs": "^7.0.0",
     "shiki": "^3.4.2",
@@ -42,7 +39,7 @@
     "build": "astro build",
     "cf-typegen": "wrangler types",
     "check": "astro build && tsc && wrangler pages deployment --dry-run",
-    "deploy": "npx playwright install chromium && astro build",
+    "deploy": "astro build",
     "dev": "astro dev",
     "preview": "astro build && wrangler pages dev dist"
   },

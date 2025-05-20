@@ -4,16 +4,16 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import rehypeMermaid from "rehype-mermaid";
-import react from '@astrojs/react';
-
-// Removing cloudflare adapter as it's not needed
+import cloudflare from "@astrojs/cloudflare";
+// import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://Domdhi.com",
-  integrations: [mdx(), sitemap(), tailwind(), react()],
+  integrations: [mdx(), sitemap(), tailwind()],
 
-  // Removed cloudflare adapter
+  output: "server",
+  adapter: cloudflare(),
 
   experimental: {
     responsiveImages: true,

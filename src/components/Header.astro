@@ -91,7 +91,11 @@ import { SITE_TITLE } from "../consts";
 			document.documentElement.classList.remove("light");
 		}
 
-		window.localStorage.setItem("theme", theme);
+		try {
+			window.localStorage.setItem("theme", theme);
+		} catch (e) {
+			console.error("Error setting theme in localStorage:", e);
+		}
 
 		// Update toggle button state
 		const toggleButton = document.getElementById("theme-toggle");
@@ -107,18 +111,26 @@ import { SITE_TITLE } from "../consts";
 	function setupThemeToggle() {
 		const toggleButton = document.getElementById("theme-toggle");
 		if (toggleButton) {
+			if (toggleButton.dataset.themeListenerAttached === "true") return; // Prevent duplicate listeners
+
 			toggleButton.addEventListener("click", () => {
+				console.log("Desktop theme toggle clicked");
 				const isDark =
 					document.documentElement.classList.contains("dark");
 				document.documentElement.classList.toggle("dark");
 				document.documentElement.classList.toggle("light");
 
-				localStorage.setItem("theme", isDark ? "light" : "dark");
+				try {
+					localStorage.setItem("theme", isDark ? "light" : "dark");
+				} catch (e) {
+					console.error("Error setting theme in localStorage:", e);
+				}
 				toggleButton.setAttribute(
 					"aria-pressed",
 					!isDark ? "true" : "false",
 				);
 			});
+			toggleButton.dataset.themeListenerAttached = "true"; // Mark as attached
 		}
 	}
 

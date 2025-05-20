@@ -12,7 +12,7 @@ export default defineConfig({
   site: "https://Domdhi.com",
   integrations: [mdx(), sitemap(), tailwind()],
 
-  output: "server",
+  output: "static",
   adapter: cloudflare(),
 
   experimental: {
@@ -28,6 +28,13 @@ export default defineConfig({
 
   markdown: {
     syntaxHighlight: false,
-    rehypePlugins: [rehypeMermaid],
+    rehypePlugins: [
+      [rehypeMermaid, {
+        strategy: "img-svg", // This creates SVG at build time
+        mermaidConfig: {
+          theme: "default"
+        }
+      }]
+    ],
   },
 });

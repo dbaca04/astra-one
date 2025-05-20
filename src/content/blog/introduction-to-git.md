@@ -8,7 +8,6 @@ category: "code"
 tags: ["git", "workflow", "basics", "version control", "developer tools", "coding fundamentals"]
 heroImage: "/images/git-intro.jpg"
 ---
-import Mermaid from '../../components/Mermaid.jsx';
 
 ## My Journey into Git: Demystifying Version Control for Every Explorer
 
@@ -52,7 +51,15 @@ The terminology can be the most intimidating part. Here are a few key concepts e
 *   **Remote (e.g., GitHub, GitLab, Bitbucket):** A copy of your repository that lives on a server somewhere else (like the internet). This is essential for backing up your work and collaborating with others.
     *   *My Analogy:* A secure, cloud-based duplicate of your treasure chest and logbook.
 
-<Mermaid chart={`graph TD\n    A[\"Working Directory <br/> (Files you edit)\"] -- \"1. Modify files\" --> A\n    A -- \"2. git add <files>\" --> B[\"Staging Area (Index) <br/> (Changes to be committed)\"]\n    B -- \"3. git commit -m 'message'\" --> C[\"Local Repository (.git) <br/> (Project history & versions)\"]\n    C -- \"6. git checkout <branch/commit> <br/> (Updates Working Directory)\" --> A\n    C -- \"4. git push\" --> D[\"Remote Repository <br/> (e.g., GitHub, GitLab)\"]\n    D -- \"5. git pull / git fetch\" --> C\n`} />
+```mermaid
+graph TD
+    A["Working Directory <br/> (Files you edit)"] -- "1. Modify files" --> A
+    A -- "2. git add <files>" --> B["Staging Area (Index) <br/> (Changes to be committed)"]
+    B -- "3. git commit -m 'message'" --> C["Local Repository (.git) <br/> (Project history & versions)"]
+    C -- "6. git checkout <branch/commit> <br/> (Updates Working Directory)" --> A
+    C -- "4. git push" --> D["Remote Repository <br/> (e.g., GitHub, GitLab)"]
+    D -- "5. git pull / git fetch" --> C
+```
 
 ### A Super Simple Local Workflow (Just You and Your Computer)
 

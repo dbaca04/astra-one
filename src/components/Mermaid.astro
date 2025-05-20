@@ -1,0 +1,27 @@
+---
+// Mermaid component for Astro (client-side rendering only)
+interface Props {
+    chart: string;
+}
+
+const { chart } = Astro.props;
+---
+
+<div class="mermaid">
+    {chart}
+</div>
+
+<script>
+    declare global {
+        interface Window {
+            mermaid: any;
+        }
+    }
+
+    // Client-side rendering of Mermaid diagrams
+    document.addEventListener("astro:page-load", () => {
+        if (typeof window.mermaid !== "undefined") {
+            window.mermaid.run();
+        }
+    });
+</script>

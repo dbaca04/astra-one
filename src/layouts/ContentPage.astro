@@ -49,5 +49,43 @@ const contentTitleMappings = {
             </div>
         </main>
         <Footer />
+        <script type="module">
+            // Use older version of mermaid (10.x) for better compatibility
+            import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+
+            // Initialize mermaid with a more compatible config
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: "default",
+                securityLevel: "loose",
+            });
+
+            // Function to render charts that might be added dynamically
+            function renderMermaidCharts() {
+                if (typeof mermaid !== "undefined") {
+                    try {
+                        const mermaidElements =
+                            document.querySelectorAll("div.mermaid");
+                        if (mermaidElements.length > 0) {
+                            mermaid.run({
+                                nodes: mermaidElements,
+                            });
+                        }
+                    } catch (e) {
+                        console.error("Error rendering Mermaid charts:", e);
+                    }
+                }
+            }
+
+            // Render on page load
+            if (document.readyState === "complete") {
+                renderMermaidCharts();
+            } else {
+                window.addEventListener("load", renderMermaidCharts);
+            }
+
+            // Re-render on Astro page transitions
+            document.addEventListener("astro:page-load", renderMermaidCharts);
+        </script>
     </body>
 </html>

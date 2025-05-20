@@ -136,8 +136,10 @@ import HeaderLink from "./HeaderLink.astro";
         const hamburger = menuButton?.querySelector(".hamburger-icon");
 
         if (!menuButton || !mobileMenu || !hamburger) return;
+        if (menuButton.dataset.mobileMenuListenerAttached === "true") return; // Prevent duplicate listeners
 
         menuButton.addEventListener("click", function () {
+            console.log("Hamburger menu clicked");
             const expanded =
                 menuButton.getAttribute("aria-expanded") === "true";
 
@@ -179,11 +181,15 @@ import HeaderLink from "./HeaderLink.astro";
                 );
             });
         });
+        menuButton.dataset.mobileMenuListenerAttached = "true"; // Mark as attached
     }
 
     function setupMobileThemeToggle() {
         const toggleButton = document.getElementById("mobile-theme-toggle");
         if (toggleButton) {
+            if (toggleButton.dataset.mobileThemeListenerAttached === "true")
+                return; // Prevent duplicate listeners
+
             // Set initial state based on current theme
             const isDark = document.documentElement.classList.contains("dark");
             toggleButton.setAttribute(
@@ -193,17 +199,23 @@ import HeaderLink from "./HeaderLink.astro";
 
             // Add click event
             toggleButton.addEventListener("click", function () {
+                console.log("Mobile theme toggle clicked");
                 const isDark =
                     document.documentElement.classList.contains("dark");
                 document.documentElement.classList.toggle("dark");
                 document.documentElement.classList.toggle("light");
 
-                localStorage.setItem("theme", isDark ? "light" : "dark");
+                try {
+                    localStorage.setItem("theme", isDark ? "light" : "dark");
+                } catch (e) {
+                    console.error("Error setting theme in localStorage:", e);
+                }
                 toggleButton.setAttribute(
                     "aria-pressed",
                     !isDark ? "true" : "false",
                 );
             });
+            toggleButton.dataset.mobileThemeListenerAttached = "true"; // Mark as attached
         }
     }
 </script>

@@ -29,8 +29,8 @@ The deployment is managed through two key files:
 ### Important Notes
 
 - The site is configured to use static output mode in `astro.config.mjs` with `output: "static"` and no adapter.
-- Mermaid diagrams are rendered as SVGs at build time using the `rehype-mermaid` plugin with `strategy: "simple-svg"`.
-- Image optimization uses the `compile` service in Astro for Cloudflare compatibility.
+- Mermaid diagrams are rendered using the `rehype-mermaid` plugin with `strategy: "pre-mermaid"`.
+- Image optimization uses the `sharp` service locally, which will use an appropriate fallback on Cloudflare.
 
 ### Deployment Process
 

@@ -49,14 +49,14 @@
 ## Astro Components
 
 - **Mermaid Diagrams**
-  - Use the `"simple-svg"` strategy for pre-rendering at build time
-  - This strategy avoids Playwright dependency issues
+  - Use the `"pre-mermaid"` strategy for rehype-mermaid
+  - This strategy uses client-side rendering and avoids Playwright dependency issues
   
   ```typescript
   markdown: {
     rehypePlugins: [
       [rehypeMermaid, {
-        strategy: "simple-svg", 
+        strategy: "pre-mermaid", 
         mermaidConfig: {
           theme: "default"
         }
@@ -66,11 +66,18 @@
   ```
 
 - **Image Optimization**
-  - Use the compile service for Cloudflare compatibility
+  - Use the Sharp service for image processing
+  - When deployed to Cloudflare, Astro will automatically use an appropriate fallback
   
   ```typescript
+  // ✅ DO: Use the Sharp service
   image: {
-    service: { entrypoint: "astro/assets/services/compile" },
+    service: { entrypoint: "astro/assets/services/sharp" },
+  },
+  
+  // ❌ DON'T: Use a non-existent service
+  image: {
+    service: { entrypoint: "astro/assets/services/compile" }, // This doesn't exist
   },
   ```
 
@@ -115,4 +122,8 @@
 
 4. **Mermaid Rendering Errors**
    - **Error**: `browserType.launch: Executable doesn't exist`
-   - **Solution**: Use `strategy: "simple-svg"` instead of `"img-svg"` for rehype-mermaid 
+   - **Solution**: Use `strategy: "pre-mermaid"` instead of `"img-svg"` for rehype-mermaid
+
+5. **Image Service Errors**
+   - **Error**: `Missing "./assets/services/compile" specifier in "astro" package`
+   - **Solution**: Use `service: { entrypoint: "astro/assets/services/sharp" }` instead 

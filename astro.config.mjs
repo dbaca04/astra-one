@@ -20,7 +20,9 @@ export default defineConfig({
   },
 
   image: {
-    service: { entrypoint: "astro/assets/services/compile" }, // Use the compile service for Cloudflare compatibility
+    // Use the default Sharp service for local builds
+    // For Cloudflare deploy, this will use the appropriate fallback
+    service: { entrypoint: "astro/assets/services/sharp" },
     experimentalLayout: 'constrained', // Default layout for images
     experimentalObjectFit: 'cover', // Default object-fit style
     experimentalObjectPosition: 'center', // Default object-position style
@@ -30,7 +32,7 @@ export default defineConfig({
     syntaxHighlight: false,
     rehypePlugins: [
       [rehypeMermaid, {
-        strategy: "simple-svg", // Using simple-svg instead of img-svg to avoid Playwright dependency
+        strategy: "pre-mermaid", // Using pre-mermaid which doesn't require Playwright
         mermaidConfig: {
           theme: "default"
         }

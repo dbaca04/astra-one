@@ -28,8 +28,8 @@ The deployment is managed through two key files:
 
 ### Important Notes
 
-- The site is configured to use static output mode in `astro.config.mjs` with `output: "static"` and the Cloudflare adapter.
-- Mermaid diagrams are rendered as SVGs at build time using the `rehype-mermaid` plugin with `strategy: "img-svg"`.
+- The site is configured to use static output mode in `astro.config.mjs` with `output: "static"` and no adapter.
+- Mermaid diagrams are rendered as SVGs at build time using the `rehype-mermaid` plugin with `strategy: "simple-svg"`.
 - Image optimization uses the `compile` service in Astro for Cloudflare compatibility.
 
 ### Deployment Process
@@ -52,7 +52,7 @@ Before deploying:
 For running Playwright tests locally (not during deployment):
 
 ```bash
-./scripts/run-tests.sh
+./public/test-local.sh
 ```
 
 This script:

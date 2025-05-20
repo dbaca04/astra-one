@@ -4,17 +4,17 @@
 
 - **Static Output Mode**
   - Always use `output: "static"` in astro.config.mjs
-  - Use the Cloudflare adapter: `adapter: cloudflare()`
-  - Avoid server-side rendering features as they require Workers mode
+  - Do not use any adapter for static output mode
+  - Avoid server-side rendering features
   
   ```typescript
-  // ✅ DO: Use static output mode
+  // ✅ DO: Use static output mode without an adapter
   export default defineConfig({
     output: "static",
-    adapter: cloudflare(),
+    // No adapter needed for static output
   });
 
-  // ❌ DON'T: Use SSR mode
+  // ❌ DON'T: Use SSR mode or unnecessary adapters
   export default defineConfig({
     output: "server",
     adapter: cloudflare({ mode: "directory" }),
@@ -49,14 +49,14 @@
 ## Astro Components
 
 - **Mermaid Diagrams**
-  - Use the `"img-svg"` strategy for pre-rendering at build time
-  - This strategy creates SVGs during the build process, not at runtime
+  - Use the `"simple-svg"` strategy for pre-rendering at build time
+  - This strategy avoids Playwright dependency issues
   
   ```typescript
   markdown: {
     rehypePlugins: [
       [rehypeMermaid, {
-        strategy: "img-svg", 
+        strategy: "simple-svg", 
         mermaidConfig: {
           theme: "default"
         }
@@ -111,4 +111,8 @@
 
 3. **Path Errors**
    - **Error**: `ENOENT: no such file or directory`
-   - **Solution**: Verify paths in configuration files are relative to the project root 
+   - **Solution**: Verify paths in configuration files are relative to the project root
+
+4. **Mermaid Rendering Errors**
+   - **Error**: `browserType.launch: Executable doesn't exist`
+   - **Solution**: Use `strategy: "simple-svg"` instead of `"img-svg"` for rehype-mermaid 

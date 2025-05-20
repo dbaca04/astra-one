@@ -4,7 +4,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import rehypeMermaid from "rehype-mermaid";
-// import cloudflare from "@astrojs/cloudflare";
+import cloudflare from "@astrojs/cloudflare";
 // import react from '@astrojs/react';
 
 // https://astro.build/config
@@ -12,8 +12,12 @@ export default defineConfig({
   site: "https://Domdhi.com",
   integrations: [mdx(), sitemap(), tailwind()],
 
-  output: "static",
-  // Removed adapter since we're using static output mode
+  output: "server",
+  adapter: cloudflare({
+    platformProxy: {
+      enabled: true,
+    },
+  }),
 
   experimental: {
     responsiveImages: true,

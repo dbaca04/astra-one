@@ -1,17 +1,26 @@
-import { useEffect, useRef } from "react";
-import mermaid from "mermaid";
+import React, { useEffect, useRef } from 'react';
+import mermaid from 'mermaid';
 
 export default function Mermaid({ chart }) {
-    const ref = useRef(null);
+    const mermaidRef = useRef(null);
 
     useEffect(() => {
-        if (ref.current) {
-            mermaid.initialize({ startOnLoad: false, theme: "default" });
-            mermaid.render(`mermaid-${Math.random()}`, chart, (svgCode) => {
-                ref.current.innerHTML = svgCode;
+        if (mermaidRef.current) {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'default',
+                securityLevel: 'loose',
+            });
+
+            mermaid.run({
+                nodes: [mermaidRef.current]
             });
         }
     }, [chart]);
 
-    return <div ref={ref} />;
+    return (
+        <div className="mermaid" ref={mermaidRef}>
+            {chart}
+        </div>
+    );
 } 

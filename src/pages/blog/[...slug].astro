@@ -12,6 +12,9 @@ import {
     getAdjacentPostsInSection,
 } from "../../utils/blogNavigation";
 
+// Add prerender directive to ensure pages are prerendered during build
+export const prerender = true;
+
 // This function is required for Astro to know which paths to generate
 export async function getStaticPaths() {
     const allblog = await getCollection("blog");

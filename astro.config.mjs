@@ -20,8 +20,7 @@ export default defineConfig({
   },
 
   image: {
-    // Using standard built-in "astro:assets" without specifying service 
-    // to use default static image optimization
+    service: { entrypoint: "astro/assets/services/compile" }, // Use the compile service for Cloudflare compatibility
     experimentalLayout: 'constrained', // Default layout for images
     experimentalObjectFit: 'cover', // Default object-fit style
     experimentalObjectPosition: 'center', // Default object-position style

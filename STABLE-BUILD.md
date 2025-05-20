@@ -32,8 +32,8 @@ git checkout v1.0.0-stable
 
 Detailed documentation about the stable configuration can be found in:
 
-1. `.roo/rules/stable-build.md` - Cursor rule for stable build configuration
-2. `.roo/rules/cloudflare-deployment.md` - Cursor rule for Cloudflare deployment guidelines
+1. `.cursor/rules/stable-build.mdc` - Cursor rule for stable build configuration
+2. `.cursor/rules/cloudflare-deployment.mdc` - Cursor rule for Cloudflare deployment guidelines
 3. `docs/deployment.md` - General deployment documentation
 4. `docs/cloudflare-deployment-rules.md` - Detailed Cloudflare deployment rules
 

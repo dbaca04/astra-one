@@ -1,0 +1,62 @@
+---
+import type { Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+    page: Page<CollectionEntry<"blog">>;
+}
+
+const { page } = Astro.props;
+
+const currentPage = page.currentPage;
+const totalPages = page.totalPages;
+const prevUrl = page.url.prev;
+const nextUrl = page.url.next;
+---
+
+<nav
+    aria-label="Pagination"
+    class="flex justify-center items-center space-x-4 my-8"
+>
+    {
+        prevUrl ? (
+            <a
+                href={prevUrl}
+                class="px-4 py-2 border border-theme-border rounded-md text-theme-text hover:bg-theme-accent hover:text-theme-accent-text hover:border-theme-accent transition-colors duration-200"
+                aria-label="Previous page"
+            >
+                &laquo; Previous
+            </a>
+        ) : (
+            <span
+                class="px-4 py-2 border border-theme-border rounded-md text-theme-muted cursor-not-allowed opacity-50"
+                aria-disabled="true"
+            >
+                &laquo; Previous
+            </span>
+        )
+    }
+
+    <span class="text-theme-text">
+        Page {currentPage} of {totalPages}
+    </span>
+
+    {
+        nextUrl ? (
+            <a
+                href={nextUrl}
+                class="px-4 py-2 border border-theme-border rounded-md text-theme-text hover:bg-theme-accent hover:text-theme-accent-text hover:border-theme-accent transition-colors duration-200"
+                aria-label="Next page"
+            >
+                Next &raquo;
+            </a>
+        ) : (
+            <span
+                class="px-4 py-2 border border-theme-border rounded-md text-theme-muted cursor-not-allowed opacity-50"
+                aria-disabled="true"
+            >
+                Next &raquo;
+            </span>
+        )
+    }
+</nav>

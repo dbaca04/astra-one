@@ -1,0 +1,18 @@
+# robots.txt for domdhi.com
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /api/
+
+# Allow crawling of critical content
+Allow: /blog/
+Allow: /about/
+Allow: /contact/
+
+# Sitemap location
+Sitemap: https://domdhi.com/sitemap.xml
+
+# Crawl-delay directive for all bots (optional)
+Crawl-delay: 10 

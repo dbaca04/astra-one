@@ -9,8 +9,20 @@ import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://Domdhi.com",
-  integrations: [mdx(), sitemap(), tailwind()],
+  site: "https://domdhi.com",
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) =>
+        !page.includes('/admin/') &&
+        !page.includes('/private/') &&
+        !page.includes('.json'),
+      changefreq: 'weekly',
+      priority: 0.7,
+      lastmod: new Date(),
+    }),
+    tailwind()
+  ],
 
   adapter: cloudflare({
     platformProxy: {

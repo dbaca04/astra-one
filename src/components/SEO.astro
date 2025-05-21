@@ -19,6 +19,7 @@ interface Props {
     tags?: string[];
     noindex?: boolean;
     nofollow?: boolean;
+    allowCrawling?: boolean;
     structuredData?: string;
 }
 
@@ -35,6 +36,7 @@ const {
     tags = [],
     noindex = false,
     nofollow = false,
+    allowCrawling = true,
     structuredData,
 } = Astro.props;
 
@@ -49,10 +51,18 @@ const imageURL = image.startsWith("http")
     : new URL(image, Astro.site).toString();
 
 // Build robots directive
-const robotsContent = [
-    ...(noindex ? ["noindex"] : ["index"]),
-    ...(nofollow ? ["nofollow"] : ["follow"]),
-].join(", ");
+const robotsContent = (() => {
+    // If allowCrawling is false, force noindex, nofollow
+    if (!allowCrawling) {
+        return "noindex, nofollow";
+    }
+
+    // Otherwise use the individually provided noindex and nofollow flags
+    return [
+        ...(noindex ? ["noindex"] : ["index"]),
+        ...(nofollow ? ["nofollow"] : ["follow"]),
+    ].join(", ");
+})();
 ---
 
 <!-- Primary Meta Tags -->

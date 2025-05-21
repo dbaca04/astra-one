@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run lint-staged to check SEO requirements
+npx lint-staged
+
+# Additional SEO validation checks
+echo "🔍 Running additional SEO checks..."
+npm run seo:check

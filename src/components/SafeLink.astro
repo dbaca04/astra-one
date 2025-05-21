@@ -1,0 +1,37 @@
+---
+/**
+ * SafeLink Component
+ *
+ * A wrapper around standard <a> tags that automatically adds security and accessibility
+ * attributes to external links (rel="noopener noreferrer", target="_blank", appropriate title)
+ */
+import { isExternalLink, getExternalLinkAttributes } from "../utils/links";
+
+interface Props {
+    href: string;
+    class?: string;
+    title?: string;
+    ariaLabel?: string;
+    [key: string]: any; // Allow any other props
+}
+
+const { href, title, ...props } = Astro.props;
+
+// Determine if this is an external link
+const isExternal = isExternalLink(href);
+
+// Get attributes for external links
+const externalAttrs = isExternal ? getExternalLinkAttributes(href, title) : {};
+
+// Merge all props, with external attributes taking precedence if needed
+const allProps = {
+    href,
+    ...props,
+    ...externalAttrs,
+};
+---
+
+<a {...allProps}>
+    <slot />
+    {isExternal && <span class="sr-only"> (opens in a new tab)</span>}
+</a>

@@ -31,6 +31,9 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.16",
     "gray-matter": "^4.0.3",
+    "husky": "^9.1.7",
+    "lighthouse-ci": "^1.13.1",
+    "lint-staged": "^16.0.0",
     "playwright": "^1.52.0",
     "wrangler": "4.12.0"
   },
@@ -41,7 +44,19 @@
     "check": "astro build && tsc && wrangler pages deployment --dry-run",
     "deploy": "astro build",
     "dev": "astro dev",
-    "preview": "astro build && wrangler pages dev dist"
+    "preview": "astro build && wrangler pages dev dist",
+    "prepare": "husky",
+    "seo:check": "node scripts/seo-test.js",
+    "seo:lighthouse": "node scripts/seo-test.js --lighthouse",
+    "lint-staged": "lint-staged"
   },
-  "type": "module"
+  "type": "module",
+  "lint-staged": {
+    "public/robots.txt": [
+      "node scripts/seo-test.js"
+    ],
+    "src/**/*.{astro,ts,js,jsx,tsx,md,mdx}": [
+      "node scripts/seo-test.js"
+    ]
+  }
 }

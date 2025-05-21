@@ -7,6 +7,7 @@ import Footer from "../../components/Footer.astro";
 import { getCollection } from "astro:content";
 import FormattedDate from "../../components/FormattedDate.astro";
 import { Picture } from "astro:assets";
+import PaginationControls from "../../components/PaginationControls.astro";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     const allPosts = await getCollection("blog");
@@ -89,6 +90,7 @@ const description =
                         })
                     }
                 </ul>
+                <PaginationControls page={page} />
             </section>
         </main>
         <Footer />

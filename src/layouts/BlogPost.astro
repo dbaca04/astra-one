@@ -6,7 +6,6 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import TableOfContents from "../components/TableOfContents.astro";
-import JsonLdSchema from "../components/JsonLdSchema.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { ClientRouter } from "astro:transitions";
 import { Picture } from "astro:assets";
@@ -89,14 +88,14 @@ if (frontmatterProps.heroImage) {
 	}
 }
 
-const jsonLdSchema = generateBlogPostSchema({
+const blogPostSchema = generateBlogPostSchema({
 	title: frontmatterProps.title,
 	description: frontmatterProps.description,
 	publishDate: new Date(frontmatterProps.date),
 	updateDate: frontmatterProps.updatedDate
 		? new Date(frontmatterProps.updatedDate)
 		: undefined,
-	author: frontmatterProps.author || "David Bacaian",
+	author: frontmatterProps.author || "Domdhi",
 	slug: currentSlugFromParams as string,
 	tags: frontmatterProps.tags,
 	image: heroImageSrc,
@@ -118,8 +117,16 @@ const blogTitleMappings = {
 		<BaseHead
 			title={frontmatterProps.title}
 			description={frontmatterProps.description}
+			image={heroImageSrc}
+			article={true}
+			publishDate={new Date(frontmatterProps.date)}
+			modifiedDate={frontmatterProps.updatedDate
+				? new Date(frontmatterProps.updatedDate)
+				: undefined}
+			tags={frontmatterProps.tags}
+			author={frontmatterProps.author || "Domdhi"}
+			structuredData={blogPostSchema}
 		/>
-		<JsonLdSchema schema={jsonLdSchema} />
 		<ClientRouter />
 	</head>
 

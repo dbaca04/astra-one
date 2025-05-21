@@ -7,7 +7,7 @@ import { ClientRouter } from "astro:transitions";
 import "../styles/base.css";
 import "../styles/transitions.css";
 
-const { title, description } = Astro.props;
+const { title, description, image, noindex, nofollow } = Astro.props;
 
 // Custom title mappings for content pages
 const contentTitleMappings = {
@@ -18,7 +18,13 @@ const contentTitleMappings = {
 
 <html lang="en">
     <head>
-        <BaseHead title={title} description={description} />
+        <BaseHead
+            title={title}
+            description={description}
+            image={image}
+            noindex={noindex}
+            nofollow={nofollow}
+        />
         <ClientRouter />
     </head>
 

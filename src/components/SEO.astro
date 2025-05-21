@@ -1,0 +1,106 @@
+---
+/**
+ * SEO Component for Astro
+ * This component centralizes all SEO-related meta tags for better management
+ */
+import { type CollectionEntry } from "astro:content";
+import JsonLdSchema from "./JsonLdSchema.astro";
+
+interface Props {
+    title: string;
+    description: string;
+    canonical?: string;
+    image?: string;
+    imageAlt?: string;
+    type?: "website" | "article" | "profile";
+    author?: string;
+    publishDate?: Date;
+    modifiedDate?: Date;
+    tags?: string[];
+    noindex?: boolean;
+    nofollow?: boolean;
+    structuredData?: string;
+}
+
+const {
+    title,
+    description,
+    canonical,
+    image = "/og-image.png",
+    imageAlt = title,
+    type = "website",
+    author = "Domdhi",
+    publishDate,
+    modifiedDate,
+    tags = [],
+    noindex = false,
+    nofollow = false,
+    structuredData,
+} = Astro.props;
+
+// Construct canonical URL (if not provided)
+const canonicalURL = canonical
+    ? new URL(canonical, Astro.site)
+    : new URL(Astro.url.pathname, Astro.site);
+
+// Construct image URL
+const imageURL = image.startsWith("http")
+    ? image
+    : new URL(image, Astro.site).toString();
+
+// Build robots directive
+const robotsContent = [
+    ...(noindex ? ["noindex"] : ["index"]),
+    ...(nofollow ? ["nofollow"] : ["follow"]),
+].join(", ");
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<!-- Robots and Canonical Tags -->
+<meta name="robots" content={robotsContent} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph / Facebook Tags -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageURL} />
+<meta property="og:image:alt" content={imageAlt} />
+{
+    publishDate && (
+        <meta
+            property="article:published_time"
+            content={publishDate.toISOString()}
+        />
+    )
+}
+{
+    modifiedDate && (
+        <meta
+            property="article:modified_time"
+            content={modifiedDate.toISOString()}
+        />
+    )
+}
+{
+    tags.length > 0 &&
+        tags.map((tag) => <meta property="article:tag" content={tag} />)
+}
+{author && <meta property="article:author" content={author} />}
+
+<!-- Twitter Card Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL} />
+<meta name="twitter:image:alt" content={imageAlt} />
+{author && <meta name="twitter:creator" content={author} />}
+
+<!-- Structured Data (JSON-LD) -->
+{structuredData && <JsonLdSchema schema={structuredData} />}

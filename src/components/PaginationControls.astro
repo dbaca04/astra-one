@@ -9,7 +9,7 @@ interface Props {
 const { page } = Astro.props;
 
 const currentPage = page.currentPage;
-const totalPages = page.totalPages;
+const totalPages = page.lastPage;
 const prevUrl = page.url.prev;
 const nextUrl = page.url.next;
 ---

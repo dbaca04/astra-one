@@ -22,7 +22,7 @@ If you need to revert to this stable configuration:
 
 ```bash
 # Check out specific files from the stable tag
-git checkout v1.0.0-stable -- astro.config.mjs cloudflare-pages.config.json package.json
+git checkout v1.0.0-stable -- astro.config.mjs cloudflare-pages.config.json package.json wrangler.json
 
 # Or revert the entire repository to this tag
 git checkout v1.0.0-stable
@@ -44,6 +44,7 @@ Detailed documentation about the stable configuration can be found in:
 - Use the Sharp service for image optimization
 - Keep the deployment script simple: `"deploy": "astro build"`
 - Ensure all required dependencies are in the `dependencies` section, not `devDependencies`
+- **Keep the wrangler.json file** - Required for Cloudflare Pages deployment even with static builds
 
 ## Testing Before Deployment
 

@@ -34,6 +34,9 @@ export default defineConfig({
     responsiveImages: true,
   },
 
+  // Enable View Transitions API
+  viewTransitions: true,
+
   image: {
     // Use the default Sharp service for local builds
     // For Cloudflare deploy, this will use the appropriate fallback

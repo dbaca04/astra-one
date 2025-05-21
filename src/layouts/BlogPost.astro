@@ -7,7 +7,7 @@ import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
-import { ClientRouter } from "astro:transitions";
+import { ViewTransitions } from "astro:transitions";
 import { Picture } from "astro:assets";
 import "../styles/base.css";
 import "../styles/transitions.css";
@@ -127,7 +127,7 @@ const blogTitleMappings = {
 			author={frontmatterProps.author || "Domdhi"}
 			structuredData={blogPostSchema}
 		/>
-		<ClientRouter />
+		<ViewTransitions />
 	</head>
 
 	<body

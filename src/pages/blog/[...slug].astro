@@ -61,10 +61,10 @@ const { Content } = await render(post);
 <BlogPost {...post.data}>
     <Content />
 
-    {/* Add navigation after the content */}
+    {/* Add navigation after the content, now into the named slot */}
     {
         (prevPost || nextPost || prevSectionPost || nextSectionPost) && (
-            <div class="mt-16 flex flex-col gap-8 md:mt-12 md:gap-6 sm:mt-10 sm:gap-5">
+            <div slot="chronological-navigation" class="flex flex-col gap-8">
                 {hasSectionNav && (
                     <div class="navigation-section-wrapper">
                         <PostNavigation

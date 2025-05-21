@@ -1,20 +1,45 @@
 ---
+import type { Page, GetStaticPathsOptions } from "astro";
+import type { CollectionEntry } from "astro:content";
 import BaseHead from "../../components/BaseHead.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import { getCollection } from "astro:content";
 import FormattedDate from "../../components/FormattedDate.astro";
 import { Picture } from "astro:assets";
+import PaginationControls from "../../components/PaginationControls.astro";
 
-const title = "Blog";
-const description = "All blog posts";
-const posts = await getCollection("blog");
-posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+    const allPosts = await getCollection("blog");
+    allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+    const pageSize = 10; // Define page size
+    return paginate(allPosts, { pageSize });
+}
+
+interface Props {
+    page: Page<CollectionEntry<"blog">>;
+}
+
+const { page } = Astro.props as Props;
+
+// Determine current page number for unique titles/descriptions if needed
+const currentPageNumber =
+    page.currentPage > 1 ? `Page ${page.currentPage}` : "";
+const title =
+    `Blog ${currentPageNumber ? `- ${currentPageNumber}` : ""}`.trim();
+const description =
+    `All blog posts ${currentPageNumber ? `- ${currentPageNumber}` : ""}`.trim();
+
+const prevUrl = page.url.prev;
+const nextUrl = page.url.next;
 ---
 
 <html lang="en">
     <head>
         <BaseHead title={title} description={description} />
+        {/* SEO Link Tags for Pagination */}
+        {prevUrl && <link rel="prev" href={prevUrl} />}
+        {nextUrl && <link rel="next" href={nextUrl} />}
     </head>
     <body class="bg-theme-bg text-theme-text flex flex-col min-h-screen">
         <Header />
@@ -27,10 +52,9 @@ posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
                 </h1>
                 <ul class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {
-                        posts.map((post) => {
+                        page.data.map((post) => {
                             const postSlug = post.data.slug || post.id;
-                            const imageSource =
-                                post.data.heroImage || post.data.image;
+                            const imageSource = post.data.heroImage;
 
                             return (
                                 <li class="bg-theme-card-bg rounded-lg shadow-lg overflow-hidden transition-shadow duration-300 hover:shadow-xl">
@@ -72,6 +96,7 @@ posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
                         })
                     }
                 </ul>
+                <PaginationControls page={page} />
             </section>
         </main>
         <Footer />

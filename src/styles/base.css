@@ -192,3 +192,9 @@ body {
 .transition-theme {
     transition: var(--theme-transition);
 }
+
+/* Ensure pre tags within prose are scrollable to prevent layout breaks */
+.prose pre {
+    max-width: 100%;
+    overflow-x: auto;
+}

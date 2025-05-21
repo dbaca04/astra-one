@@ -29,11 +29,17 @@ const title =
     `Blog ${currentPageNumber ? `- ${currentPageNumber}` : ""}`.trim();
 const description =
     `All blog posts ${currentPageNumber ? `- ${currentPageNumber}` : ""}`.trim();
+
+const prevUrl = page.url.prev;
+const nextUrl = page.url.next;
 ---
 
 <html lang="en">
     <head>
         <BaseHead title={title} description={description} />
+        {/* SEO Link Tags for Pagination */}
+        {prevUrl && <link rel="prev" href={prevUrl} />}
+        {nextUrl && <link rel="next" href={nextUrl} />}
     </head>
     <body class="bg-theme-bg text-theme-text flex flex-col min-h-screen">
         <Header />

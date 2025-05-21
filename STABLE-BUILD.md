@@ -4,7 +4,7 @@ This file documents the current stable build configuration for Astra One that ha
 
 ## Current Stable Version
 
-- **Tagged Version**: `v1.0.0-stable`
+- **Tagged Version**: `v1.0.1-stable`
 - **Date Created**: May 20, 2025
 - **Status**: Verified working with Cloudflare Pages
 
@@ -22,10 +22,10 @@ If you need to revert to this stable configuration:
 
 ```bash
 # Check out specific files from the stable tag
-git checkout v1.0.0-stable -- astro.config.mjs cloudflare-pages.config.json package.json wrangler.json
+git checkout v1.0.1-stable -- astro.config.mjs cloudflare-pages.config.json package.json wrangler.json
 
 # Or revert the entire repository to this tag
-git checkout v1.0.0-stable
+git checkout v1.0.1-stable
 ```
 
 ## Where to Find Detailed Documentation

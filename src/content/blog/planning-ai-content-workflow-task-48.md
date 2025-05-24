@@ -1,13 +1,12 @@
 ---
+slug: automating-creativity-ai-powered-blog-content-workflow-task-48
 title: "Automating Creativity: Our Plan for an AI-Powered Blog Content Workflow (Task 48)"
 description: "An inside look at our ambitious Task 48: building an AI workflow to generate blog posts, from prompt to draft, using Gemini, Docker, and more!"
-pubDate: 2024-05-25
-updatedDate: 2024-05-25
-image: /images/task-48-ai-workflow.jpg # Placeholder - replace with a relevant image
-tags: ["AI", "Automation", "Blogging", "Workflow", "Gemini", "Development Update", "Project Update", "TaskMaster"]
-category: "Project Updates"
+date: 2024-05-25T10:00:00Z
 author: "Domdhi"
-draft: false
+category: "Project Updates"
+tags: ["AI", "Automation", "Blogging", "Workflow", "Gemini", "Development Update", "Project Update", "TaskMaster"]
+heroImage: /images/task-48-ai-workflow.jpg
 ---
 
 Hey everyone! We're constantly exploring ways to leverage AI to enhance our creative and technical workflows here at Domdhi. Today, I'm excited to share the blueprint for one of our most ambitious internal projects yet: **Task 48 - Developing an AI Workflow for Blog Content Creation**.

@@ -208,12 +208,15 @@ const blogTitleMappings = {
 							{
 								frontmatterProps.tags &&
 									frontmatterProps.tags.length > 0 && (
-										<div class="flex flex-wrap gap-2 justify-center mt-4 text-sm text-theme-text opacity-80">
+										<div class="flex flex-wrap gap-3 justify-center mt-4 text-sm text-theme-text opacity-80">
 											{frontmatterProps.tags.map(
 												(tag) => (
-													<span class="inline-block px-2 py-1 bg-theme-code-bg rounded-md transition-theme">
+													<a
+														href={`/tags/${tag}`}
+														class="inline-block px-3 py-1.5 bg-theme-code-bg hover:bg-theme-accent hover:text-theme-accent-text rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md capitalize"
+													>
 														#{tag}
-													</span>
+													</a>
 												),
 											)}
 										</div>

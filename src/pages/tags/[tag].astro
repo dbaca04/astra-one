@@ -1,0 +1,70 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import ContentPage from "../../layouts/ContentPage.astro";
+
+export async function getStaticPaths() {
+    const allPosts = await getCollection("blog");
+    const uniqueTags = [
+        ...new Set(
+            allPosts
+                .map((post) => post.data.tags)
+                .filter((tags) => Array.isArray(tags))
+                .flat()
+                .filter((tag) => typeof tag === "string" && tag.trim() !== ""),
+        ),
+    ];
+
+    return uniqueTags.map((tag) => {
+        const filteredPosts = allPosts.filter(
+            (post) => post.data.tags && post.data.tags.includes(tag),
+        );
+        return {
+            params: { tag },
+            props: { posts: filteredPosts },
+        };
+    });
+}
+
+interface Props {
+    posts: CollectionEntry<"blog">[];
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<ContentPage
+    title={`Posts tagged with \"${tag}\"`}
+    description={`Find all posts tagged with ${tag} on our site.`}
+>
+    <section class="container mx-auto py-8 px-4">
+        <h1 class="text-4xl font-bold mb-8 text-theme-text-accent">
+            Posts tagged: <span class="capitalize">{tag}</span>
+        </h1>
+        {
+            posts.length === 0 ? (
+                <p class="text-lg text-theme-muted">
+                    No posts found with the tag "{tag}".
+                </p>
+            ) : (
+                <ul class="list-disc pl-5 space-y-2">
+                    {posts.map((post) => (
+                        <li>
+                            <a
+                                href={`/blog/${post.id}/`}
+                                class="text-theme-accent hover:underline"
+                            >
+                                {post.data.title}
+                            </a>
+                            {post.data.description && (
+                                <p class="text-sm text-theme-muted mt-1">
+                                    {post.data.description}
+                                </p>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            )
+        }
+    </section>
+</ContentPage>

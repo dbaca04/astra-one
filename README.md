@@ -1,49 +1,47 @@
 # Domdhi: AI-Powered Content Hub
 
-![Domdhi Website Preview](https://github.com/dbaca04/domdhi/assets/preview.jpg)
-
 <!-- dash-content-start -->
 
 Domdhi is a personal content hub exploring the intersection of AI, web development, and creative pursuits. Built with Astro, styled with Tailwind CSS, and deployed on Cloudflare Workers.
 
 ## Core Features
 
-- **Project Setup & Structure:**
-    - Astro project initialization and structured layout.
-    - Base layout components for consistent page structure.
-- **Navigation & Content Organization:**
-    - Dynamic site navigation (Code, Create, Automate sections).
-    - Content collections for Markdown/MDX blog posts and pages with defined frontmatter.
-    - Templates for blog posts and section listing pages.
-    - Homepage with an introduction, section links, and a feed of the latest articles.
-    - Static 'About' and 'Contact' pages.
-- **Blog & Content Functionality:**
-    - Tagging system for content categorization and display on entries.
-    - RSS feed generation for content syndication.
-    - Previous/Next entry navigation on blog posts.
-    - Table of Contents (TOC) for blog posts with smooth scrolling and active link highlighting.
-    - Related posts feature based on shared tags/categories.
-    - Dynamic breadcrumb navigation with Schema.org markup.
-- **User Experience & Design:**
-    - Fully responsive design for desktop, tablet, and mobile.
-    - Enhanced content readability and formatting.
-    - Improved styling for blog post navigation.
-    - Dark theme enhancements for navigation and menus, ensuring accessibility.
-    - Consistent glow effect UI for interactive elements.
-    - Animated page transitions using Astro View Transitions.
+- **Astro Foundation:**
+    - Project initialized with Astro, leveraging its static site generation capabilities.
+    - Structured layout with base components for consistent page design.
+- **Content Management & Delivery:**
+    - Dynamic navigation for "Code", "Create", and "Automate" sections.
+    - Markdown/MDX content collections for blog posts and pages with type-safe frontmatter.
+    - Dedicated templates for blog posts and section listing pages.
+    - Homepage featuring an introduction, section links, and a feed of the latest articles.
+    - Static "About" and "Contact" pages.
+- **Blogging Capabilities:**
+    - Tagging system for content organization and display.
+    - Automatic RSS feed generation.
+    - "Previous/Next" navigation on individual blog posts.
+    - Auto-generated Table of Contents (TOC) with smooth scrolling and active link highlighting.
+    - "Related Posts" functionality based on shared tags.
+    - Dynamic breadcrumb navigation with Schema.org structured data.
+- **Design & User Experience:**
+    - Fully responsive design ensuring optimal viewing on all devices.
+    - Focus on content readability and clear formatting.
+    - Enhanced styling for blog post navigation elements.
+    - Accessible dark theme for navigation and menus.
+    - Consistent "glow effect" UI for interactive elements.
+    - Smooth page transitions powered by Astro View Transitions.
 - **Styling & Theming:**
-    - Integration with Tailwind CSS for utility-first styling.
-    - Project-wide refactor to Tailwind CSS from previous custom styles.
-    - Light and dark mode support with good contrast.
-    - Specific styling improvements for components like the 'Latest Articles' feed and Journal subscription box.
+    - Tailwind CSS integration for a utility-first styling approach.
+    - Comprehensive refactor from custom CSS to Tailwind.
+    - Support for light and dark modes with high contrast ratios.
+    - Specific styling enhancements for the "Latest Articles" feed and Journal subscription box.
 - **SEO & Performance:**
-    - SEO-friendly with canonical URLs and OpenGraph data.
-    - Sitemap support.
-    - Rich snippet metadata (Schema.org - BlogPosting, Author, Breadcrumbs) for blog posts.
-    - Optimized for 100/100 Lighthouse performance.
+    - SEO best practices implemented, including canonical URLs and OpenGraph metadata.
+    - Automatic sitemap generation.
+    - Rich snippet metadata (Schema.org: BlogPosting, Author, Breadcrumbs) for blog posts.
+    - Optimized for top Lighthouse performance scores (100/100).
 - **Branding & Accessibility:**
-    - Consistent 'Domdhi' branding across the site (text, logo, footer).
-    - Addressed site-wide CSS contrast issues for WCAG compliance.
+    - Consistent "Domdhi" branding (text, logo, footer) throughout the site.
+    - Addressed CSS contrast issues site-wide for WCAG AA compliance.
 
 <!-- dash-content-end -->
 

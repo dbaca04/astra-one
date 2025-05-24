@@ -2,7 +2,7 @@
 slug: creating-character-art-with-ai
 title: "Creating Character Art with AI: My Quest for Consistency"
 description: "My process and tips for generating compelling and somewhat consistent character art using AI image generators."
-date: 2025-05-17T14:00:00Z
+date: "2025-05-17T14:00:00Z"
 author: "Domdhi"
 category: "create"
 tags: ["digital art", "image generation", "creativity", "characters", "AI art", "prompting"]

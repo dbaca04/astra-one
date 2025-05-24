@@ -2,7 +2,7 @@
 slug: from-text-to-image-getting-started
 title: "From Text to Image: Your First Steps into AI Art Generation"
 description: "A beginner-friendly guide on the basic steps to generate your first images from text prompts using AI tools."
-date: 2025-05-16T10:00:00Z
+date: "2025-05-16T10:00:00Z"
 author: "Domdhi"
 category: "discover"
 tags: ["image generation", "basics", "prompting", "AI tools", "beginners", "text-to-image"]

@@ -1,7 +1,7 @@
 ---
 title: "My New Pair Programmer: Getting Started with Cursor"
 description: "An introductory post about AI-assisted coding with Cursor, covering setup and first impressions."
-date: 2023-10-28T10:00:00Z
+date: "2023-10-28T10:00:00Z"
 slug: "getting-started-with-cursor"
 category: "code"
 tags: ["AI coding", "Cursor", "workflow"]

@@ -2,7 +2,7 @@
 slug: automating-creativity-ai-powered-blog-content-workflow-task-48
 title: "Automating Creativity: Our Plan for an AI-Powered Blog Content Workflow (Task 48)"
 description: "An inside look at our ambitious Task 48: building an AI workflow to generate blog posts, from prompt to draft, using Gemini, Docker, and more!"
-date: 2024-05-25T10:00:00Z
+date: "2025-05-25T10:00:00Z"
 author: "Domdhi"
 category: "Project Updates"
 tags: ["AI", "Automation", "Blogging", "Workflow", "Gemini", "Development Update", "Project Update", "TaskMaster"]

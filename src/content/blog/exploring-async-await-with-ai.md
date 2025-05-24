@@ -2,7 +2,7 @@
 slug: exploring-async-await-with-ai
 title: "Exploring Async/Await with AI: How I Got a Handle on Asynchronous JavaScript"
 description: "My journey using AI tools like Cursor to finally get comfortable with understanding and implementing async/await in JavaScript."
-date: 2025-05-18T10:00:00Z
+date: "2025-05-18T10:00:00Z"
 author: "Domdhi"
 category: "code"
 tags: ["AI coding", "javascript", "async", "await", "promises", "web development", "learning to code", "cursor ai"]

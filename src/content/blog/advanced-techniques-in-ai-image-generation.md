@@ -2,7 +2,7 @@
 slug: advanced-ai-image-techniques
 title: "Advanced Techniques in AI Image Generation"
 description: "Diving deeper into prompting and parameters for AI art."
-date: 2025-05-18T16:00:00Z
+date: "2025-05-18T16:00:00Z"
 author: "Domdhi"
 category: "create"
 tags: ["digital art", "creativity", "image generation", "prompting", "techniques"]

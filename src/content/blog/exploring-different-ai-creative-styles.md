@@ -2,7 +2,7 @@
 slug: exploring-different-ai-creative-styles
 title: "Exploring Different AI Creative Styles: My Journey into Artistic Mimicry"
 description: "Diving into how I prompt AI image generators to achieve specific artistic styles, from cyberpunk to whimsical watercolors."
-date: 2025-05-14T15:00:00Z
+date: "2025-05-14T15:00:00Z"
 author: "Domdhi"
 category: "create"
 tags: ["creativity", "image generation", "styles", "AI art", "prompting", "artistic styles"]

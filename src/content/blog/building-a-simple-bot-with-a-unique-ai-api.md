@@ -2,7 +2,7 @@
 slug: building-simple-bot-chronosentiment-api
 title: "Building a Simple Bot with the (Fictional) ChronoSentiment AI API"
 description: "My journey experimenting with a unique, less common AI service to build a small but insightful bot."
-date: 2025-05-18T11:00:00Z
+date: "2025-05-18T11:00:00Z"
 author: "Domdhi"
 category: "automate"
 tags: ["automation", "API", "bots", "python", "sentiment analysis", "ai tools", "unique"]

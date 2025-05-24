@@ -2,7 +2,7 @@
 slug: my-full-ai-image-workflow
 title: "My Full AI Image Workflow"
 description: "Step-by-step process from idea to final AI image."
-date: 2025-05-17T10:00:00Z
+date: "2025-05-17T10:00:00Z"
 author: "Domdhi"
 category: "create"
 tags: ["digital art", "creativity", "image generation", "prompting", "workflow"]

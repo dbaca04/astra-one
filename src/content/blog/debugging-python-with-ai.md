@@ -2,7 +2,7 @@
 slug: debugging-python-with-ai
 title: "Debugging Python with AI: My New Favorite Coding Buddy"
 description: "How I'm leveraging AI assistants to supercharge my Python debugging process and squash those pesky bugs faster."
-date: 2025-05-16T12:00:00Z
+date: "2025-05-16T12:00:00Z"
 author: "Domdhi"
 category: "code"
 tags: ["AI coding", "python", "debugging", "code assistance", "developer tools", "troubleshooting"]

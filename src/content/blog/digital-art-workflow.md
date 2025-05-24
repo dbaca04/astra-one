@@ -1,7 +1,7 @@
 ---
 title: "My Digital Art Workflow: From Concept to Creation"
 description: "A detailed look at my process for creating digital art, including tools, techniques, and tips for beginners."
-date: 2023-10-31T10:00:00Z
+date: "2023-10-31T10:00:00Z"
 slug: "digital-art-workflow"
 author: "Domdhi"
 category: "create"

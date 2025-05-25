@@ -1,0 +1,441 @@
+---
+export const prerender = false;
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+// import { Icon } from "astro-icon/components"; // Removed for now
+
+interface DraftFrontmatter {
+    slug?: string;
+    title: string;
+    date: string; // Consider using Date type and formatting it
+    status?: string;
+    // Add other expected frontmatter properties here
+}
+
+interface Draft {
+    id: string;
+    title: string;
+    date: string;
+    status: string;
+    filePath: string; // To identify the file for approve/reject
+}
+
+// Define a more specific type for blog post entries based on the schema
+type BlogPostEntry = CollectionEntry<"blog">;
+
+interface PublishedPost {
+    id: string;
+    slug: string;
+    title: string;
+    publishDate: Date;
+    // Add other properties as needed for display or actions
+}
+
+// Determine current view (drafts or published)
+const url = new URL(Astro.request.url);
+const currentView = url.searchParams.get("view") || "drafts"; // Default to drafts
+
+// Fetch actual draft content from the `src/content/drafts` directory
+const rawDraftModules = import.meta.glob("../../content/drafts/**/*.md");
+const rawDrafts: { frontmatter: DraftFrontmatter; file: string }[] = [];
+
+for (const path in rawDraftModules) {
+    const draftModule = await rawDraftModules[path]();
+    rawDrafts.push({
+        // @ts-ignore
+        frontmatter: draftModule.frontmatter,
+        file: path, // 'path' here is the relative path to the file
+    });
+}
+
+const drafts: Draft[] = rawDrafts.map((draftFile) => {
+    const fileName = draftFile.file.split("/").pop()?.replace(".md", "");
+    return {
+        id: draftFile.frontmatter.slug || fileName || draftFile.file, // Use slug, then filename, then full path as fallback ID
+        title: draftFile.frontmatter.title,
+        date: draftFile.frontmatter.date,
+        status: draftFile.frontmatter.status || "Draft", // Default to Draft if no status
+        filePath: draftFile.file, // Store the file path
+    };
+});
+
+// Fetch published blog posts if currentView is 'published'
+let publishedPosts: PublishedPost[] = [];
+if (currentView === "published") {
+    const allBlogPosts: BlogPostEntry[] = await getCollection(
+        "blog",
+        (post) => {
+            // Filter for posts that are not drafts (draft is false or undefined in schema, defaulting to false)
+            // Asserting type for post.data as linter struggles with Zod optional().default()
+            return (post.data as { draft?: boolean }).draft !== true;
+        },
+    );
+
+    publishedPosts = allBlogPosts.map((post: BlogPostEntry) => {
+        // Use post.data.slug if available, otherwise fallback to post.id (Astro's guaranteed unique ID/slug)
+        const slug = post.data.slug ?? post.id;
+        return {
+            id: slug,
+            slug: slug,
+            title: post.data.title,
+            publishDate: post.data.date, // Already a Date type due to z.coerce.date() in schema
+            // Map other necessary fields
+        };
+    });
+}
+---
+
+<AdminLayout title="Content Management">
+    <script>
+        async function handleApprove(draftId, filePath) {
+            // API call to approve the draft
+            try {
+                const response = await fetch(`/api/admin/content/approve`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        filePath: filePath.replace(
+                            /^..\/..\/content\/drafts\//,
+                            "",
+                        ),
+                    }),
+                });
+                if (response.ok) {
+                    window.location.href = "/admin/content?view=drafts"; // Refresh to drafts view
+                    console.log("Draft approved:", draftId);
+                } else {
+                    const errorText = await response.text();
+                    console.error("Failed to approve draft:", errorText);
+                    alert(
+                        `Failed to approve draft: ${errorText}. See console for details.`,
+                    );
+                }
+            } catch (error) {
+                console.error("Error approving draft:", error);
+                alert("Error approving draft. See console for details.");
+            }
+        }
+
+        async function handleReject(draftId, filePath) {
+            // API call to reject the draft
+            try {
+                const response = await fetch(`/api/admin/content/reject`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        filePath: filePath.replace(
+                            /^..\/..\/content\/drafts\//,
+                            "",
+                        ),
+                    }),
+                });
+                if (response.ok) {
+                    window.location.href = "/admin/content?view=drafts"; // Refresh to drafts view
+                    console.log("Draft rejected:", draftId);
+                } else {
+                    const errorText = await response.text();
+                    console.error("Failed to reject draft:", errorText);
+                    alert(
+                        `Failed to reject draft: ${errorText}. See console for details.`,
+                    );
+                }
+            } catch (error) {
+                console.error("Error rejecting draft:", error);
+                alert("Error rejecting draft. See console for details.");
+            }
+        }
+
+        async function handleUnpublish(postId, postTitle) {
+            // Placeholder for unpublish functionality
+            if (
+                confirm(
+                    `Are you sure you want to unpublish "${postTitle}" and move it to drafts?`,
+                )
+            ) {
+                console.log("Attempting to unpublish post:", postId);
+                // TODO: Implement API call to /api/admin/content/unpublish
+                // Example structure:
+                // try {
+                //     const response = await fetch(`/api/admin/content/unpublish`, {
+                //         method: "POST",
+                //         headers: { "Content-Type": "application/json" },
+                //         body: JSON.stringify({ slug: postId }), // Send slug or other identifier
+                //     });
+                //     if (response.ok) {
+                //         alert("Post unpublished successfully and moved to drafts.");
+                //         window.location.href = '/admin/content?view=published'; // Refresh published view
+                //     } else {
+                //         const errorText = await response.text();
+                //         alert(`Failed to unpublish post: ${errorText}`);
+                //     }
+                // } catch (error) {
+                //     alert("Error unpublishing post. See console for details.");
+                //     console.error("Error unpublishing post:", error);
+                // }
+                alert(
+                    "Unpublish functionality not yet implemented. Post ID: " +
+                        postId,
+                );
+            }
+        }
+
+        // Attach event listeners to buttons after the DOM is loaded
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".approve-btn").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const draftId = button.getAttribute("data-id");
+                    const filePath = button.getAttribute("data-path");
+                    if (draftId && filePath) {
+                        handleApprove(draftId, filePath);
+                    }
+                });
+            });
+
+            document.querySelectorAll(".reject-btn").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const draftId = button.getAttribute("data-id");
+                    const filePath = button.getAttribute("data-path");
+                    if (draftId && filePath) {
+                        handleReject(draftId, filePath);
+                    }
+                });
+            });
+
+            document.querySelectorAll(".unpublish-btn").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const postId = button.getAttribute("data-id");
+                    const postTitle = button.getAttribute("data-title");
+                    if (postId && postTitle) {
+                        handleUnpublish(postId, postTitle);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <h1 class="text-3xl font-bold mb-2">Content Management</h1>
+    <p class="mb-6 text-theme-text opacity-80">
+        Manage your draft and published blog posts.
+    </p>
+
+    <!-- View Switcher Tabs -->
+    <div class="mb-6 border-b border-theme-border">
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+            <a
+                href="/admin/content?view=drafts"
+                class:list={[
+                    "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm",
+                    currentView === "drafts"
+                        ? "border-theme-accent text-theme-accent"
+                        : "border-transparent text-theme-text-muted hover:text-theme-text hover:border-theme-text-muted transition-colors",
+                ]}
+            >
+                Drafts ({drafts.length})
+            </a>
+            <a
+                href="/admin/content?view=published"
+                class:list={[
+                    "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm",
+                    currentView === "published"
+                        ? "border-theme-accent text-theme-accent"
+                        : "border-transparent text-theme-text-muted hover:text-theme-text hover:border-theme-text-muted transition-colors",
+                ]}
+            >
+                Published ({publishedPosts.length})
+            </a>
+        </nav>
+    </div>
+
+    {/* Conditional Rendering based on currentView */}
+    {
+        currentView === "drafts" && (
+            <div class="bg-theme-card-bg p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Drafts</h2>
+                {drafts.length > 0 ? (
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-theme-border">
+                            <thead class="bg-theme-table-header-bg">
+                                <tr>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-theme-text opacity-70 uppercase tracking-wider"
+                                    >
+                                        Title
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-theme-text opacity-70 uppercase tracking-wider"
+                                    >
+                                        Date Generated
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-theme-text opacity-70 uppercase tracking-wider"
+                                    >
+                                        Status
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-theme-text opacity-70 uppercase tracking-wider"
+                                    >
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-theme-card-bg divide-y divide-theme-border">
+                                {drafts.map((draft) => (
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-theme-text">
+                                            {draft.title}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-theme-text opacity-70">
+                                            {draft.date}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                class:list={[
+                                                    "px-2 inline-flex text-xs leading-5 font-semibold rounded-full",
+                                                    draft.status === "Draft" &&
+                                                        "bg-yellow-500 bg-opacity-20 text-yellow-700 dark:text-yellow-300",
+                                                    draft.status ===
+                                                        "Pending Review" &&
+                                                        "bg-blue-500 bg-opacity-20 text-blue-700 dark:text-blue-300",
+                                                    draft.status ===
+                                                        "Approved" &&
+                                                        "bg-green-500 bg-opacity-20 text-green-700 dark:text-green-300",
+                                                ]}
+                                            >
+                                                {draft.status}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a
+                                                href={`/admin/content/edit/${draft.id}`}
+                                                class="text-theme-accent hover:text-theme-accent-dark mr-3 inline-flex items-center"
+                                                title="Edit/View Draft"
+                                            >
+                                                {/* <Icon name="mdi:pencil" class="w-4 h-4 mr-1" /> */}{" "}
+                                                Edit/View
+                                            </a>
+                                            <button
+                                                class="approve-btn text-green-500 hover:text-green-600 dark:text-green-400 dark:hover:text-green-300 mr-3 inline-flex items-center"
+                                                data-id={draft.id}
+                                                data-path={draft.filePath}
+                                                title="Approve Draft"
+                                            >
+                                                {/* <Icon name="mdi:check-circle-outline" class="w-4 h-4 mr-1" /> */}{" "}
+                                                Approve
+                                            </button>
+                                            <button
+                                                class="reject-btn text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 inline-flex items-center"
+                                                data-id={draft.id}
+                                                data-path={draft.filePath}
+                                                title="Reject Draft"
+                                            >
+                                                {/* <Icon name="mdi:close-circle-outline" class="w-4 h-4 mr-1" /> */}{" "}
+                                                Reject
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ) : (
+                    <p class="text-theme-text opacity-80">No drafts found.</p>
+                )}
+            </div>
+        )
+    }
+
+    {
+        currentView === "published" && (
+            <div class="bg-theme-card-bg p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Published Posts</h2>
+                {publishedPosts.length > 0 ? (
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-theme-border">
+                            <thead class="bg-theme-table-header-bg">
+                                <tr>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-theme-text opacity-70 uppercase tracking-wider"
+                                    >
+                                        Title
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-theme-text opacity-70 uppercase tracking-wider"
+                                    >
+                                        Publication Date
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-theme-text opacity-70 uppercase tracking-wider"
+                                    >
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-theme-card-bg divide-y divide-theme-border">
+                                {publishedPosts.map((post) => (
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-theme-text">
+                                            {post.title}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-theme-text opacity-70">
+                                            {post.publishDate.toLocaleDateString(
+                                                "en-US",
+                                                {
+                                                    year: "numeric",
+                                                    month: "long",
+                                                    day: "numeric",
+                                                },
+                                            )}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a
+                                                href={`/admin/content/edit/${post.slug}`}
+                                                class="text-theme-accent hover:text-theme-accent-dark mr-3 inline-flex items-center"
+                                                title="Edit Post"
+                                            >
+                                                {/* <Icon name="mdi:pencil" class="w-4 h-4 mr-1" /> */}{" "}
+                                                Edit
+                                            </a>
+                                            <a
+                                                href={`/blog/${post.slug}`}
+                                                target="_blank"
+                                                class="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 mr-3 inline-flex items-center"
+                                                title="View Published Post"
+                                            >
+                                                {/* <Icon name="mdi:eye-outline" class="w-4 h-4 mr-1" /> */}{" "}
+                                                View Public
+                                            </a>
+                                            <button
+                                                class="unpublish-btn text-orange-500 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-300 inline-flex items-center"
+                                                data-id={post.id}
+                                                data-title={post.title}
+                                                title="Unpublish and Move to Drafts"
+                                            >
+                                                {/* <Icon name="mdi:arrow-u-left-top" class="w-4 h-4 mr-1" /> */}{" "}
+                                                Unpublish
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ) : (
+                    <p class="text-theme-text opacity-80">
+                        No published posts found.
+                    </p>
+                )}
+            </div>
+        )
+    }
+</AdminLayout>

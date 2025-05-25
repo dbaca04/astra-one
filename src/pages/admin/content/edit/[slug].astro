@@ -257,44 +257,62 @@ if (frontmatter && typeof frontmatter === "object") {
                             )}
                         </div>
                     ))}
-                    <h2 class="text-2xl font-semibold mt-6 mb-4">
-                        Content Body
-                    </h2>
-                    <div
-                        class="mb-6 flex flex-col md:flex-row md:space-x-4"
-                        id="editor-container"
-                    >
-                        {/* Left Pane: Markdown Editor */}
-                        <div class="md:w-1/2 w-full mb-4 md:mb-0">
-                            <label
-                                for="body"
-                                class="block text-sm font-medium text-theme-text mb-1"
-                            >
-                                Markdown Input
-                            </label>
-                            <textarea
-                                id="body"
-                                name="body"
-                                rows="25"
-                                class="mt-1 block w-full h-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent resize-none"
-                                set:text={body}
-                            >
-                            </textarea>
+                    <div id="content-body-section" class="mb-8">
+                        <h2 class="text-2xl font-semibold mb-4">Content Body</h2>
+
+                        <!-- Markdown Editor Toolbar -->
+                        <div id="markdown-toolbar" class="mb-2 flex items-center space-x-2 p-2 border border-theme-border rounded-md bg-theme-bg-alt">
+                            <button type="button" id="toolbar-bold" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Bold">B</button>
+                            <button type="button" id="toolbar-italic" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Italic">I</button>
+                            <button type="button" id="toolbar-h1" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Heading 1">H1</button>
+                            <button type="button" id="toolbar-h2" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Heading 2">H2</button>
+                            <button type="button" id="toolbar-h3" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Heading 3">H3</button>
+                            <button type="button" id="toolbar-ul" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Unordered List">UL</button>
+                            <button type="button" id="toolbar-ol" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Ordered List">OL</button>
+                            <button type="button" id="toolbar-link" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Link">Link</button>
+                            <button type="button" id="toolbar-image" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Image">Image</button>
+                            <button type="button" id="toolbar-codeblock" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Code Block">Code</button>
+                            <button type="button" id="toolbar-blockquote" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Blockquote">Quote</button>
+                            <button type="button" id="toolbar-help" class="px-2 py-1 border border-theme-border rounded hover:bg-theme-bg text-theme-text" title="Markdown Help">Help</button>
+                            <!-- More buttons will be added in subsequent tasks -->
                         </div>
-                        {/* Right Pane: HTML Preview */}
-                        <div class="md:w-1/2 w-full">
-                            <label
-                                for="preview"
-                                class="block text-sm font-medium text-theme-text mb-1"
-                            >
-                                Live Preview
-                            </label>
-                            <div
-                                id="preview"
-                                class="mt-1 block w-full h-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg overflow-y-auto prose dark:prose-invert max-w-none"
-                                style="min-height: 500px;"
-                            >
-                                {/* Preview content will be injected here by JavaScript */}
+
+                        <div
+                            id="split-screen-editor-container"
+                            class="mb-6 flex flex-col md:flex-row md:space-x-4"
+                        >
+                            {/* Left Pane: Markdown Editor */}
+                            <div class="md:w-1/2 w-full mb-4 md:mb-0">
+                                <label
+                                    for="body"
+                                    class="block text-sm font-medium text-theme-text mb-1"
+                                >
+                                    Markdown Input
+                                </label>
+                                <textarea
+                                    id="body"
+                                    name="body"
+                                    rows="25"
+                                    class="mt-1 block w-full h-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent resize-none"
+                                    set:text={body}
+                                >
+                                </textarea>
+                            </div>
+                            {/* Right Pane: HTML Preview */}
+                            <div class="md:w-1/2 w-full">
+                                <label
+                                    for="preview"
+                                    class="block text-sm font-medium text-theme-text mb-1"
+                                >
+                                    Live Preview
+                                </label>
+                                <div
+                                    id="preview"
+                                    class="mt-1 block w-full h-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg overflow-y-auto prose dark:prose-invert max-w-none"
+                                    style="min-height: 500px;"
+                                >
+                                    {/* Preview content will be injected here by JavaScript */}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -352,6 +370,20 @@ if (frontmatter && typeof frontmatter === "object") {
     const aiSuggestionsText = document.getElementById("aiSuggestionsText");
     const markdownInput = document.getElementById("body"); // Markdown textarea
     const htmlPreview = document.getElementById("preview"); // Preview div
+
+    // Toolbar buttons
+    const toolbarBold = document.getElementById("toolbar-bold");
+    const toolbarItalic = document.getElementById("toolbar-italic");
+    const toolbarH1 = document.getElementById("toolbar-h1");
+    const toolbarH2 = document.getElementById("toolbar-h2");
+    const toolbarH3 = document.getElementById("toolbar-h3");
+    const toolbarUL = document.getElementById("toolbar-ul");
+    const toolbarOL = document.getElementById("toolbar-ol");
+    const toolbarLink = document.getElementById("toolbar-link");
+    const toolbarImage = document.getElementById("toolbar-image");
+    const toolbarCodeBlock = document.getElementById("toolbar-codeblock");
+    const toolbarBlockquote = document.getElementById("toolbar-blockquote");
+    const toolbarHelp = document.getElementById("toolbar-help");
 
     // Debounce function
     function debounce(func, delay) {
@@ -428,88 +460,100 @@ if (frontmatter && typeof frontmatter === "object") {
                     // Handle if marked.parse returns a Promise (async usage)
                     parseResult
                         .then((html) => {
-                            console.log(
-                                "Async parse resolved. HTML type:",
-                                typeof html,
-                            );
+                            console.log("Async marked.parse resolved.");
                             processHtml(html);
                         })
-                        .catch((promiseError) => {
+                        .catch((err) => {
                             console.error(
-                                "Error during async Markdown parsing:",
-                                promiseError,
+                                "Error in async marked.parse:",
+                                err,
                             );
                             htmlPreview.textContent =
-                                "Error: Preview failed due to an async parsing error.";
+                                "Error: Markdown parsing failed (async).";
                         });
-                } else if (typeof parseResult === "string") {
-                    console.log("Handling sync marked.parse result (string).");
-                    // Handle synchronous string result
-                    processHtml(parseResult);
                 } else {
-                    console.error(
-                        "marked.parse did not return a string or a Promise:",
-                        parseResult,
-                    );
-                    htmlPreview.textContent =
-                        "Error: Preview could not be generated (unexpected parse result type).";
-                }
-            } catch (error) {
-                console.error(
-                    "Error during Markdown parsing or initial processing:",
-                    error,
-                );
-                htmlPreview.textContent =
-                    "Error: Preview failed to update due to a parsing error.";
-            }
-        } else {
-            console.error(
-                "markdownInput or htmlPreview is not the correct HTMLElement type or is null.",
-            );
-            if (!(markdownInput instanceof HTMLTextAreaElement)) {
-                console.error("markdownInput is invalid:", markdownInput);
-            }
-            if (!(htmlPreview instanceof HTMLElement)) {
-                console.error("htmlPreview is invalid:", htmlPreview);
-            }
-        }
-    }
-
-    // Create a debounced version of updatePreview
-    const debouncedUpdatePreview = debounce(updatePreview, 300); // 300ms delay
-
-    // Initial preview update on page load
-    if (markdownInput && htmlPreview) {
-        // Ensure libraries are loaded before attempting preview
-        if (typeof marked !== "undefined" && typeof DOMPurify !== "undefined") {
-            updatePreview(); // Initial update immediately
-        } else {
-            console.error("Libraries not loaded at initial preview time");
-            // Add a small delay to check again
-            setTimeout(() => {
-                if (
-                    typeof marked !== "undefined" &&
-                    typeof DOMPurify !== "undefined"
-                ) {
                     console.log(
-                        "Libraries loaded after delay, updating preview",
+                        "Handling sync marked.parse result (string or other).",
                     );
-                    updatePreview();
-                } else {
-                    console.error("Libraries still not loaded after delay");
-                    if (htmlPreview instanceof HTMLElement) {
-                        htmlPreview.textContent =
-                            "Error: Required libraries not loaded. Please refresh the page.";
-                    }
+                    // Handle if marked.parse returns a string directly (sync usage)
+                    processHtml(parseResult);
                 }
-            }, 1000);
+            } catch (e) {
+                console.error("Error during markdown parsing or sanitization:", e);
+                if (htmlPreview instanceof HTMLElement)
+                    htmlPreview.textContent = "Error: Preview generation failed.";
+            }
         }
     }
 
-    // Update preview on input using the debounced function
+    // Debounced preview update
+    const debouncedUpdatePreview = debounce(updatePreview, 300);
+
+    // Event listener for markdown input
     if (markdownInput) {
-        markdownInput.addEventListener("input", debouncedUpdatePreview);
+        markdownInput.addEventListener("input", () => {
+            console.log("Markdown input event fired.");
+            debouncedUpdatePreview();
+        });
+        // Initial preview on page load
+        updatePreview(); 
     }
+
+    // Helper function to apply markdown formatting
+    function applyMarkdownFormatting(prefix, suffix, placeholder = "text") {
+        if (!(markdownInput instanceof HTMLTextAreaElement)) return;
+
+        const start = markdownInput.selectionStart;
+        const end = markdownInput.selectionEnd;
+        const value = markdownInput.value;
+
+        const textBeforeSelection = value.substring(0, start);
+        const textAfterSelection = value.substring(end);
+        const originalSelectedText = value.substring(start, end);
+
+        if (originalSelectedText && originalSelectedText.trim() !== "") {
+            // Selection exists and is not just whitespace
+            const coreText = originalSelectedText.trim();
+            const leadingSpaceInSelection = originalSelectedText.substring(0, originalSelectedText.indexOf(coreText));
+            const trailingSpaceInSelection = originalSelectedText.substring(originalSelectedText.indexOf(coreText) + coreText.length);
+
+            const formattedText = `${prefix}${coreText}${suffix}`;
+            markdownInput.value = `${textBeforeSelection}${leadingSpaceInSelection}${formattedText}${trailingSpaceInSelection}${textAfterSelection}`;
+            
+            // Select the formatted core text
+            const newSelectionStart = textBeforeSelection.length + leadingSpaceInSelection.length + prefix.length;
+            const newSelectionEnd = newSelectionStart + coreText.length;
+            markdownInput.setSelectionRange(newSelectionStart, newSelectionEnd);
+        } else {
+            // No text selected, or selection is only whitespace: insert with placeholder
+            const textToInsert = `${prefix}${placeholder}${suffix}`;
+            markdownInput.value = `${textBeforeSelection}${textToInsert}${textAfterSelection}`;
+            
+            const placeholderStart = start + prefix.length;
+            const placeholderEnd = placeholderStart + placeholder.length;
+            markdownInput.setSelectionRange(placeholderStart, placeholderEnd);
+        }
+        
+        markdownInput.focus();
+        updatePreview(); // Update preview immediately after applying format
+    }
+
+    // Event listeners for toolbar buttons
+    toolbarBold?.addEventListener("click", (event) => { event.preventDefault(); applyMarkdownFormatting("**", "**", "bold text"); });
+    toolbarItalic?.addEventListener("click", (event) => { event.preventDefault(); applyMarkdownFormatting("*", "*", "italic text"); });
+    toolbarH1?.addEventListener("click", (event) => { event.preventDefault(); applyMarkdownFormatting("\n# ", "\n", "Heading 1"); });
+    toolbarH2?.addEventListener("click", (event) => { event.preventDefault(); applyMarkdownFormatting("\n## ", "\n", "Heading 2"); });
+    toolbarH3?.addEventListener("click", (event) => { event.preventDefault(); applyMarkdownFormatting("\n### ", "\n", "Heading 3"); });
+    toolbarUL?.addEventListener("click", (event) => { event.preventDefault(); applyMarkdownFormatting("\n- ", "", "List item"); });
+    toolbarOL?.addEventListener("click", (event) => { event.preventDefault(); applyMarkdownFormatting("\n1. ", "", "List item"); });
+    toolbarLink?.addEventListener("click", (event) => { event.preventDefault(); applyMarkdownFormatting("[", "](url)", "Link text"); });
+    toolbarImage?.addEventListener("click", (event) => { event.preventDefault(); applyMarkdownFormatting("![", "](alt text)", "Image"); });
+    toolbarCodeBlock?.addEventListener("click", (event) => { event.preventDefault(); applyMarkdownFormatting("\n```\n", "\n```\n", "code"); });
+    toolbarBlockquote?.addEventListener("click", (event) => { event.preventDefault(); applyMarkdownFormatting("\n> ", "", "Quoted text"); });
+    toolbarHelp?.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.open('https://guides.github.com/features/mastering-markdown/', '_blank');
+    });
 
     if (
         form instanceof HTMLFormElement &&

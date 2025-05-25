@@ -8,18 +8,10 @@ interface RejectBody {
     filePath?: string; // Path relative to the project root, e.g., src/content/drafts/my-draft.md
 }
 
-// Placeholder for authentication - replace with actual auth logic from Task 49
-async function isAuthenticated(request: Request): Promise<boolean> {
-    // Example: Check for a session cookie or auth header
-    // const session = request.headers.get('Authorization');
-    // if (!session || session !== 'Bearer valid-admin-token') return false;
-    console.warn("Authentication for /api/admin/content/reject is currently a placeholder. Implement actual checks!");
-    return true; // Allow for now, REQUIRES ACTUAL IMPLEMENTATION
-}
-
-export const POST: APIRoute = async ({ request }) => {
-    const authenticated = await isAuthenticated(request);
-    if (!authenticated) {
+export const POST: APIRoute = async ({ request, cookies }) => {
+    // Authentication Check
+    const sessionCookie = cookies.get('session');
+    if (!sessionCookie || sessionCookie.value !== 'admin') {
         return new Response(JSON.stringify({ message: "Unauthorized" }), {
             status: 401,
             headers: { 'Content-Type': 'application/json' },

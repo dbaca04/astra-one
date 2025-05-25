@@ -5,6 +5,14 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import yaml from "js-yaml";
 import matter from "gray-matter";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
+
+// Authentication Check
+const sessionCookie = Astro.cookies.get("session");
+if (!sessionCookie || sessionCookie.value !== "admin") {
+    return Astro.redirect("/admin/login", 302);
+}
 
 export const prerender = false;
 
@@ -162,7 +170,15 @@ if (frontmatter && typeof frontmatter === "object") {
 <AdminLayout
     title={`Edit ${isPublishedContent ? "Published Post" : "Draft"}: ${urlSlug ?? "New"}`}
 >
-    <div class="container mx-auto px-4 py-8">
+    <!-- Add CDN links for marked and DOMPurify in the head -->
+    <script is:inline src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+    ></script>
+    <script
+        is:inline
+        src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"
+    ></script>
+
+    <div class="container px-4 py-8">
         <h1 class="text-3xl font-bold mb-6">
             Edit {isPublishedContent ? "Published Post" : "Draft"}: {
                 urlSlug ?? "New"
@@ -231,26 +247,56 @@ if (frontmatter && typeof frontmatter === "object") {
                                     type="text"
                                     id={key}
                                     name={key}
-                                    value={String(value ?? "")}
+                                    value={
+                                        key === "tags" && Array.isArray(value)
+                                            ? value.join(", ")
+                                            : String(value ?? "")
+                                    }
                                     class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
                                 />
                             )}
                         </div>
                     ))}
-                    <div class="mb-6">
-                        <label
-                            for="bodyContent"
-                            class="block text-sm font-medium text-theme-text"
-                        >
-                            Body Content (Markdown)
-                        </label>
-                        <textarea
-                            id="bodyContent"
-                            name="bodyContent"
-                            rows="20"
-                            class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
-                            set:text={body}
-                        />
+                    <h2 class="text-2xl font-semibold mt-6 mb-4">
+                        Content Body
+                    </h2>
+                    <div
+                        class="mb-6 flex flex-col md:flex-row md:space-x-4"
+                        id="editor-container"
+                    >
+                        {/* Left Pane: Markdown Editor */}
+                        <div class="md:w-1/2 w-full mb-4 md:mb-0">
+                            <label
+                                for="body"
+                                class="block text-sm font-medium text-theme-text mb-1"
+                            >
+                                Markdown Input
+                            </label>
+                            <textarea
+                                id="body"
+                                name="body"
+                                rows="25"
+                                class="mt-1 block w-full h-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent resize-none"
+                                set:text={body}
+                            >
+                            </textarea>
+                        </div>
+                        {/* Right Pane: HTML Preview */}
+                        <div class="md:w-1/2 w-full">
+                            <label
+                                for="preview"
+                                class="block text-sm font-medium text-theme-text mb-1"
+                            >
+                                Live Preview
+                            </label>
+                            <div
+                                id="preview"
+                                class="mt-1 block w-full h-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg overflow-y-auto prose dark:prose-invert max-w-none"
+                                style="min-height: 500px;"
+                            >
+                                {/* Preview content will be injected here by JavaScript */}
+                            </div>
+                        </div>
                     </div>
                     <div class="flex items-center justify-between mt-6">
                         <button
@@ -304,6 +350,166 @@ if (frontmatter && typeof frontmatter === "object") {
     const aiSuggestButton = document.getElementById("aiSuggestButton");
     const aiSuggestionsArea = document.getElementById("aiSuggestionsArea");
     const aiSuggestionsText = document.getElementById("aiSuggestionsText");
+    const markdownInput = document.getElementById("body"); // Markdown textarea
+    const htmlPreview = document.getElementById("preview"); // Preview div
+
+    // Debounce function
+    function debounce(func, delay) {
+        let timeoutId;
+        return function (...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+    }
+
+    // Function to update preview
+    function updatePreview() {
+        console.log("updatePreview called");
+
+        if (typeof marked === "undefined") {
+            console.error("marked library is not loaded!");
+            if (htmlPreview instanceof HTMLElement)
+                htmlPreview.textContent =
+                    "Error: Markdown library (marked) not loaded.";
+            return;
+        }
+        if (typeof DOMPurify === "undefined") {
+            console.error("DOMPurify library is not loaded!");
+            if (htmlPreview instanceof HTMLElement)
+                htmlPreview.textContent =
+                    "Error: Sanitizer library (DOMPurify) not loaded.";
+            return;
+        }
+
+        if (
+            markdownInput instanceof HTMLTextAreaElement &&
+            htmlPreview instanceof HTMLElement
+        ) {
+            const markdownText = markdownInput.value;
+            console.log("Markdown text length:", markdownText.length);
+            try {
+                const parseResult = marked.parse(markdownText);
+                console.log("marked.parse result type:", typeof parseResult);
+
+                const processHtml = (htmlContent) => {
+                    console.log(
+                        "processHtml called with type:",
+                        typeof htmlContent,
+                    );
+                    if (typeof htmlContent === "string") {
+                        try {
+                            htmlPreview.innerHTML =
+                                DOMPurify.sanitize(htmlContent);
+                            console.log("Preview updated successfully.");
+                        } catch (sanitizeError) {
+                            console.error(
+                                "Error during DOMPurify.sanitize:",
+                                sanitizeError,
+                            );
+                            htmlPreview.textContent =
+                                "Error: Sanitization failed.";
+                        }
+                    } else {
+                        console.error(
+                            "Processed HTML content is not a string:",
+                            htmlContent,
+                        );
+                        htmlPreview.textContent =
+                            "Error: Preview could not be generated (invalid HTML content type).";
+                    }
+                };
+
+                if (parseResult && typeof parseResult.then === "function") {
+                    console.log(
+                        "Handling async marked.parse result (Promise).",
+                    );
+                    // Handle if marked.parse returns a Promise (async usage)
+                    parseResult
+                        .then((html) => {
+                            console.log(
+                                "Async parse resolved. HTML type:",
+                                typeof html,
+                            );
+                            processHtml(html);
+                        })
+                        .catch((promiseError) => {
+                            console.error(
+                                "Error during async Markdown parsing:",
+                                promiseError,
+                            );
+                            htmlPreview.textContent =
+                                "Error: Preview failed due to an async parsing error.";
+                        });
+                } else if (typeof parseResult === "string") {
+                    console.log("Handling sync marked.parse result (string).");
+                    // Handle synchronous string result
+                    processHtml(parseResult);
+                } else {
+                    console.error(
+                        "marked.parse did not return a string or a Promise:",
+                        parseResult,
+                    );
+                    htmlPreview.textContent =
+                        "Error: Preview could not be generated (unexpected parse result type).";
+                }
+            } catch (error) {
+                console.error(
+                    "Error during Markdown parsing or initial processing:",
+                    error,
+                );
+                htmlPreview.textContent =
+                    "Error: Preview failed to update due to a parsing error.";
+            }
+        } else {
+            console.error(
+                "markdownInput or htmlPreview is not the correct HTMLElement type or is null.",
+            );
+            if (!(markdownInput instanceof HTMLTextAreaElement)) {
+                console.error("markdownInput is invalid:", markdownInput);
+            }
+            if (!(htmlPreview instanceof HTMLElement)) {
+                console.error("htmlPreview is invalid:", htmlPreview);
+            }
+        }
+    }
+
+    // Create a debounced version of updatePreview
+    const debouncedUpdatePreview = debounce(updatePreview, 300); // 300ms delay
+
+    // Initial preview update on page load
+    if (markdownInput && htmlPreview) {
+        // Ensure libraries are loaded before attempting preview
+        if (typeof marked !== "undefined" && typeof DOMPurify !== "undefined") {
+            updatePreview(); // Initial update immediately
+        } else {
+            console.error("Libraries not loaded at initial preview time");
+            // Add a small delay to check again
+            setTimeout(() => {
+                if (
+                    typeof marked !== "undefined" &&
+                    typeof DOMPurify !== "undefined"
+                ) {
+                    console.log(
+                        "Libraries loaded after delay, updating preview",
+                    );
+                    updatePreview();
+                } else {
+                    console.error("Libraries still not loaded after delay");
+                    if (htmlPreview instanceof HTMLElement) {
+                        htmlPreview.textContent =
+                            "Error: Required libraries not loaded. Please refresh the page.";
+                    }
+                }
+            }, 1000);
+        }
+    }
+
+    // Update preview on input using the debounced function
+    if (markdownInput) {
+        markdownInput.addEventListener("input", debouncedUpdatePreview);
+    }
 
     if (
         form instanceof HTMLFormElement &&
@@ -320,11 +526,11 @@ if (frontmatter && typeof frontmatter === "object") {
             const updatedFrontmatter = JSON.parse(
                 JSON.stringify(initialFrontmatter || {}),
             );
-            const updatedBody = formData.get("bodyContent"); // FormDataEntryValue | null
+            const updatedBody = formData.get("body"); // FormDataEntryValue | null
 
             for (const [key] of formData.entries()) {
                 // Iterate only keys, get value from form.elements or formData
-                if (key !== "bodyContent") {
+                if (key !== "body") {
                     const formElement = form.elements.namedItem(key);
                     const formValue = formData.get(key); // FormDataEntryValue
 
@@ -338,6 +544,14 @@ if (frontmatter && typeof frontmatter === "object") {
                             typeof formValue === "string"
                                 ? parseFloat(formValue) || 0
                                 : 0;
+                    } else if (
+                        key === "tags" &&
+                        typeof formValue === "string"
+                    ) {
+                        updatedFrontmatter[key] = formValue
+                            .split(",")
+                            .map((tag) => tag.trim())
+                            .filter((tag) => tag !== "");
                     } else {
                         // For other types (string, date string from ISO), assign the string value from FormData
                         updatedFrontmatter[key] =
@@ -404,11 +618,7 @@ if (frontmatter && typeof frontmatter === "object") {
                 }
             } catch (err) {
                 feedbackMessage.textContent = `Error: ${err.message}`;
-                feedbackMessage.className = "text-red-500";
-                console.error("Save error:", err);
             }
-            saveButton.disabled = false;
-            saveButton.textContent = "Save Changes";
         });
     }
 
@@ -418,50 +628,109 @@ if (frontmatter && typeof frontmatter === "object") {
         aiSuggestionsText instanceof HTMLElement &&
         form instanceof HTMLFormElement
     ) {
-        aiSuggestButton.addEventListener("click", async () => {
+        aiSuggestButton.addEventListener("click", async (event) => {
+            event.preventDefault();
             aiSuggestButton.disabled = true;
-            aiSuggestButton.textContent = "Getting Suggestions...";
-            aiSuggestionsArea.classList.add("hidden");
+            aiSuggestButton.textContent = "Getting suggestions...";
+            aiSuggestionsArea.classList.remove("hidden");
             aiSuggestionsText.textContent = "";
 
-            let currentBodyContent = "";
-            const bodyElement = form.elements.namedItem("bodyContent");
-            if (bodyElement instanceof HTMLTextAreaElement) {
-                currentBodyContent = bodyElement.value;
+            const formData = new FormData(form);
+            const updatedFrontmatter = JSON.parse(
+                JSON.stringify(initialFrontmatter || {}),
+            );
+            const updatedBody = formData.get("body"); // FormDataEntryValue | null
+
+            for (const [key] of formData.entries()) {
+                // Iterate only keys, get value from form.elements or formData
+                if (key !== "body") {
+                    const formElement = form.elements.namedItem(key);
+                    const formValue = formData.get(key); // FormDataEntryValue
+
+                    if (
+                        formElement instanceof HTMLInputElement &&
+                        formElement.type === "checkbox"
+                    ) {
+                        updatedFrontmatter[key] = formElement.checked;
+                    } else if (typeof initialFrontmatter[key] === "number") {
+                        updatedFrontmatter[key] =
+                            typeof formValue === "string"
+                                ? parseFloat(formValue) || 0
+                                : 0;
+                    } else if (
+                        key === "tags" &&
+                        typeof formValue === "string"
+                    ) {
+                        updatedFrontmatter[key] = formValue
+                            .split(",")
+                            .map((tag) => tag.trim())
+                            .filter((tag) => tag !== "");
+                    } else {
+                        // For other types (string, date string from ISO), assign the string value from FormData
+                        updatedFrontmatter[key] =
+                            typeof formValue === "string" ? formValue : "";
+                    }
+                }
             }
 
+            if (
+                contentType === "draft" &&
+                updatedFrontmatter.hasOwnProperty("slug")
+            ) {
+                updatedFrontmatter.slug = slugToSave;
+            }
+            if (contentType === "published") {
+                updatedFrontmatter.slug = slugToSave;
+                delete updatedFrontmatter.draft;
+            }
+
+            const endpoint =
+                contentType === "published"
+                    ? `/api/admin/content/save-published-post`
+                    : `/api/admin/content/save-draft`;
+
             try {
-                const response = await fetch("/api/admin/ai/suggest", {
+                const response = await fetch(endpoint, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        content: currentBodyContent,
-                        // Optionally, pass current frontmatter or other context later
-                        // frontmatter: initialFrontmatter
+                        slug: slugToSave,
+                        frontmatter: updatedFrontmatter,
+                        body:
+                            typeof updatedBody === "string" ? updatedBody : "", // Ensure body is string
                     }),
                 });
-
-                const result = await response.json();
-
+                const resultText = await response.text();
+                let result;
+                try {
+                    result = JSON.parse(resultText);
+                } catch (e) {
+                    if (!response.ok)
+                        throw new Error(
+                            resultText ||
+                                "Failed to save. Server returned non-JSON response.",
+                        );
+                    result = {
+                        message:
+                            resultText ||
+                            "Saved successfully (non-JSON response).",
+                    };
+                }
                 if (response.ok) {
                     aiSuggestionsText.textContent =
-                        result.suggestion || "No suggestion received.";
-                    aiSuggestionsArea.classList.remove("hidden");
+                        result.message || "Suggestions received!";
+                    aiSuggestionsText.className = "text-green-500";
                 } else {
                     throw new Error(
-                        result.message || "Failed to get AI suggestions.",
+                        result.message || "Failed to get suggestions.",
                     );
                 }
             } catch (err) {
                 aiSuggestionsText.textContent = `Error: ${err.message}`;
-                aiSuggestionsArea.classList.remove("hidden"); // Show area to display the error
-                console.error("AI Suggestion error:", err);
+            } finally {
+                aiSuggestButton.disabled = false;
+                aiSuggestButton.textContent = "Get AI Suggestions";
             }
-
-            aiSuggestButton.disabled = false;
-            aiSuggestButton.textContent = "Get AI Suggestions";
         });
     }
 </script>

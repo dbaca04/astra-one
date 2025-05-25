@@ -1,0 +1,105 @@
+---
+export const prerender = false;
+import AdminLayout from "../../layouts/AdminLayout.astro";
+
+interface ApiResponse {
+    message?: string;
+    error?: string;
+    details?: string;
+}
+
+let message = Astro.url.searchParams.get("message");
+let error = Astro.url.searchParams.get("error");
+
+if (Astro.request.method === "POST") {
+    try {
+        const formData = await Astro.request.formData();
+        const topic = formData.get("topic");
+
+        if (!topic || typeof topic !== "string") {
+            error = "Topic is required and must be a string.";
+        } else {
+            // Call the HTTP endpoint of ai-content-generator.mjs
+            // The endpoint is http://localhost:PORT/generate-content (PORT from .env or 3000)
+            const port = import.meta.env.PORT || 3000;
+            const response = await fetch(
+                `http://localhost:${port}/generate-content`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ topic }),
+                },
+            );
+
+            const result: ApiResponse = await response.json();
+
+            if (response.ok) {
+                message =
+                    result.message ||
+                    "Content generation process started successfully.";
+            } else {
+                error = result.error || "Failed to start content generation.";
+                if (result.details) error += ` Details: ${result.details}`;
+            }
+        }
+    } catch (e) {
+        console.error("Error triggering workflow:", e);
+        error =
+            "An unexpected error occurred while triggering the workflow: " +
+            e.message;
+    }
+    // Redirect to GET to clear form resubmission and show message/error
+    return Astro.redirect(
+        `/admin/trigger?message=${encodeURIComponent(message || "")}&error=${encodeURIComponent(error || "")}`,
+        303,
+    );
+}
+---
+
+<AdminLayout title="Manual Workflow Trigger">
+    <h1 class="text-3xl font-bold mb-6">Manual Workflow Trigger</h1>
+    <p class="mb-6 text-theme-text opacity-80">
+        Manually start the AI content generation workflow by providing a topic.
+    </p>
+
+    {
+        message && (
+            <div class="mb-4 p-4 bg-green-500 bg-opacity-20 text-green-700 dark:text-green-300 rounded-md">
+                {message}
+            </div>
+        )
+    }
+    {
+        error && (
+            <div class="mb-4 p-4 bg-red-500 bg-opacity-20 text-red-700 dark:text-red-300 rounded-md">
+                {error}
+            </div>
+        )
+    }
+
+    <form method="POST" class="bg-theme-card-bg p-6 rounded-lg shadow-md">
+        <div class="mb-4">
+            <label
+                for="topic"
+                class="block text-sm font-medium text-theme-text mb-1"
+                >Blog Post Topic</label
+            >
+            <input
+                type="text"
+                id="topic"
+                name="topic"
+                required
+                class="w-full px-3 py-2 border border-theme-border rounded-md shadow-sm focus:outline-none focus:ring-theme-accent focus:border-theme-accent bg-theme-bg"
+                placeholder="e.g., Latest Trends in AI Development"
+            />
+        </div>
+        <button
+            type="submit"
+            class="w-full bg-theme-accent text-theme-bg py-2 px-4 rounded-md hover:bg-theme-accent-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-accent"
+        >
+            Generate Content
+        </button>
+    </form>
+</AdminLayout>

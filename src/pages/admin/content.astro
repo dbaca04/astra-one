@@ -4,6 +4,12 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 // import { Icon } from "astro-icon/components"; // Removed for now
 
+// Authentication Check
+const sessionCookie = Astro.cookies.get("session");
+if (!sessionCookie || sessionCookie.value !== "admin") {
+    return Astro.redirect("/admin/login", 302);
+}
+
 interface DraftFrontmatter {
     slug?: string;
     title: string;
@@ -58,30 +64,33 @@ const drafts: Draft[] = rawDrafts.map((draftFile) => {
         filePath: draftFile.file, // Store the file path
     };
 });
+const draftsCount = drafts.length;
 
-// Fetch published blog posts if currentView is 'published'
-let publishedPosts: PublishedPost[] = [];
+// Fetch all published blog posts to get the count for the tab
+const allPublishedPostsForCount: BlogPostEntry[] = await getCollection(
+    "blog",
+    (post) => {
+        return (post.data as { draft?: boolean }).draft !== true;
+    },
+);
+const publishedPostsCount = allPublishedPostsForCount.length;
+
+// Fetch published blog posts for display only if currentView is 'published'
+let publishedPostsForDisplay: PublishedPost[] = [];
 if (currentView === "published") {
-    const allBlogPosts: BlogPostEntry[] = await getCollection(
-        "blog",
-        (post) => {
-            // Filter for posts that are not drafts (draft is false or undefined in schema, defaulting to false)
-            // Asserting type for post.data as linter struggles with Zod optional().default()
-            return (post.data as { draft?: boolean }).draft !== true;
+    // We can reuse allPublishedPostsForCount if no further filtering specific to display is needed
+    // or refetch/filter if display criteria are different. For now, let's map from the already fetched posts.
+    publishedPostsForDisplay = allPublishedPostsForCount.map(
+        (post: BlogPostEntry) => {
+            const slug = post.data.slug ?? post.id;
+            return {
+                id: slug,
+                slug: slug,
+                title: post.data.title,
+                publishDate: post.data.date,
+            };
         },
     );
-
-    publishedPosts = allBlogPosts.map((post: BlogPostEntry) => {
-        // Use post.data.slug if available, otherwise fallback to post.id (Astro's guaranteed unique ID/slug)
-        const slug = post.data.slug ?? post.id;
-        return {
-            id: slug,
-            slug: slug,
-            title: post.data.title,
-            publishDate: post.data.date, // Already a Date type due to z.coerce.date() in schema
-            // Map other necessary fields
-        };
-    });
 }
 ---
 
@@ -127,6 +136,13 @@ if (currentView === "published") {
                 return;
             }
 
+            // Transform filePathFromButton from '../../content/drafts/file.md'
+            // to 'src/content/drafts/file.md'
+            const correctedFilePath = filePathFromButton.replace(
+                /^..\/..\//,
+                "src/",
+            );
+
             try {
                 const response = await fetch(`/api/admin/content/reject`, {
                     method: "POST",
@@ -134,7 +150,7 @@ if (currentView === "published") {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        filePath: filePathFromButton,
+                        filePath: correctedFilePath, // Use the corrected path
                     }),
                 });
 
@@ -148,17 +164,23 @@ if (currentView === "published") {
                     }
                 } else {
                     let errorMessage = "Failed to reject draft. Unknown error.";
-                    let errorDetails = undefined; // Initialize as undefined
+                    let errorDetails: any = undefined; // Explicitly 'any' or a more specific error interface
                     try {
                         errorDetails = await response.json();
                         // Check if errorDetails is an object and has a string property 'message'
                         if (
                             errorDetails &&
                             typeof errorDetails === "object" &&
-                            "message" in errorDetails &&
-                            typeof errorDetails.message === "string"
+                            "message" in errorDetails // Check for presence first
                         ) {
-                            errorMessage = errorDetails.message;
+                            const messageValue = errorDetails.message; // Access it
+                            if (typeof messageValue === "string") {
+                                // Then check type
+                                errorMessage = messageValue;
+                            } else {
+                                // Handle case where message exists but isn't a string
+                                errorMessage = `Server responded with status: ${response.status} ${response.statusText}. Error message format unexpected.`;
+                            }
                         } else {
                             errorMessage = `Server responded with status: ${response.status} ${response.statusText}. No specific error message provided in JSON.`;
                         }
@@ -279,7 +301,7 @@ if (currentView === "published") {
                         : "border-transparent text-theme-text-muted hover:text-theme-text hover:border-theme-text-muted transition-colors",
                 ]}
             >
-                Drafts ({drafts.length})
+                Drafts ({draftsCount})
             </a>
             <a
                 href="/admin/content?view=published"
@@ -290,7 +312,7 @@ if (currentView === "published") {
                         : "border-transparent text-theme-text-muted hover:text-theme-text hover:border-theme-text-muted transition-colors",
                 ]}
             >
-                Published ({publishedPosts.length})
+                Published ({publishedPostsCount})
             </a>
         </nav>
     </div>
@@ -401,7 +423,7 @@ if (currentView === "published") {
         currentView === "published" && (
             <div class="bg-theme-card-bg p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-semibold mb-4">Published Posts</h2>
-                {publishedPosts.length > 0 ? (
+                {publishedPostsForDisplay.length > 0 ? (
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-theme-border">
                             <thead class="bg-theme-table-header-bg">
@@ -427,7 +449,7 @@ if (currentView === "published") {
                                 </tr>
                             </thead>
                             <tbody class="bg-theme-card-bg divide-y divide-theme-border">
-                                {publishedPosts.map((post) => (
+                                {publishedPostsForDisplay.map((post) => (
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-theme-text">
                                             {post.title}
@@ -444,7 +466,7 @@ if (currentView === "published") {
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <a
-                                                href={`/admin/content/edit/${post.slug}`}
+                                                href={`/admin/content/edit/${post.slug}?type=published`}
                                                 class="text-theme-accent hover:text-theme-accent-dark mr-3 inline-flex items-center"
                                                 title="Edit Post"
                                             >

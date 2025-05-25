@@ -1,0 +1,57 @@
+---
+export const prerender = false;
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Dashboard Overview">
+    <h1 class="text-3xl font-bold mb-6 text-theme-text">Admin Dashboard</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+            class="bg-theme-card-bg p-6 rounded-lg shadow-md border border-theme-border"
+        >
+            <h2 class="text-xl font-semibold mb-2 text-theme-text">
+                Content Stats
+            </h2>
+            <p class="text-theme-text">
+                Drafts: <span class="font-bold text-theme-text">0</span>
+            </p>
+            <p class="text-theme-text">
+                Published: <span class="font-bold text-theme-text">0</span>
+            </p>
+            {/* Add more stats as needed */}
+        </div>
+
+        <div
+            class="bg-theme-card-bg p-6 rounded-lg shadow-md border border-theme-border"
+        >
+            <h2 class="text-xl font-semibold mb-2 text-theme-text">
+                Quick Actions
+            </h2>
+            <ul class="space-y-2">
+                <li>
+                    <a
+                        href="/admin/trigger"
+                        class="text-theme-accent hover:text-theme-accent-dark hover:underline"
+                        >Trigger New Content</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="/admin/content"
+                        class="text-theme-accent hover:text-theme-accent-dark hover:underline"
+                        >Manage Drafts</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="/admin/config"
+                        class="text-theme-accent hover:text-theme-accent-dark hover:underline"
+                        >Workflow Configuration</a
+                    >
+                </li>
+            </ul>
+        </div>
+
+        {/* Add more cards/widgets as the dashboard develops */}
+    </div>
+</AdminLayout>

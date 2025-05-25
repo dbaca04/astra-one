@@ -1,13 +1,20 @@
 ---
-slug: advanced-techniques-in-ai-image-generation
-title: "Advanced Techniques in AI Image Generation"
-description: "Diving deeper into prompting and parameters for AI art."
-date: "2025-05-18T16:00:00Z"
-author: "Domdhi"
-category: "create"
-tags: ["digital art", "creativity", "image generation", "prompting", "techniques"]
-heroImage: "/images/advanced-techniques.jpg"
+slug: draft-advanced-techniques-in-ai-image-generation
+title: Advanced Techniques in AI Image Generation
+description: Diving deeper into prompting and parameters for AI art.
+date: '2025-05-18T16:00:00Z'
+author: Domdhi
+category: create
+tags:
+  - digital art
+  - creativity
+  - image generation
+  - prompting
+  - techniques
+heroImage: /images/advanced-techniques.jpg
+draft: true
 ---
+
 ## Advanced Techniques in AI Image Generation
 
 So, you've dipped your toes into AI image generation, marveled at the initial magic, and perhaps even shared some of your first creations. Awesome! But what if I told you there's a whole other layer of control and creativity waiting to be unlocked? If you're ready to move beyond basic prompts and start truly sculpting your AI-generated visions, then you're in the right place. Today, I want to share some of the advanced techniques I've been exploring to really push the boundaries of what's possible with AI art.

@@ -1,0 +1,131 @@
+---
+import Sidebar from "../components/admin/Sidebar.astro";
+import "../styles/base.css";
+const { title } = Astro.props;
+---
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title ? `${title} - Admin` : "Admin Dashboard"}</title>
+        {/* Basic SEO, can be enhanced later */}
+        <meta name="robots" content="noindex, nofollow" />
+        <script is:inline>
+            const theme = (() => {
+                if (
+                    typeof localStorage !== "undefined" &&
+                    localStorage.getItem("theme")
+                ) {
+                    return localStorage.getItem("theme");
+                }
+                if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                    return "dark";
+                }
+                return "light";
+            })();
+
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+            }
+
+            window.onload = () => {
+                const themeToggle = document.getElementById("themeToggle");
+                if (themeToggle) {
+                    themeToggle.addEventListener("click", () => {
+                        const currentTheme =
+                            document.documentElement.classList.contains("dark")
+                                ? "dark"
+                                : "light";
+                        const newTheme =
+                            currentTheme === "dark" ? "light" : "dark";
+                        document.documentElement.classList.remove(
+                            currentTheme === "dark" ? "dark" : "light",
+                        );
+                        document.documentElement.classList.add(newTheme);
+                        localStorage.setItem("theme", newTheme);
+                        updateIcon(newTheme);
+                    });
+                    // Set initial button text and icon
+                    updateIcon(
+                        document.documentElement.classList.contains("dark")
+                            ? "dark"
+                            : "light",
+                    );
+                }
+            };
+
+            function updateIcon(theme) {
+                const themeToggle = document.getElementById("themeToggle");
+                if (!themeToggle) return;
+
+                const sunIcon = themeToggle.querySelector(".sun-icon");
+                const moonIcon = themeToggle.querySelector(".moon-icon");
+
+                if (sunIcon && moonIcon) {
+                    if (theme === "dark") {
+                        sunIcon.classList.add("hidden");
+                        moonIcon.classList.remove("hidden");
+                        themeToggle.setAttribute(
+                            "aria-label",
+                            "Switch to Light Mode",
+                        );
+                    } else {
+                        sunIcon.classList.remove("hidden");
+                        moonIcon.classList.add("hidden");
+                        themeToggle.setAttribute(
+                            "aria-label",
+                            "Switch to Dark Mode",
+                        );
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body class="bg-theme-bg text-theme-text flex">
+        <Sidebar />
+        <main class="flex-1 p-6">
+            <div class="flex justify-end mb-4">
+                <button
+                    id="themeToggle"
+                    class="p-2 rounded-full text-theme-header-text hover:bg-theme-selection-bg focus:outline-none focus:ring-2 focus:ring-theme-accent focus:ring-offset-2 focus:ring-offset-theme-bg transition-colors duration-200"
+                    aria-label="Switch to Dark Mode"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="sun-icon block dark:hidden h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 3v1m0 16v1m8.66-8.66l-.707.707M4.04 4.04l-.707.707M21 12h-1M4 12H3m15.66 8.66l-.707-.707M4.747 19.953l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z"
+                        ></path>
+                    </svg>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="moon-icon hidden dark:block h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                        ></path>
+                    </svg>
+                    <span class="sr-only">Switch Theme</span>
+                </button>
+            </div>
+            <slot />
+        </main>
+        <style is:global>
+            /* Additional global styles for admin if needed */
+        </style>
+    </body>
+</html>

@@ -11,7 +11,16 @@ interface SavePublishedPostBody {
     body: string;
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
+    // Authentication Check
+    const sessionCookie = cookies.get('session');
+    if (!sessionCookie || sessionCookie.value !== 'admin') {
+        return new Response(JSON.stringify({ message: "Unauthorized" }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+
     if (request.headers.get("Content-Type") !== "application/json") {
         return new Response(JSON.stringify({ message: "Unsupported Media Type. Expecting application/json." }), {
             status: 415,

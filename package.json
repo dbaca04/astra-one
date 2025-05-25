@@ -20,6 +20,7 @@
     "@astrojs/sitemap": "^3.4.0",
     "@astrojs/tailwind": "^6.0.2",
     "astro": "^5.7.13",
+    "gray-matter": "^4.0.3",
     "mermaid": "^11.6.0",
     "rehype-mermaid": "^3.0.0",
     "sharp": "^0.34.2",
@@ -30,10 +31,13 @@
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.16",
-    "gray-matter": "^4.0.3",
+    "@types/dompurify": "^3.0.5",
+    "@types/marked": "^5.0.2",
+    "dompurify": "^3.2.6",
     "husky": "^9.1.7",
-    "lighthouse-ci": "^1.13.1",
+    "lighthouse-ci": "^1.10.0",
     "lint-staged": "^16.0.0",
+    "marked": "^15.0.12",
     "playwright": "^1.52.0",
     "wrangler": "4.12.0"
   },

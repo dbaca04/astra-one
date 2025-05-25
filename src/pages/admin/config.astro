@@ -1,0 +1,664 @@
+---
+export const prerender = false;
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import aiConfig from "../../../scripts/ai-config.json";
+
+const currentConfig = aiConfig;
+---
+
+<AdminLayout title="Workflow Configuration">
+    <h1 class="text-3xl font-bold mb-6">Workflow Configuration</h1>
+    <p class="mb-6 text-theme-text opacity-80">
+        Manage settings for the AI content generation workflow. Changes made
+        here will update the live configuration.
+    </p>
+
+    <form class="space-y-8 bg-theme-card-bg p-6 rounded-lg shadow-md">
+        <section>
+            <h2
+                class="text-2xl font-semibold mb-4 border-b border-theme-border pb-2"
+            >
+                AI Model Settings
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {
+                    Object.entries(currentConfig.aiModels).map(
+                        ([modelKey, modelConfig]) => (
+                            <div class="p-4 border border-theme-border rounded-md">
+                                <h3 class="text-lg font-medium text-theme-text mb-2 capitalize">
+                                    {modelKey.replace(/([A-Z])/g, " $1").trim()}
+                                </h3>
+                                <div>
+                                    <label
+                                        for={`${modelKey}-provider`}
+                                        class="block text-sm font-medium text-theme-text"
+                                    >
+                                        Provider
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id={`${modelKey}-provider`}
+                                        value={(modelConfig as any).provider}
+                                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                                    />
+                                </div>
+                                <div class="mt-2">
+                                    <label
+                                        for={`${modelKey}-modelName`}
+                                        class="block text-sm font-medium text-theme-text"
+                                    >
+                                        Model Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id={`${modelKey}-modelName`}
+                                        value={(modelConfig as any).modelName}
+                                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                                    />
+                                </div>
+                                <div class="mt-2">
+                                    <label
+                                        for={`${modelKey}-maxTokens`}
+                                        class="block text-sm font-medium text-theme-text"
+                                    >
+                                        Max Tokens
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id={`${modelKey}-maxTokens`}
+                                        value={(modelConfig as any).maxTokens}
+                                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                                    />
+                                </div>
+                                <div class="mt-2">
+                                    <label
+                                        for={`${modelKey}-temperature`}
+                                        class="block text-sm font-medium text-theme-text"
+                                    >
+                                        Temperature
+                                    </label>
+                                    <input
+                                        type="number"
+                                        step="0.1"
+                                        id={`${modelKey}-temperature`}
+                                        value={(modelConfig as any).temperature}
+                                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                                    />
+                                </div>
+                            </div>
+                        ),
+                    )
+                }
+            </div>
+        </section>
+
+        <section>
+            <h2
+                class="text-2xl font-semibold mb-4 border-b border-theme-border pb-2"
+            >
+                File Paths
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label
+                        for="outputDir"
+                        class="block text-sm font-medium text-theme-text"
+                        >Output Directory (Blog Posts)</label
+                    >
+                    <input
+                        type="text"
+                        id="outputDir"
+                        value={currentConfig.paths.outputDir}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="contextDir"
+                        class="block text-sm font-medium text-theme-text"
+                        >Context Directory (Existing Posts for Analysis)</label
+                    >
+                    <input
+                        type="text"
+                        id="contextDir"
+                        value={currentConfig.paths.contextDir}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="imageOutputDir"
+                        class="block text-sm font-medium text-theme-text"
+                        >Image Output Directory</label
+                    >
+                    <input
+                        type="text"
+                        id="imageOutputDir"
+                        value={currentConfig.paths.imageOutputDir}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2
+                class="text-2xl font-semibold mb-4 border-b border-theme-border pb-2"
+            >
+                Base Prompts
+            </h2>
+            <div class="space-y-4">
+                {
+                    Object.entries(currentConfig.basePrompts).map(
+                        ([promptKey, promptValue]) => (
+                            <div>
+                                <label
+                                    for={`${promptKey}`}
+                                    class="block text-sm font-medium text-theme-text capitalize"
+                                >
+                                    {promptKey
+                                        .replace(/([A-Z])/g, " $1")
+                                        .trim()}{" "}
+                                    Base Prompt
+                                </label>
+                                <textarea
+                                    id={`${promptKey}`}
+                                    rows="4"
+                                    class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                                >
+                                    {String(promptValue)}
+                                </textarea>
+                            </div>
+                        ),
+                    )
+                }
+            </div>
+        </section>
+
+        <section>
+            <h2
+                class="text-2xl font-semibold mb-4 border-b border-theme-border pb-2"
+            >
+                Content Defaults
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label
+                        for="defaultCategory"
+                        class="block text-sm font-medium text-theme-text"
+                        >Default Category</label
+                    >
+                    <input
+                        type="text"
+                        id="defaultCategory"
+                        value={currentConfig.defaultCategory}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="author"
+                        class="block text-sm font-medium text-theme-text"
+                        >Author</label
+                    >
+                    <input
+                        type="text"
+                        id="author"
+                        value={currentConfig.author}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2
+                class="text-2xl font-semibold mb-4 border-b border-theme-border pb-2"
+            >
+                Duplicate Detection
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label
+                        for="keywordOverlapThreshold"
+                        class="block text-sm font-medium text-theme-text"
+                        >Keyword Overlap Threshold</label
+                    >
+                    <input
+                        type="number"
+                        id="keywordOverlapThreshold"
+                        value={currentConfig.duplicateDetection
+                            .keywordOverlapThreshold}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="enableStopWordRemoval"
+                        class="block text-sm font-medium text-theme-text mb-1"
+                        >Enable Stop Word Removal</label
+                    >
+                    <input
+                        type="checkbox"
+                        id="enableStopWordRemoval"
+                        checked={currentConfig.duplicateDetection
+                            .enableStopWordRemoval}
+                        class="h-5 w-5 text-theme-accent border-theme-border rounded focus:ring-theme-accent"
+                    />
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2
+                class="text-2xl font-semibold mb-4 border-b border-theme-border pb-2"
+            >
+                Image Generation
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label
+                        for="imageNecessityThreshold"
+                        class="block text-sm font-medium text-theme-text"
+                        >Necessity Threshold</label
+                    >
+                    <input
+                        type="number"
+                        step="0.01"
+                        id="imageNecessityThreshold"
+                        value={currentConfig.imageGeneration.necessityThreshold}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="generateMaxImages"
+                        class="block text-sm font-medium text-theme-text"
+                        >Max Images Per Post</label
+                    >
+                    <input
+                        type="number"
+                        id="generateMaxImages"
+                        value={currentConfig.imageGeneration.generateMaxImages}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2
+                class="text-2xl font-semibold mb-4 border-b border-theme-border pb-2"
+            >
+                Diagram Generation
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label
+                        for="diagramNecessityThreshold"
+                        class="block text-sm font-medium text-theme-text"
+                        >Necessity Threshold</label
+                    >
+                    <input
+                        type="number"
+                        step="0.01"
+                        id="diagramNecessityThreshold"
+                        value={currentConfig.diagramGeneration
+                            .necessityThreshold}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="maxDiagramsPerPost"
+                        class="block text-sm font-medium text-theme-text"
+                        >Max Diagrams Per Post</label
+                    >
+                    <input
+                        type="number"
+                        id="maxDiagramsPerPost"
+                        value={currentConfig.diagramGeneration
+                            .maxDiagramsPerPost}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2
+                class="text-2xl font-semibold mb-4 border-b border-theme-border pb-2"
+            >
+                Email Review
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label
+                        class="block text-sm font-medium text-theme-text mb-1"
+                        >Email Review Enabled</label
+                    >
+                    <input
+                        type="checkbox"
+                        id="emailReviewEnabled"
+                        checked={currentConfig.emailReview.enabled}
+                        class="h-5 w-5 text-theme-accent border-theme-border rounded focus:ring-theme-accent"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="recipientEmail"
+                        class="block text-sm font-medium text-theme-text"
+                        >Recipient Email</label
+                    >
+                    <input
+                        type="email"
+                        id="recipientEmail"
+                        value={currentConfig.emailReview.recipientEmail}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="senderEmail"
+                        class="block text-sm font-medium text-theme-text"
+                        >Sender Email</label
+                    >
+                    <input
+                        type="email"
+                        id="senderEmail"
+                        value={currentConfig.emailReview.senderEmail}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="subjectPrefix"
+                        class="block text-sm font-medium text-theme-text"
+                        >Subject Prefix</label
+                    >
+                    <input
+                        type="text"
+                        id="subjectPrefix"
+                        value={currentConfig.emailReview.subjectPrefix}
+                        class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                    />
+                </div>
+            </div>
+            <div class="mt-6 border-t border-theme-border pt-6">
+                <h3 class="text-xl font-semibold mb-3">SMTP Configuration</h3>
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
+                    <div>
+                        <label
+                            for="smtpHost"
+                            class="block text-sm font-medium text-theme-text"
+                            >SMTP Host</label
+                        >
+                        <input
+                            type="text"
+                            id="smtpHost"
+                            value={currentConfig.emailReview.smtp.host}
+                            class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            for="smtpPort"
+                            class="block text-sm font-medium text-theme-text"
+                            >SMTP Port</label
+                        >
+                        <input
+                            type="number"
+                            id="smtpPort"
+                            value={currentConfig.emailReview.smtp.port}
+                            class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            for="smtpSecure"
+                            class="block text-sm font-medium text-theme-text mb-1"
+                            >SMTP Secure (TLS)</label
+                        >
+                        <input
+                            type="checkbox"
+                            id="smtpSecure"
+                            checked={currentConfig.emailReview.smtp.secure}
+                            class="h-5 w-5 text-theme-accent border-theme-border rounded focus:ring-theme-accent"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            for="smtpUserEnvVar"
+                            class="block text-sm font-medium text-theme-text"
+                            >SMTP User Env Var</label
+                        >
+                        <input
+                            type="text"
+                            id="smtpUserEnvVar"
+                            value={currentConfig.emailReview.smtp.auth
+                                .userEnvVar}
+                            class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            for="smtpPassEnvVar"
+                            class="block text-sm font-medium text-theme-text"
+                            >SMTP Pass Env Var</label
+                        >
+                        <input
+                            type="text"
+                            id="smtpPassEnvVar"
+                            value={currentConfig.emailReview.smtp.auth
+                                .passEnvVar}
+                            class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="pt-6 border-t border-theme-border">
+            <button
+                type="submit"
+                id="saveConfigBtn"
+                class="px-6 py-2 bg-theme-accent text-theme-accent-text font-semibold rounded-md shadow-md hover:bg-theme-accent-hover focus:outline-none focus:ring-2 focus:ring-theme-accent focus:ring-offset-2"
+            >
+                Save Configuration
+            </button>
+            <p id="formStatus" class="mt-4 text-sm"></p>
+        </div>
+    </form>
+</AdminLayout>
+
+<script define:vars={{ initialConfigFromProps: currentConfig }}>
+    const form = document.querySelector("form");
+    const saveButton = document.getElementById("saveConfigBtn");
+    const formStatus = document.getElementById("formStatus");
+
+    const initialConfig = JSON.parse(JSON.stringify(initialConfigFromProps));
+
+    if (form && saveButton && formStatus) {
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            saveButton.disabled = true;
+            formStatus.textContent = "Saving...";
+            formStatus.className = "mt-4 text-sm text-yellow-500";
+
+            const configData = { ...initialConfig };
+
+            // AI Models
+            Object.keys(configData.aiModels).forEach((modelKey) => {
+                const modelProvider = form.querySelector(
+                    `#${modelKey}-provider`,
+                );
+                const modelName = form.querySelector(`#${modelKey}-modelName`);
+                const maxTokens = form.querySelector(`#${modelKey}-maxTokens`);
+                const temperature = form.querySelector(
+                    `#${modelKey}-temperature`,
+                );
+
+                if (modelProvider)
+                    configData.aiModels[modelKey].provider =
+                        modelProvider.value;
+                if (modelName)
+                    configData.aiModels[modelKey].modelName = modelName.value;
+                if (maxTokens)
+                    configData.aiModels[modelKey].maxTokens = parseInt(
+                        maxTokens.value,
+                        10,
+                    );
+                if (temperature)
+                    configData.aiModels[modelKey].temperature = parseFloat(
+                        temperature.value,
+                    );
+            });
+
+            // File Paths
+            const outputDir = form.querySelector("#outputDir");
+            const contextDir = form.querySelector("#contextDir");
+            const imageOutputDir = form.querySelector("#imageOutputDir");
+            if (outputDir) configData.paths.outputDir = outputDir.value;
+            if (contextDir) configData.paths.contextDir = contextDir.value;
+            if (imageOutputDir)
+                configData.paths.imageOutputDir = imageOutputDir.value;
+
+            // Base Prompts
+            Object.keys(configData.basePrompts).forEach((promptKey) => {
+                const promptTextarea = form.querySelector(`#${promptKey}`);
+                if (promptTextarea)
+                    configData.basePrompts[promptKey] = promptTextarea.value;
+            });
+
+            // Content Defaults
+            const defaultCategory = form.querySelector("#defaultCategory");
+            const author = form.querySelector("#author");
+            if (defaultCategory)
+                configData.defaultCategory = defaultCategory.value;
+            if (author) configData.author = author.value;
+
+            // Duplicate Detection
+            const keywordOverlapThreshold = form.querySelector(
+                "#keywordOverlapThreshold",
+            );
+            const enableStopWordRemoval = form.querySelector(
+                "#enableStopWordRemoval",
+            );
+            if (keywordOverlapThreshold)
+                configData.duplicateDetection.keywordOverlapThreshold =
+                    parseInt(keywordOverlapThreshold.value, 10);
+            if (enableStopWordRemoval)
+                configData.duplicateDetection.enableStopWordRemoval =
+                    enableStopWordRemoval.checked;
+
+            // Image Generation
+            const imageNecessityThreshold = form.querySelector(
+                "#imageNecessityThreshold",
+            );
+            const generateMaxImages = form.querySelector("#generateMaxImages");
+            if (imageNecessityThreshold)
+                configData.imageGeneration.necessityThreshold = parseFloat(
+                    imageNecessityThreshold.value,
+                );
+            if (generateMaxImages)
+                configData.imageGeneration.generateMaxImages = parseInt(
+                    generateMaxImages.value,
+                    10,
+                );
+
+            // Diagram Generation
+            const diagramNecessityThreshold = form.querySelector(
+                "#diagramNecessityThreshold",
+            );
+            const maxDiagramsPerPost = form.querySelector(
+                "#maxDiagramsPerPost",
+            );
+            if (diagramNecessityThreshold)
+                configData.diagramGeneration.necessityThreshold = parseFloat(
+                    diagramNecessityThreshold.value,
+                );
+            if (maxDiagramsPerPost)
+                configData.diagramGeneration.maxDiagramsPerPost = parseInt(
+                    maxDiagramsPerPost.value,
+                    10,
+                );
+
+            // Email Review
+            const emailReviewEnabled = form.querySelector(
+                "#emailReviewEnabled",
+            );
+            const recipientEmail = form.querySelector("#recipientEmail");
+            const senderEmail = form.querySelector("#senderEmail");
+            const subjectPrefix = form.querySelector("#subjectPrefix");
+            if (emailReviewEnabled)
+                configData.emailReview.enabled = emailReviewEnabled.checked;
+            if (recipientEmail)
+                configData.emailReview.recipientEmail = recipientEmail.value;
+            if (senderEmail)
+                configData.emailReview.senderEmail = senderEmail.value;
+            if (subjectPrefix)
+                configData.emailReview.subjectPrefix = subjectPrefix.value;
+
+            // Email Review SMTP
+            const smtpHost = form.querySelector("#smtpHost");
+            const smtpPort = form.querySelector("#smtpPort");
+            const smtpSecure = form.querySelector("#smtpSecure");
+            const smtpUserEnvVar = form.querySelector("#smtpUserEnvVar");
+            const smtpPassEnvVar = form.querySelector("#smtpPassEnvVar");
+            if (smtpHost) configData.emailReview.smtp.host = smtpHost.value;
+            if (smtpPort)
+                configData.emailReview.smtp.port = parseInt(smtpPort.value, 10);
+            if (smtpSecure)
+                configData.emailReview.smtp.secure = smtpSecure.checked;
+            if (smtpUserEnvVar)
+                configData.emailReview.smtp.auth.userEnvVar =
+                    smtpUserEnvVar.value;
+            if (smtpPassEnvVar)
+                configData.emailReview.smtp.auth.passEnvVar =
+                    smtpPassEnvVar.value;
+
+            try {
+                const response = await fetch("/api/admin/config", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(configData),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    formStatus.textContent =
+                        result.message || "Configuration saved successfully!";
+                    formStatus.className = "mt-4 text-sm text-green-500";
+                    Object.assign(
+                        initialConfig,
+                        JSON.parse(JSON.stringify(configData)),
+                    );
+                } else {
+                    formStatus.textContent = `Error: ${result.message || "Unknown error"}`;
+                    if (result.error) {
+                        formStatus.textContent += ` (${result.error})`;
+                    }
+                    formStatus.className = "mt-4 text-sm text-red-500";
+                }
+            } catch (error) {
+                console.error("Form submission error:", error);
+                formStatus.textContent =
+                    "An unexpected error occurred during submission.";
+                formStatus.className = "mt-4 text-sm text-red-500";
+            }
+            saveButton.disabled = false;
+            setTimeout(() => {
+                if (formStatus) formStatus.textContent = ""; // Added null check for formStatus here
+            }, 5000);
+        });
+    } else {
+        console.error(
+            "Form, save button, or status element not found. Form submission will not work.",
+        );
+    }
+</script>

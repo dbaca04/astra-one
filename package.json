@@ -46,17 +46,17 @@
     "dev": "astro dev",
     "preview": "astro build && wrangler pages dev dist",
     "prepare": "husky",
-    "seo:check": "node .local_scripts/seo-test.js",
-    "seo:lighthouse": "node .local_scripts/seo-test.js --lighthouse",
+    "seo:check": "node scripts/seo-test.js",
+    "seo:lighthouse": "node scripts/seo-test.js --lighthouse",
     "lint-staged": "lint-staged"
   },
   "type": "module",
   "lint-staged": {
     "public/robots.txt": [
-      "node .local_scripts/seo-test.js"
+      "node scripts/seo-test.js"
     ],
     "src/**/*.{astro,ts,js,jsx,tsx,md,mdx}": [
-      "node .local_scripts/seo-test.js"
+      "node scripts/seo-test.js"
     ]
   }
 }

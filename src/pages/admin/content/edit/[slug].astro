@@ -252,16 +252,32 @@ if (frontmatter && typeof frontmatter === "object") {
                             set:text={body}
                         />
                     </div>
-                    <button
-                        type="submit"
-                        id="saveButton"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    >
-                        Save Changes
-                    </button>
+                    <div class="flex items-center justify-between mt-6">
+                        <button
+                            type="submit"
+                            id="saveButton"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        >
+                            Save Changes
+                        </button>
+                        <button
+                            type="button"
+                            id="aiSuggestButton"
+                            class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        >
+                            Get AI Suggestions
+                        </button>
+                    </div>
                 </form>
             )
         }
+        <div
+            id="aiSuggestionsArea"
+            class="mt-6 p-4 border border-theme-border rounded-lg bg-theme-card-bg shadow-md hidden"
+        >
+            <h3 class="text-xl font-semibold mb-2">AI Suggestions:</h3>
+            <p id="aiSuggestionsText" class="text-theme-text-muted"></p>
+        </div>
         <p class="mt-4">Raw URL slug: <code>{urlSlug ?? "N/A"}</code></p>
         {
             actualFileSlugForSaving && (
@@ -285,6 +301,9 @@ if (frontmatter && typeof frontmatter === "object") {
     const form = document.getElementById("editForm");
     const saveButton = document.getElementById("saveButton");
     const feedbackMessage = document.getElementById("feedbackMessage");
+    const aiSuggestButton = document.getElementById("aiSuggestButton");
+    const aiSuggestionsArea = document.getElementById("aiSuggestionsArea");
+    const aiSuggestionsText = document.getElementById("aiSuggestionsText");
 
     if (
         form instanceof HTMLFormElement &&
@@ -390,6 +409,59 @@ if (frontmatter && typeof frontmatter === "object") {
             }
             saveButton.disabled = false;
             saveButton.textContent = "Save Changes";
+        });
+    }
+
+    if (
+        aiSuggestButton instanceof HTMLButtonElement &&
+        aiSuggestionsArea instanceof HTMLElement &&
+        aiSuggestionsText instanceof HTMLElement &&
+        form instanceof HTMLFormElement
+    ) {
+        aiSuggestButton.addEventListener("click", async () => {
+            aiSuggestButton.disabled = true;
+            aiSuggestButton.textContent = "Getting Suggestions...";
+            aiSuggestionsArea.classList.add("hidden");
+            aiSuggestionsText.textContent = "";
+
+            let currentBodyContent = "";
+            const bodyElement = form.elements.namedItem("bodyContent");
+            if (bodyElement instanceof HTMLTextAreaElement) {
+                currentBodyContent = bodyElement.value;
+            }
+
+            try {
+                const response = await fetch("/api/admin/ai/suggest", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        content: currentBodyContent,
+                        // Optionally, pass current frontmatter or other context later
+                        // frontmatter: initialFrontmatter
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    aiSuggestionsText.textContent =
+                        result.suggestion || "No suggestion received.";
+                    aiSuggestionsArea.classList.remove("hidden");
+                } else {
+                    throw new Error(
+                        result.message || "Failed to get AI suggestions.",
+                    );
+                }
+            } catch (err) {
+                aiSuggestionsText.textContent = `Error: ${err.message}`;
+                aiSuggestionsArea.classList.remove("hidden"); // Show area to display the error
+                console.error("AI Suggestion error:", err);
+            }
+
+            aiSuggestButton.disabled = false;
+            aiSuggestButton.textContent = "Get AI Suggestions";
         });
     }
 </script>

@@ -1,0 +1,395 @@
+---
+import AdminLayout from "../../../../layouts/AdminLayout.astro";
+import { getEntry, type CollectionEntry } from "astro:content";
+import fs from "node:fs/promises";
+import path from "node:path";
+import yaml from "js-yaml";
+import matter from "gray-matter";
+
+export const prerender = false;
+
+const { slug: urlSlugParam } = Astro.params; // urlSlugParam can be undefined
+const urlSlug = urlSlugParam ?? null; // Now urlSlug is string | null
+
+const contentType = Astro.url.searchParams.get("type") || "draft";
+
+let frontmatter: Record<string, any> = {};
+let body = "";
+let error: string | null = null;
+let actualFileSlugForSaving: string | null = urlSlug;
+let isPublishedContent = contentType === "published";
+
+if (urlSlug) {
+    if (isPublishedContent) {
+        try {
+            const postEntry = await getEntry("blog", urlSlug);
+            if (postEntry) {
+                frontmatter = postEntry.data as Record<string, any>;
+                const blogContentDir = path.join(
+                    process.cwd(),
+                    "src/content/blog",
+                );
+                let foundFilePath: string | null = null; // Explicitly typed
+                const possibleExtensions = [".md", ".mdx"];
+                for (const ext of possibleExtensions) {
+                    const testPath = path.join(
+                        blogContentDir,
+                        `${urlSlug}${ext}`,
+                    );
+                    try {
+                        await fs.access(testPath);
+                        foundFilePath = testPath;
+                        break;
+                    } catch {
+                        // File not found
+                    }
+                }
+
+                if (foundFilePath) {
+                    const rawFileContent = await fs.readFile(
+                        foundFilePath,
+                        "utf-8",
+                    );
+                    const parsedFile = matter(rawFileContent);
+                    frontmatter = parsedFile.data || {};
+                    body = parsedFile.content.trim();
+                } else {
+                    error = `Published post file for slug '${urlSlug}' not found in src/content/blog/.`;
+                    Astro.response.status = 404;
+                }
+            } else {
+                error = `Published post with slug '${urlSlug}' not found.`;
+                Astro.response.status = 404;
+            }
+        } catch (e: any) {
+            console.error(`Error fetching published post '${urlSlug}':`, e);
+            error = `Error loading published post: ${e.message}`;
+            Astro.response.status = 500;
+        }
+    } else {
+        const draftsDir = path.join(process.cwd(), "src/content/drafts");
+        let matchedFileContent: {
+            fm: Record<string, any>;
+            contentBody: string;
+            filenameSlug: string;
+        } | null = null;
+
+        try {
+            const filesInDrafts = await fs.readdir(draftsDir);
+            let primaryMatch: any = null;
+            let fallbackMatch: any = null;
+
+            for (const filenameInDir of filesInDrafts) {
+                if (
+                    !filenameInDir.endsWith(".md") &&
+                    !filenameInDir.endsWith(".mdx")
+                ) {
+                    continue;
+                }
+                const currentFilePath = path.join(draftsDir, filenameInDir);
+                let rawFileContent = await fs
+                    .readFile(currentFilePath, "utf-8")
+                    .catch(() => "");
+                if (!rawFileContent) continue;
+
+                const parsedFile = matter(rawFileContent);
+                const currentFileFM = parsedFile.data || {};
+                const currentFileBody = parsedFile.content.trim();
+                const currentFilenameSlug = filenameInDir.replace(
+                    /\.(md|mdx)$/,
+                    "",
+                );
+
+                if (currentFileFM.slug && currentFileFM.slug === urlSlug) {
+                    primaryMatch = {
+                        fm: currentFileFM,
+                        contentBody: currentFileBody,
+                        filenameSlug: currentFilenameSlug,
+                    };
+                    break;
+                }
+                if (
+                    currentFilenameSlug === urlSlug &&
+                    (!currentFileFM.slug ||
+                        currentFileFM.slug === currentFilenameSlug) &&
+                    !fallbackMatch
+                ) {
+                    fallbackMatch = {
+                        fm: currentFileFM,
+                        contentBody: currentFileBody,
+                        filenameSlug: currentFilenameSlug,
+                    };
+                }
+            }
+
+            matchedFileContent = primaryMatch || fallbackMatch;
+
+            if (matchedFileContent) {
+                frontmatter = matchedFileContent.fm;
+                body = matchedFileContent.contentBody;
+                actualFileSlugForSaving = matchedFileContent.filenameSlug;
+            } else {
+                error = `Draft matching URL slug '${urlSlug}' not found.`;
+                Astro.response.status = 404;
+            }
+        } catch (dirError: any) {
+            error = `Server error accessing drafts: ${dirError.message}`;
+            Astro.response.status = 500;
+        }
+    }
+} else {
+    error = "No slug provided.";
+    Astro.response.status = 400;
+}
+
+console.log(
+    `Editing page for URL slug: ${urlSlug}, Content Type: ${contentType}, Resolved slug for saving: ${actualFileSlugForSaving}, Is Published: ${isPublishedContent}`,
+);
+
+let clientVarsFrontmatter: Record<string, string | boolean | number | null> =
+    {};
+if (frontmatter && typeof frontmatter === "object") {
+    for (const [key, value] of Object.entries(frontmatter)) {
+        if (value instanceof Date) {
+            clientVarsFrontmatter[key] = value.toISOString();
+        } else {
+            clientVarsFrontmatter[key] = value;
+        }
+    }
+}
+---
+
+<AdminLayout
+    title={`Edit ${isPublishedContent ? "Published Post" : "Draft"}: ${urlSlug ?? "New"}`}
+>
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">
+            Edit {isPublishedContent ? "Published Post" : "Draft"}: {
+                urlSlug ?? "New"
+            }
+        </h1>
+        {
+            error && (
+                <div
+                    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+                    role="alert"
+                >
+                    <strong class="font-bold">Error!</strong>
+                    <span class="block sm:inline"> {error}</span>
+                </div>
+            )
+        }
+        {
+            !error && actualFileSlugForSaving && (
+                <form
+                    id="editForm"
+                    class="bg-theme-card-bg p-6 rounded-lg shadow-md"
+                >
+                    <h2 class="text-2xl font-semibold mb-4">Frontmatter</h2>
+                    {Object.entries(frontmatter).map(([key, value]) => (
+                        <div class="mb-4">
+                            <label
+                                for={key}
+                                class="block text-sm font-medium text-theme-text capitalize"
+                            >
+                                {key.replace(/([A-Z])/g, " $1")}
+                            </label>
+                            {key === "draft" && isPublishedContent ? (
+                                <>
+                                    <input
+                                        type="checkbox"
+                                        id={key}
+                                        name={key}
+                                        checked={Boolean(value)}
+                                        disabled
+                                        class="mt-1 h-5 w-5 text-theme-accent border-theme-border rounded focus:ring-theme-accent disabled:opacity-50"
+                                    />
+                                    <p class="text-xs text-theme-text-muted mt-1">
+                                        The 'draft' status of a published post
+                                        is managed via publish/unpublish
+                                        actions.
+                                    </p>
+                                </>
+                            ) : typeof value === "boolean" ? (
+                                <input
+                                    type="checkbox"
+                                    id={key}
+                                    name={key}
+                                    checked={Boolean(value)}
+                                    class="mt-1 h-5 w-5 text-theme-accent border-theme-border rounded focus:ring-theme-accent"
+                                />
+                            ) : typeof value === "number" ? (
+                                <input
+                                    type="number"
+                                    id={key}
+                                    name={key}
+                                    value={value}
+                                    class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                                />
+                            ) : (
+                                <input
+                                    type="text"
+                                    id={key}
+                                    name={key}
+                                    value={String(value ?? "")}
+                                    class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                                />
+                            )}
+                        </div>
+                    ))}
+                    <div class="mb-6">
+                        <label
+                            for="bodyContent"
+                            class="block text-sm font-medium text-theme-text"
+                        >
+                            Body Content (Markdown)
+                        </label>
+                        <textarea
+                            id="bodyContent"
+                            name="bodyContent"
+                            rows="20"
+                            class="mt-1 block w-full px-3 py-2 border border-theme-border rounded-md shadow-sm bg-theme-bg focus:ring-theme-accent focus:border-theme-accent"
+                            set:text={body}
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        id="saveButton"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                        Save Changes
+                    </button>
+                </form>
+            )
+        }
+        <p class="mt-4">Raw URL slug: <code>{urlSlug ?? "N/A"}</code></p>
+        {
+            actualFileSlugForSaving && (
+                <p class="mt-1">
+                    Effective slug for saving:{" "}
+                    <code>{actualFileSlugForSaving}</code> ({contentType})
+                </p>
+            )
+        }
+        <div id="feedbackMessage" class="mt-4"></div>
+    </div>
+</AdminLayout>
+
+<script
+    define:vars={{
+        slugToSave: actualFileSlugForSaving ?? "",
+        contentType: contentType,
+        initialFrontmatter: clientVarsFrontmatter,
+    }}
+>
+    const form = document.getElementById("editForm");
+    const saveButton = document.getElementById("saveButton");
+    const feedbackMessage = document.getElementById("feedbackMessage");
+
+    if (
+        form instanceof HTMLFormElement &&
+        saveButton instanceof HTMLButtonElement &&
+        feedbackMessage instanceof HTMLElement
+    ) {
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving...";
+            feedbackMessage.textContent = "";
+
+            const formData = new FormData(form);
+            const updatedFrontmatter = JSON.parse(
+                JSON.stringify(initialFrontmatter || {}),
+            );
+            const updatedBody = formData.get("bodyContent"); // FormDataEntryValue | null
+
+            for (const [key] of formData.entries()) {
+                // Iterate only keys, get value from form.elements or formData
+                if (key !== "bodyContent") {
+                    const formElement = form.elements.namedItem(key);
+                    const formValue = formData.get(key); // FormDataEntryValue
+
+                    if (
+                        formElement instanceof HTMLInputElement &&
+                        formElement.type === "checkbox"
+                    ) {
+                        updatedFrontmatter[key] = formElement.checked;
+                    } else if (typeof initialFrontmatter[key] === "number") {
+                        updatedFrontmatter[key] =
+                            typeof formValue === "string"
+                                ? parseFloat(formValue) || 0
+                                : 0;
+                    } else {
+                        // For other types (string, date string from ISO), assign the string value from FormData
+                        updatedFrontmatter[key] =
+                            typeof formValue === "string" ? formValue : "";
+                    }
+                }
+            }
+
+            if (
+                contentType === "draft" &&
+                updatedFrontmatter.hasOwnProperty("slug")
+            ) {
+                updatedFrontmatter.slug = slugToSave;
+            }
+            if (contentType === "published") {
+                updatedFrontmatter.slug = slugToSave;
+                delete updatedFrontmatter.draft;
+            }
+
+            const endpoint =
+                contentType === "published"
+                    ? `/api/admin/content/save-published-post`
+                    : `/api/admin/content/save-draft`;
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        slug: slugToSave,
+                        frontmatter: updatedFrontmatter,
+                        body:
+                            typeof updatedBody === "string" ? updatedBody : "", // Ensure body is string
+                    }),
+                });
+                const resultText = await response.text();
+                let result;
+                try {
+                    result = JSON.parse(resultText);
+                } catch (e) {
+                    if (!response.ok)
+                        throw new Error(
+                            resultText ||
+                                "Failed to save. Server returned non-JSON response.",
+                        );
+                    result = {
+                        message:
+                            resultText ||
+                            "Saved successfully (non-JSON response).",
+                    };
+                }
+                if (response.ok) {
+                    feedbackMessage.textContent =
+                        result.message || "Saved successfully!";
+                    feedbackMessage.className = "text-green-500";
+                    setTimeout(() => {
+                        window.location.href =
+                            contentType === "published"
+                                ? `/admin/content?view=published`
+                                : "/admin/content?view=drafts";
+                    }, 1500);
+                } else {
+                    throw new Error(result.message || "Failed to save.");
+                }
+            } catch (err) {
+                feedbackMessage.textContent = `Error: ${err.message}`;
+                feedbackMessage.className = "text-red-500";
+                console.error("Save error:", err);
+            }
+            saveButton.disabled = false;
+            saveButton.textContent = "Save Changes";
+        });
+    }
+</script>

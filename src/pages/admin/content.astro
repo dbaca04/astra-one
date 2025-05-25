@@ -118,8 +118,15 @@ if (currentView === "published") {
             }
         }
 
-        async function handleReject(draftId, filePath) {
-            // API call to reject the draft
+        async function handleReject(draftId, filePathFromButton) {
+            if (
+                !confirm(
+                    `Are you sure you want to reject and delete the draft "${draftId}"? This action cannot be undone.`,
+                )
+            ) {
+                return;
+            }
+
             try {
                 const response = await fetch(`/api/admin/content/reject`, {
                     method: "POST",
@@ -127,25 +134,63 @@ if (currentView === "published") {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        filePath: filePath.replace(
-                            /^..\/..\/content\/drafts\//,
-                            "",
-                        ),
+                        filePath: filePathFromButton,
                     }),
                 });
+
                 if (response.ok) {
-                    window.location.href = "/admin/content?view=drafts"; // Refresh to drafts view
-                    console.log("Draft rejected:", draftId);
-                } else {
-                    const errorText = await response.text();
-                    console.error("Failed to reject draft:", errorText);
-                    alert(
-                        `Failed to reject draft: ${errorText}. See console for details.`,
+                    alert("Draft rejected and deleted successfully.");
+                    const rowToRemove = document.querySelector(
+                        `tr[data-draft-id="${draftId}"]`,
                     );
+                    if (rowToRemove) {
+                        rowToRemove.remove();
+                    }
+                } else {
+                    let errorMessage = "Failed to reject draft. Unknown error.";
+                    let errorDetails = undefined; // Initialize as undefined
+                    try {
+                        errorDetails = await response.json();
+                        // Check if errorDetails is an object and has a string property 'message'
+                        if (
+                            errorDetails &&
+                            typeof errorDetails === "object" &&
+                            "message" in errorDetails &&
+                            typeof errorDetails.message === "string"
+                        ) {
+                            errorMessage = errorDetails.message;
+                        } else {
+                            errorMessage = `Server responded with status: ${response.status} ${response.statusText}. No specific error message provided in JSON.`;
+                        }
+                        console.error(
+                            "Failed to reject draft - API response object:",
+                            errorDetails,
+                        );
+                    } catch (jsonParseError) {
+                        console.error(
+                            "Failed to parse error JSON from reject API:",
+                            jsonParseError,
+                        );
+                        try {
+                            const textError = await response.text();
+                            errorMessage =
+                                textError ||
+                                `Server responded with status: ${response.status} ${response.statusText}, but response body was not valid JSON or was empty.`;
+                        } catch (textParseError) {
+                            errorMessage = `Server responded with status: ${response.status} ${response.statusText}, and failed to read response body.`;
+                            console.error(
+                                "Failed to read error response text:",
+                                textParseError,
+                            );
+                        }
+                    }
+                    alert(`${errorMessage} See console for more details.`);
                 }
             } catch (error) {
-                console.error("Error rejecting draft:", error);
-                alert("Error rejecting draft. See console for details.");
+                console.error("Network or other error rejecting draft:", error);
+                alert(
+                    "Network error or other issue while trying to reject draft. See console for details.",
+                );
             }
         }
 
@@ -288,7 +333,7 @@ if (currentView === "published") {
                             </thead>
                             <tbody class="bg-theme-card-bg divide-y divide-theme-border">
                                 {drafts.map((draft) => (
-                                    <tr>
+                                    <tr data-draft-id={draft.id}>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-theme-text">
                                             {draft.title}
                                         </td>

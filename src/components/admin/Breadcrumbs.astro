@@ -1,0 +1,156 @@
+---
+/**
+ * Admin Breadcrumbs component
+ * Matches the main Breadcrumbs component structure and logic
+ * Supports both pre-built items (from utils) and path-based generation
+ */
+import { Schema } from "astro-seo-schema";
+
+export interface BreadcrumbItem {
+    text: string;
+    url?: string;
+    isCurrentPage?: boolean;
+}
+
+export interface Props {
+    /**
+     * If provided, uses this current path instead of Astro.url
+     */
+    currentPath?: string;
+    /**
+     * Custom title mappings for path segments
+     */
+    titleMappings?: Record<string, string>;
+    /**
+     * Hide breadcrumbs on certain pages
+     */
+    excludeOnHome?: boolean;
+    /**
+     * If provided, uses these items directly (from utils)
+     */
+    items?: BreadcrumbItem[];
+}
+
+const {
+    currentPath,
+    titleMappings = {},
+    excludeOnHome = true,
+    items = undefined,
+} = Astro.props;
+
+const path = currentPath || Astro.url.pathname;
+const shouldRender = !(excludeOnHome && (path === "/" || path === ""));
+
+let breadcrumbs: BreadcrumbItem[] = [];
+let breadcrumbsSchemaString = "{}";
+
+if (shouldRender) {
+    if (items && items.length > 0) {
+        // Use provided items (from utils)
+        breadcrumbs = items.map((item, idx) => ({
+            text: item.text || "",
+            url: item.url,
+            isCurrentPage: item.isCurrentPage ?? idx === items.length - 1,
+        }));
+    } else {
+        // Generate from path (same as main component)
+        const createSegment = (
+            segment: string,
+            fullPath: string,
+            isCurrent = false,
+        ): BreadcrumbItem => {
+            let formattedText = segment
+                .split("-")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
+            if (titleMappings[segment]) {
+                formattedText = titleMappings[segment];
+            } else if (segment.match(/^\[\.\.\.(.*)\]$/)) {
+                formattedText = "Entry";
+            } else if (segment.match(/^\[(.*)\]$/)) {
+                formattedText = "Detail";
+            }
+            return {
+                text: formattedText,
+                url: fullPath,
+                isCurrentPage: isCurrent,
+            };
+        };
+        breadcrumbs = [];
+        breadcrumbs.push({ text: "Admin", url: "/admin" });
+        const segments = path
+            .replace(/^\/admin/, "")
+            .split("/")
+            .filter(Boolean);
+        if (segments.length > 0) {
+            let current = "/admin";
+            segments.forEach((segment, idx) => {
+                current += `/${segment}`;
+                const isLast = idx === segments.length - 1;
+                breadcrumbs.push(createSegment(segment, current, isLast));
+            });
+        }
+        if (breadcrumbs.length > 0) {
+            const lastItem = breadcrumbs[breadcrumbs.length - 1];
+            if (lastItem.text.endsWith(".html")) {
+                lastItem.text = lastItem.text.replace(".html", "");
+            }
+        }
+    }
+    // JSON-LD schema
+    const siteUrl = import.meta.env.SITE || Astro.site || "https://domdhi.com";
+    const breadcrumbsSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: breadcrumbs.map((item, idx) => ({
+            "@type": "ListItem",
+            position: idx + 1,
+            name: item.text,
+            item: item.url ? `${siteUrl}${item.url}` : undefined,
+        })),
+    };
+    breadcrumbsSchemaString = JSON.stringify(breadcrumbsSchema);
+}
+---
+
+{
+    shouldRender && breadcrumbs.length > 0 && (
+        <>
+            <nav
+                aria-label="Breadcrumb"
+                class="breadcrumb-nav py-2 px-4 md:px-6 bg-gray-50 dark:bg-gray-900 bg-opacity-30 rounded-md mb-6 text-sm text-gray-500 dark:text-gray-400"
+            >
+                <ol class="flex flex-wrap items-center">
+                    {breadcrumbs.map((item, idx) => (
+                        <li class="flex items-center">
+                            {idx > 0 && (
+                                <span
+                                    class="mx-2 text-gray-400 dark:text-gray-500"
+                                    aria-hidden="true"
+                                >
+                                    /
+                                </span>
+                            )}
+                            {item.isCurrentPage ? (
+                                <span
+                                    class="font-semibold text-gray-700 dark:text-gray-200"
+                                    aria-current="page"
+                                >
+                                    {item.text}
+                                </span>
+                            ) : (
+                                <a
+                                    href={item.url}
+                                    class="hover:underline hover:text-gray-700 dark:hover:text-gray-200"
+                                >
+                                    {item.text}
+                                </a>
+                            )}
+                        </li>
+                    ))}
+                </ol>
+            </nav>
+            <Schema item={JSON.parse(breadcrumbsSchemaString) as any} />
+        </>
+    )
+}

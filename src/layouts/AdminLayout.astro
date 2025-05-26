@@ -1,16 +1,89 @@
 ---
 import Sidebar from "../components/admin/Sidebar.astro";
 import "../styles/base.css";
-const { title } = Astro.props;
+import BaseHead from "../components/BaseHead.astro";
+import type { Props as BaseHeadProps } from "../components/BaseHead.astro";
+import Breadcrumbs from "../components/admin/Breadcrumbs.astro";
+import {
+    generateBreadcrumbs,
+    type TitleMappings,
+    type DynamicTitleFn,
+} from "../utils/breadcrumbs";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+// Props for AdminLayout itself, which can include BaseHeadProps
+export interface AdminLayoutProps extends BaseHeadProps {
+    // adminTitle is specific to AdminLayout to avoid conflict with BaseHead's title
+    adminTitle?: string;
+}
+
+const {
+    adminTitle, // Use adminTitle for the page, fall back to a default
+    // Destructure all BaseHeadProps to pass them through
+    title: baseHeadTitle, // This is the title prop for BaseHead/SEO
+    description,
+    image,
+    article,
+    publishDate,
+    modifiedDate,
+    tags,
+    author,
+    noindex,
+    nofollow,
+    allowCrawling, // Added allowCrawling as it's a prop of BaseHead
+    structuredData,
+} = Astro.props as AdminLayoutProps;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const titleMappings: TitleMappings = {
+    "/admin": "Dashboard",
+    "/admin/content": "Content Management",
+    "/admin/content/posts": "Posts",
+    "/admin/content/edit": "Edit",
+    "/admin/settings": "Settings",
+};
+
+const getDynamicTitle: DynamicTitleFn = async (
+    segment,
+    currentPath,
+    fullPathname,
+) => {
+    if (currentPath.startsWith("/admin/content/edit/") && segment !== "edit") {
+        return segment
+            .replace(/-/g, " ")
+            .split(" ")
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(" ");
+    }
+    return null;
+};
+
+const breadcrumbItems = await generateBreadcrumbs(
+    Astro.url.pathname,
+    titleMappings,
+    "/admin",
+    getDynamicTitle,
+);
+
+// Determine the title for the <title> tag and for BaseHead
+const pageTitle =
+    adminTitle ||
+    (breadcrumbItems.length > 1
+        ? breadcrumbItems[breadcrumbItems.length - 1].text
+        : "Admin");
+const finalSeoTitle = `${baseHeadTitle || pageTitle} | Admin Dashboard | ${SITE_TITLE}`;
+const finalSeoDescription = description || SITE_DESCRIPTION;
 ---
 
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{title ? `${title} - Admin` : "Admin Dashboard"}</title>
-        {/* Basic SEO, can be enhanced later */}
+        <title>{pageTitle} | Admin | {SITE_TITLE}</title>
+        {/* Use pageTitle for the HTML title tag */}
         <meta name="robots" content="noindex, nofollow" />
+        {/* Default for admin */}
         <script is:inline>
             const theme = (() => {
                 if (
@@ -46,7 +119,6 @@ const { title } = Astro.props;
                         localStorage.setItem("theme", newTheme);
                         updateIcon(newTheme);
                     });
-                    // Set initial button text and icon
                     updateIcon(
                         document.documentElement.classList.contains("dark")
                             ? "dark"
@@ -81,6 +153,20 @@ const { title } = Astro.props;
                 }
             }
         </script>
+        <BaseHead
+            title={finalSeoTitle}
+            description={finalSeoDescription}
+            image={image}
+            article={article}
+            publishDate={publishDate}
+            modifiedDate={modifiedDate}
+            tags={tags}
+            author={author}
+            noindex={noindex ?? true}
+            nofollow={nofollow ?? true}
+            allowCrawling={allowCrawling ?? false}
+            structuredData={structuredData}
+        />
     </head>
     <body class="bg-theme-bg text-theme-text flex">
         <Sidebar />
@@ -122,6 +208,7 @@ const { title } = Astro.props;
                     <span class="sr-only">Switch Theme</span>
                 </button>
             </div>
+            <Breadcrumbs items={breadcrumbItems} />
             <slot />
         </main>
         <style is:global>

@@ -226,27 +226,32 @@ if (currentView === "published") {
                 console.log("Attempting to unpublish post:", postId);
                 // TODO: Implement API call to /api/admin/content/unpublish
                 // Example structure:
-                // try {
-                //     const response = await fetch(`/api/admin/content/unpublish`, {
-                //         method: "POST",
-                //         headers: { "Content-Type": "application/json" },
-                //         body: JSON.stringify({ slug: postId }), // Send slug or other identifier
-                //     });
-                //     if (response.ok) {
-                //         alert("Post unpublished successfully and moved to drafts.");
-                //         window.location.href = '/admin/content?view=published'; // Refresh published view
-                //     } else {
-                //         const errorText = await response.text();
-                //         alert(`Failed to unpublish post: ${errorText}`);
-                //     }
-                // } catch (error) {
-                //     alert("Error unpublishing post. See console for details.");
-                //     console.error("Error unpublishing post:", error);
-                // }
-                alert(
-                    "Unpublish functionality not yet implemented. Post ID: " +
-                        postId,
-                );
+                try {
+                    const response = await fetch(
+                        `/api/admin/content/unpublish`,
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ slug: postId }), // Send slug or other identifier
+                        },
+                    );
+                    if (response.ok) {
+                        alert(
+                            "Post unpublished successfully and moved to drafts.",
+                        );
+                        window.location.href = "/admin/content?view=published"; // Refresh published view
+                    } else {
+                        const errorText = await response.text();
+                        alert(`Failed to unpublish post: ${errorText}`);
+                    }
+                } catch (error) {
+                    alert("Error unpublishing post. See console for details.");
+                    console.error("Error unpublishing post:", error);
+                }
+                // alert(
+                //     "Unpublish functionality not yet implemented. Post ID: " +
+                //         postId,
+                // );
             }
         }
 

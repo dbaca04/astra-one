@@ -20,6 +20,7 @@
     "@astrojs/sitemap": "^3.4.0",
     "@astrojs/tailwind": "^6.0.2",
     "astro": "^5.7.13",
+    "astro-seo-schema": "^5.0.0",
     "gray-matter": "^4.0.3",
     "mermaid": "^11.6.0",
     "rehype-mermaid": "^3.0.0",
@@ -35,7 +36,7 @@
     "@types/marked": "^5.0.2",
     "dompurify": "^3.2.6",
     "husky": "^9.1.7",
-    "lighthouse-ci": "^1.10.0",
+    "lighthouse-ci": "^1.13.1",
     "lint-staged": "^16.0.0",
     "marked": "^15.0.12",
     "playwright": "^1.52.0",
@@ -62,5 +63,25 @@
     "src/**/*.{astro,ts,js,jsx,tsx,md,mdx}": [
       "node scripts/seo-test.js"
     ]
+  },
+  "overrides": {
+    "lighthouse-ci": {
+      "lighthouse": {
+        "lodash.set": "npm:lodash@^4.17.21",
+        "raven": {
+          "cookie": "^0.7.0"
+        },
+        "update-notifier": {
+          "latest-version": {
+            "package-json": {
+              "got": "^11.8.5"
+            }
+          }
+        }
+      }
+    },
+    "lodash": "^4.17.21",
+    "got": "^11.8.5",
+    "cookie": "^0.7.0"
   }
 }

@@ -14,6 +14,9 @@ tags:
   - prompt engineering
 heroImage: /images/ai-writing-styles.jpg
 updatedDate: '2025-05-25T16:13:47.778Z'
+draft: true
+status: Published
+pubDate: '2025-05-26T22:31:18.981Z'
 ---
 
 ## Analyzing AI Writing Styles

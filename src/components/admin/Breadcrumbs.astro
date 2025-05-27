@@ -78,10 +78,12 @@ if (shouldRender) {
         };
         breadcrumbs = [];
         breadcrumbs.push({ text: "Admin", url: "/admin" });
+        // Filter out 'edit' segment for breadcrumbs
         const segments = path
             .replace(/^\/admin/, "")
             .split("/")
-            .filter(Boolean);
+            .filter(Boolean)
+            .filter(segment => segment.toLowerCase() !== 'edit'); // REMOVE 'edit' from breadcrumb
         if (segments.length > 0) {
             let current = "/admin";
             segments.forEach((segment, idx) => {

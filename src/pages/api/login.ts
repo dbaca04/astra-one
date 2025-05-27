@@ -17,7 +17,8 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
             httpOnly: true,
             secure: import.meta.env.PROD, // Use secure cookies in production
             maxAge: 60 * 60 * 24 * 7, // 1 week
-        });
+            sameSite: 'lax',
+        } as import('astro').AstroCookieSetOptions);
         return redirect('/admin', 302);
     }
     return redirect('/admin/login?error=true', 302);

@@ -19,29 +19,42 @@ if (Astro.request.method === "POST") {
         if (!topic || typeof topic !== "string") {
             error = "Topic is required and must be a string.";
         } else {
-            // Call the HTTP endpoint of ai-content-generator.mjs
-            // The endpoint is http://localhost:PORT/generate-content (PORT from .env or 4321)
-            const port = import.meta.env.PORT || 4321;
-            const response = await fetch(
-                `http://localhost:${port}/generate-content`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
+            // Call the new Astro API endpoint
+            try {
+                // Construct absolute URL for SSR fetch
+                const origin = Astro.request.headers.get("origin") || `http://localhost:${import.meta.env.PORT || 4321}`;
+                const apiUrl = `${origin}/api/generate-content`;
+                const response = await fetch(
+                    apiUrl,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ topic }),
                     },
-                    body: JSON.stringify({ topic }),
-                },
-            );
+                );
 
-            const result: ApiResponse = await response.json();
+                let result: ApiResponse | undefined;
+                let rawText: string | undefined;
+                try {
+                    rawText = await response.text();
+                    result = JSON.parse(rawText);
+                } catch (jsonErr) {
+                    console.error("Non-JSON response from /api/generate-content:", rawText);
+                    error = `Unexpected response from API (not valid JSON). Status: ${response.status}`;
+                    result = undefined;
+                }
 
-            if (response.ok) {
-                message =
-                    result.message ||
-                    "Content generation process started successfully.";
-            } else {
-                error = result.error || "Failed to start content generation.";
-                if (result.details) error += ` Details: ${result.details}`;
+                if (response.ok && result) {
+                    message = result.message || "Content generation process started successfully.";
+                } else {
+                    error = (result && result.error) || `Failed to start content generation. Status: ${response.status}`;
+                    if (result && result.details) error += ` Details: ${result.details}`;
+                }
+            } catch (fetchErr: any) {
+                console.error("Fetch error calling /api/generate-content:", fetchErr);
+                error = "Could not reach the content generation API: " + (fetchErr.message || fetchErr);
             }
         }
     } catch (e) {

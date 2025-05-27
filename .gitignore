@@ -54,8 +54,8 @@ tasks/
 # Additional config files not needed for build
 .taskmasterconfig
 .roomodes
+.windsurfrules
 remove-sensitive-file.sh
 
-# Scripts files except example
+# Scripts files
 scripts/*
-!scripts/example_prd.txt

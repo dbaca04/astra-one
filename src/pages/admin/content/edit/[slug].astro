@@ -170,12 +170,16 @@ if (frontmatter && typeof frontmatter === "object") {
 <AdminLayout
     title={`Edit ${isPublishedContent ? "Published Post" : "Draft"}: ${urlSlug ?? "New"}`}
 >
-    <!-- Add CDN links for marked and DOMPurify in the head -->
+    <!-- Add CDN links for marked, DOMPurify, and Mermaid -->
     <script is:inline src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
     ></script>
     <script
         is:inline
         src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"
+    ></script>
+    <script
+        is:inline
+        src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"
     ></script>
 
     <div class="container px-4 py-8">
@@ -201,6 +205,7 @@ if (frontmatter && typeof frontmatter === "object") {
                     id="editForm"
                     class="bg-theme-card-bg p-6 rounded-lg shadow-md"
                 >
+                    <input type="file" id="imageUploadInput" class="hidden" accept="image/*">
                     <h2 class="text-2xl font-semibold mb-4">Frontmatter</h2>
                     {Object.entries(frontmatter).map(([key, value]) => (
                         <div class="mb-4">
@@ -315,6 +320,13 @@ if (frontmatter && typeof frontmatter === "object") {
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Image List Area -->
+                        <div id="imageListArea" class="mt-6 p-4 border border-theme-border rounded-lg bg-theme-card-bg shadow-md hidden">
+                            <h3 class="text-xl font-semibold mb-2">Images in Content:</h3>
+                            <ul id="imageList"></ul>
+                        </div>
+
                     </div>
                     <div class="flex items-center justify-between mt-6">
                         <button
@@ -370,6 +382,9 @@ if (frontmatter && typeof frontmatter === "object") {
     const aiSuggestionsText = document.getElementById("aiSuggestionsText");
     const markdownInput = document.getElementById("body"); // Markdown textarea
     const htmlPreview = document.getElementById("preview"); // Preview div
+    const imageListArea = document.getElementById("imageListArea"); // Image List Area
+    const imageList = document.getElementById("imageList"); // Image List UL
+    const imageUploadInput = document.getElementById("imageUploadInput"); // Hidden file input
 
     // Toolbar buttons
     const toolbarBold = document.getElementById("toolbar-bold");
@@ -397,7 +412,7 @@ if (frontmatter && typeof frontmatter === "object") {
     }
 
     // Function to update preview
-    function updatePreview() {
+    async function updatePreview() {
         console.log("updatePreview called");
 
         if (typeof marked === "undefined") {
@@ -414,6 +429,12 @@ if (frontmatter && typeof frontmatter === "object") {
                     "Error: Sanitizer library (DOMPurify) not loaded.";
             return;
         }
+        if (typeof mermaid === "undefined" || typeof mermaid.initialize !== "function") {
+            console.error("mermaid library is not loaded or initialized!");
+            if (htmlPreview instanceof HTMLElement)
+                htmlPreview.textContent = "Error: Diagram library (mermaid) not loaded.";
+            return;
+        }
 
         if (
             markdownInput instanceof HTMLTextAreaElement &&
@@ -425,23 +446,57 @@ if (frontmatter && typeof frontmatter === "object") {
                 const parseResult = marked.parse(markdownText);
                 console.log("marked.parse result type:", typeof parseResult);
 
-                const processHtml = (htmlContent) => {
+                const processHtml = async (htmlContent) => {
                     console.log(
                         "processHtml called with type:",
                         typeof htmlContent,
                     );
                     if (typeof htmlContent === "string") {
                         try {
-                            htmlPreview.innerHTML =
-                                DOMPurify.sanitize(htmlContent);
-                            console.log("Preview updated successfully.");
+                            // Sanitize the HTML first
+                            const sanitizedHtml = DOMPurify.sanitize(htmlContent);
+
+                            // Create a temporary div to process Mermaid
+                            const tempDiv = document.createElement("div");
+                            tempDiv.innerHTML = sanitizedHtml;
+
+                            // Find Mermaid elements within the temporary div
+                            const mermaidElements = tempDiv.querySelectorAll(
+                                "code.language-mermaid, pre.mermaid"
+                            );
+
+                            if (mermaidElements.length > 0) {
+                                console.log(
+                                    `Found ${mermaidElements.length} mermaid elements.`
+                                );
+                                // Temporarily append to body to allow mermaid to calculate dimensions correctly
+                                // Or investigate if mermaid.run can work on detached elements reliably with config
+                                // For now, append, run, then detach and use innerHTML
+                                document.body.appendChild(tempDiv);
+                                try {
+                                    await mermaid.run({ nodes: mermaidElements });
+                                    console.log("Mermaid run complete.");
+                                } catch (mermaidError) {
+                                    console.error("Error running Mermaid:", mermaidError);
+                                    // Optionally display a placeholder or error in the preview
+                                } finally {
+                                    document.body.removeChild(tempDiv);
+                                }
+
+                                // Get the HTML from the temporary div after Mermaid processing
+                                htmlPreview.innerHTML = tempDiv.innerHTML;
+                                console.log("Preview updated with Mermaid processed HTML.");
+                            } else {
+                                // No mermaid elements, just set the sanitized HTML
+                                htmlPreview.innerHTML = sanitizedHtml;
+                                console.log("Preview updated with sanitized HTML.");
+                            }
                         } catch (sanitizeError) {
                             console.error(
-                                "Error during DOMPurify.sanitize:",
+                                "Error during DOMPurify.sanitize or Mermaid processing:",
                                 sanitizeError,
                             );
-                            htmlPreview.textContent =
-                                "Error: Sanitization failed.";
+                            htmlPreview.textContent = "Error: Preview sanitization or diagram rendering failed.";
                         }
                     } else {
                         console.error(
@@ -464,10 +519,7 @@ if (frontmatter && typeof frontmatter === "object") {
                             processHtml(html);
                         })
                         .catch((err) => {
-                            console.error(
-                                "Error in async marked.parse:",
-                                err,
-                            );
+                            console.error("Error in async marked.parse:", err);
                             htmlPreview.textContent =
                                 "Error: Markdown parsing failed (async).";
                         });
@@ -491,12 +543,13 @@ if (frontmatter && typeof frontmatter === "object") {
 
     // Event listener for markdown input
     if (markdownInput) {
+        mermaid.initialize({ startOnLoad: false }); // Initialize Mermaid once
         markdownInput.addEventListener("input", () => {
             console.log("Markdown input event fired.");
             debouncedUpdatePreview();
         });
         // Initial preview on page load
-        updatePreview(); 
+        updatePreview();
     }
 
     // Helper function to apply markdown formatting
@@ -776,5 +829,181 @@ if (frontmatter && typeof frontmatter === "object") {
                 aiSuggestButton.textContent = "Get AI Suggestions";
             }
         });
+    }
+
+    // Function to extract image URLs from markdown
+    function extractImageUrls(markdown) {
+        const imageUrls = [];
+        const imageRegex = /!\[.*?\]\((.*?)\)/g;
+        let match;
+        while ((match = imageRegex.exec(markdown)) !== null) {
+            if (match[1]) {
+                imageUrls.push(match[1]);
+            }
+        }
+        return imageUrls;
+    }
+
+    // Function to update the image list UI
+    function updateImageListUI(imageUrls) {
+        if (!imageList) return;
+
+        imageList.innerHTML = ''; // Clear current list
+
+        if (imageUrls.length === 0) {
+            imageListArea?.classList.add('hidden');
+            return;
+        }
+
+        imageListArea?.classList.remove('hidden');
+        imageUrls.forEach(url => {
+            const listItem = document.createElement('li');
+            listItem.classList.add('mb-2', 'flex', 'items-center', 'space-x-2', 'cursor-pointer', 'hover:bg-theme-bg-alt', 'p-1', 'rounded');
+            listItem.dataset.imageUrl = url; // Store URL on the element
+            
+            // Add a small image preview if possible
+            const img = document.createElement('img');
+            img.src = url;
+            img.classList.add('w-10', 'h-10', 'object-cover', 'rounded');
+            img.onerror = () => { 
+                // Hide image if it fails to load
+                img.style.display = 'none'; 
+                // Optionally, add a placeholder icon/text
+                const placeholder = document.createElement('span');
+                placeholder.textContent = '[Image]';
+                placeholder.classList.add('text-theme-text-muted');
+                listItem.prepend(placeholder);
+            };
+            listItem.appendChild(img);
+
+            const urlSpan = document.createElement('span');
+            urlSpan.textContent = url;
+            urlSpan.classList.add('text-sm', 'text-theme-text');
+            listItem.appendChild(urlSpan);
+            
+            imageList.appendChild(listItem);
+        });
+    }
+
+    // Variable to temporarily store the old image URL during replacement
+    let replacingImageUrl = null;
+
+    // --- Event Listeners ---
+
+    // Handle click on image list items for replacement
+    if (imageList) {
+        imageList.addEventListener('click', (event) => {
+            const target = event.target;
+            const listItem = target.closest('li');
+            if (listItem && listItem.dataset.imageUrl && imageUploadInput) {
+                replacingImageUrl = listItem.dataset.imageUrl;
+                console.log('Replacing image:', replacingImageUrl);
+                // Trigger file input programmatically
+                imageUploadInput.click();
+            }
+        });
+    }
+
+    // Update preview and image list on input
+    if (markdownInput) {
+        markdownInput.addEventListener("input", debounce(() => {
+            updatePreview();
+            const imageUrls = extractImageUrls(markdownInput.value);
+            updateImageListUI(imageUrls);
+        }, 250)); // Debounce for 250ms
+    }
+
+    // Trigger file input when image button is clicked
+    if (toolbarImage && imageUploadInput) {
+        toolbarImage.addEventListener('click', () => {
+            imageUploadInput.click();
+        });
+    }
+
+    // Placeholder for file input change (upload handling - next subtask)
+    if (imageUploadInput) {
+        imageUploadInput.addEventListener('change', async (event) => {
+            console.log('File selected for upload:', event.target.files[0]);
+            const file = event.target.files?.[0];
+
+            if (!file) {
+                return; // No file selected
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('/api/admin/upload-image', {
+                    method: 'POST',
+                    headers: {
+                        // This is often set automatically by the browser for FormData,
+                        // but we include it explicitly to see if it resolves the server-side error.
+                        // Note: The browser will still add the 'boundary' parameter.
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    console.log('Upload successful:', result.url);
+                    // Insert markdown into the editor
+                    const imageUrl = result.url;
+                    const markdownTag = `![alt text](${imageUrl})`; // TODO: Allow user to input alt text
+
+                    if (markdownInput) {
+                        const start = markdownInput.selectionStart;
+                        const end = markdownInput.selectionEnd;
+                        const currentValue = markdownInput.value;
+
+                        if (replacingImageUrl) {
+                            // Find the old markdown tag and replace it
+                            const oldMarkdownTagRegex = new RegExp(`!\[.*?\]\\(${replacingImageUrl.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&')}\\)`, 'g');
+                            markdownInput.value = currentValue.replace(oldMarkdownTagRegex, markdownTag);
+                        } else {
+                            // Insert at cursor for new images
+                            markdownInput.value = currentValue.substring(0, start) +
+                                                markdownTag +
+                                                currentValue.substring(end);
+
+                            // Move cursor after the inserted tag only for new images
+                            markdownInput.selectionStart = markdownInput.selectionEnd = start + markdownTag.length;
+                        }
+
+                        // Trigger input event to update preview and image list
+                        markdownInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+
+                } else {
+                    console.error('Upload failed:', result.error);
+                    // Display error message to the user (e.g., in the feedbackMessage area)
+                    if (feedbackMessage) {
+                        feedbackMessage.textContent = `Upload failed: ${result.error}`;
+                        feedbackMessage.style.color = 'red';
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error during upload fetch:', error);
+                 if (feedbackMessage) {
+                    feedbackMessage.textContent = `Upload failed: ${error.message}`;
+                    feedbackMessage.style.color = 'red';
+                }
+            }
+             // Clear the file input so the same file can be selected again
+            event.target.value = '';
+
+            // Reset replacingImageUrl after handling the upload
+            replacingImageUrl = null;
+        });
+    }
+
+    // Initial preview and image list update on page load
+    updatePreview();
+    if (markdownInput) {
+        const imageUrls = extractImageUrls(markdownInput.value);
+        updateImageListUI(imageUrls);
     }
 </script>

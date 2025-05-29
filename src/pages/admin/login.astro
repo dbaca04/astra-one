@@ -13,7 +13,7 @@ if (Astro.url.searchParams.has("error")) {
         {error && <p class="text-red-500 dark:text-red-400 mb-4">{error}</p>}
         <form
             method="POST"
-            action="/api/login"
+            action="/api/admin/login"
             enctype="application/x-www-form-urlencoded"
             class="bg-theme-card-bg shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-sm border border-theme-border"
         >

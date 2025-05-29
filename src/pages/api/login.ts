@@ -11,6 +11,11 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     const envUsername = import.meta.env.ADMIN_USERNAME;
     const envPassword = import.meta.env.ADMIN_PASSWORD;
 
+    console.log("Submitted Username:", username);
+    console.log("Submitted Password:", password); // Be cautious logging passwords, remove this after debugging
+    console.log("Env Username:", envUsername);
+    console.log("Env Password:", envPassword); // Be cautious logging passwords, remove this after debugging
+
     if (username === envUsername && password === envPassword) {
         cookies.set('session', 'admin', {
             path: '/',

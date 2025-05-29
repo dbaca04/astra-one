@@ -1,0 +1,88 @@
+{
+    "aiModels": {
+        "outlineGenerator": {
+            "provider": "gemini",
+            "modelName": "gemini-1.5-flash-latest",
+            "maxTokens": 1500,
+            "temperature": 0.7
+        },
+        "contentGenerator": {
+            "provider": "gemini",
+            "modelName": "gemini-1.5-flash-latest",
+            "maxTokens": 2000,
+            "temperature": 0.8
+        },
+        "seoOptimizer": {
+            "provider": "gemini",
+            "modelName": "gemini-1.5-flash-latest",
+            "maxTokens": 1000,
+            "temperature": 0.6
+        },
+        "imageNeedsAnalysis": {
+            "provider": "gemini",
+            "modelName": "gemini-1.5-flash-latest",
+            "maxTokens": 1000,
+            "temperature": 0.5
+        },
+        "imageGenerator": {
+            "provider": "gemini",
+            "modelName": "gemini-pro-vision-placeholder",
+            "maxTokens": 500,
+            "temperature": 0.7
+        },
+        "diagramOpportunist": {
+            "provider": "gemini",
+            "modelName": "gemini-1.5-flash-latest",
+            "maxTokens": 1000,
+            "temperature": 0.5
+        },
+        "diagramGenerator": {
+            "provider": "gemini",
+            "modelName": "gemini-1.5-flash-latest",
+            "maxTokens": 800,
+            "temperature": 0.4
+        }
+    },
+    "paths": {
+        "outputDir": "src/content/blog",
+        "contextDir": "src/content/blog",
+        "imageOutputDir": "public/generated-images"
+    },
+    "basePrompts": {
+        "outline": "Generate a comprehensive blog post outline for the topic: '{TOPIC}'. The outline should include a main title suitable for an H1 tag, and an array of main section titles. Focus on clarity and logical flow. Return ONLY a JSON object with keys 'title' (string) and 'sections' (array of strings).",
+        "sectionContent": "Write a detailed blog post section titled '{SECTION_TITLE}' for a blog post about '{TOPIC}'. Ensure the content is engaging, informative, and well-structured. Do not repeat the section title in the content itself. Context from other sections and existing posts: {OTHER_SECTIONS_CONTEXT}. Return plain text content for this section.",
+        "seo": "Analyze the following blog post content about '{TOPIC}' and provide SEO suggestions. Return ONLY a JSON object with 'seoTitle' (under 60 chars, ideally around 55), 'metaDescription' (under 160 chars, ideally around 155), and 'tags' (an array of 5-7 relevant keywords, appropriate for blog frontmatter tags). Ensure the seoTitle and metaDescription are compelling and click-worthy.\n\nTOPIC: {TOPIC}\n\nFULL CONTENT:\n{CONTENT}",
+        "imageNeedsAnalysisPrompt": "Analyze the following blog post topic, outline, and generated text to identify essential images. For each suggested image, provide the most relevant section title it belongs to, a detailed text prompt suitable for an image generation model, and a necessity score from 0.0 (not important) to 1.0 (critical). Return ONLY a JSON array of objects, each with keys: 'section_title' (string), 'image_description' (string), and 'necessity_score' (float). Aim for 2-4 highly relevant images if appropriate for the content.\n\nTOPIC: {TOPIC}\n\nOUTLINE: {OUTLINE}\n\nGENERATED TEXT:\n{GENERATED_TEXT}",
+        "diagramOpportunityAnalysisPrompt": "Analyze the provided blog post topic, outline, and generated text to identify sections that would significantly benefit from a visual diagram (e.g., flowchart, sequence diagram, component diagram). For each identified opportunity, specify the section title, a brief description of what the diagram should illustrate (diagram_topic), the suggested Mermaid diagram type (e.g., 'flowchart TD', 'sequenceDiagram', 'graph LR'), and a necessity score (0.0 to 1.0). Return ONLY a JSON array of objects with keys: 'section_title' (string), 'diagram_topic' (string), 'diagram_type' (string), and 'necessity_score' (float). Prioritize clarity and relevance.",
+        "mermaidDiagramGenerationPrompt": "Generate only the Mermaid syntax for a '{DIAGRAM_TYPE}' diagram that illustrates the following concept: '{DIAGRAM_TOPIC}'. The diagram is for a blog post section titled '{SECTION_TITLE}' on the main topic of '{MAIN_TOPIC}'. Ensure the syntax is clean, correct, and ready to be embedded in a Markdown ```mermaid block. Do not include any explanatory text, only the Mermaid code itself."
+    },
+    "defaultCategory": "Code",
+    "author": "Domdhi",
+    "duplicateDetection": {
+        "keywordOverlapThreshold": 3,
+        "enableStopWordRemoval": false
+    },
+    "imageGeneration": {
+        "necessityThreshold": 0.7,
+        "generateMaxImages": 3
+    },
+    "diagramGeneration": {
+        "necessityThreshold": 0.75,
+        "maxDiagramsPerPost": 2
+    },
+    "emailReview": {
+        "enabled": false,
+        "recipientEmail": "your-review-email@example.com",
+        "senderEmail": "ai-notifications@yourdomain.com",
+        "subjectPrefix": "[AI Blog Draft Review]",
+        "smtp": {
+            "host": "smtp.example.com",
+            "port": 587,
+            "secure": false,
+            "auth": {
+                "userEnvVar": "SMTP_USER",
+                "passEnvVar": "SMTP_PASS"
+            }
+        }
+    }
+}

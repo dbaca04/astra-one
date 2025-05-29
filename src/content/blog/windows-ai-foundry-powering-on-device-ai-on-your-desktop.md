@@ -2,11 +2,11 @@
 slug: windows-ai-foundry-powering-on-device-ai-on-your-desktop
 title: "Windows AI Foundry: Powering the Next Wave of On-Device AI on Your Desktop"
 description: "My deep dive into Microsoft's new Windows AI Foundry, exploring how it aims to unify AI development on Windows and what it means for developers and AI enthusiasts."
-date: "2025-05-23T09:00:00Z" # A day after the Build recaps
+date: "2025-05-29T09:00:00Z"
 author: "Domdhi"
 category: "discover"
 tags: ["windows ai", "AI development", "on-device AI", "microsoft build", "developer tools", "phi silica", "AI models", "MCP"]
-heroImage: "/images/windows-ai-foundry-banner.png"
+heroImage: "/images/windows-ai-foundry-banner.jpg"
 ---
 ## Windows AI Foundry: Powering the Next Wave of On-Device AI on Your Desktop
 
@@ -48,8 +48,7 @@ Microsoft Build 2025 highlighted several core capabilities of Windows AI Foundry
 *   **New APIs for Semantic Search and Knowledge Retrieval:** The ability to perform semantic searches across local data and retrieve relevant knowledge locally will be crucial for building intelligent on-device agents and applications that can understand and reason over your personal or organizational information.
 *   **Native Support for the Model Context Protocol (MCP):** This is key for the "agentic web" vision. MCP enables AI agents to connect with and understand the context of native Windows applications. With Windows AI Foundry supporting MCP, developers can build AI agents that seamlessly integrate with and assist users across their entire Windows experience. For example, an agent could understand what you're working on in Word, pull relevant data from Excel, and help you draft an email in Outlook, all orchestrated locally.
 
-![Conceptual diagram of Windows AI Foundry components](/images/windows-ai-foundry-components.png)
-*(Imagine a diagram: "Windows AI Foundry" in the center, with arrows pointing to "Inbox Models (Phi Silica)", "LoRA Fine-Tuning", "Semantic Search APIs", "MCP Support", and "Developer Tools/SDKs".)*
+![Conceptual diagram of Windows AI Foundry components](/images/windows-ai-foundry-components.jpg)
 
 ### Potential Use Cases I'm Already Imagining
 

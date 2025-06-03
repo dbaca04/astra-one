@@ -23,7 +23,7 @@ export default defineConfig({
     }),
     tailwind()
   ],
-
+  output: 'server',
   adapter: cloudflare({
     platformProxy: {
       enabled: true,

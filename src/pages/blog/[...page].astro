@@ -24,14 +24,14 @@ const { page } = Astro.props as Props;
 
 // Determine current page number for unique titles/descriptions if needed
 const currentPageNumber =
-    page.currentPage > 1 ? `Page ${page.currentPage}` : "";
+    page && page.currentPage > 1 ? `Page ${page.currentPage}` : "";
 const title =
     `Blog ${currentPageNumber ? `- ${currentPageNumber}` : ""}`.trim();
 const description =
     `All blog posts ${currentPageNumber ? `- ${currentPageNumber}` : ""}`.trim();
 
-const prevUrl = page.url.prev;
-const nextUrl = page.url.next;
+const prevUrl = page?.url.prev;
+const nextUrl = page?.url.next;
 ---
 
 <html lang="en">

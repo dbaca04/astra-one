@@ -8,10 +8,10 @@ interface Props {
 
 const { page } = Astro.props;
 
-const currentPage = page.currentPage;
-const totalPages = page.lastPage;
-const prevUrl = page.url.prev;
-const nextUrl = page.url.next;
+const currentPage = page?.currentPage;
+const totalPages = page?.lastPage;
+const prevUrl = page?.url?.prev;
+const nextUrl = page?.url?.next;
 ---
 
 <nav
@@ -38,7 +38,7 @@ const nextUrl = page.url.next;
     }
 
     <span class="text-theme-text">
-        Page {currentPage} of {totalPages}
+        Page {currentPage || 1} of {totalPages || 1}
     </span>
 
     {

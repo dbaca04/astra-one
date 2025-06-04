@@ -52,71 +52,78 @@ const nextUrl = page?.url.next;
                 </h1>
                 <ul class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {
-                        page.data.map((post) => {
-                            const postSlug = post.data.slug || post.id;
-                            const imageSource = post.data.heroImage;
+                        page?.data?.length > 0 ? (
+                            page.data.map((post) => {
+                                const postSlug = post.data.slug || post.id;
+                                const imageSource = post.data.heroImage;
 
-                            return (
-                                <li class="bg-theme-card-bg rounded-lg shadow-lg overflow-hidden transition-shadow duration-300 hover:shadow-xl">
-                                    <a
-                                        href={`/blog/${postSlug}/`}
-                                        class="block group"
-                                    >
-                                        {imageSource && (
-                                            <Picture
-                                                src={imageSource}
-                                                alt={post.data.title}
-                                                width={720}
-                                                height={360}
-                                                formats={[
-                                                    "avif",
-                                                    "webp",
-                                                    "jpeg",
-                                                ]}
-                                                quality={80}
-                                                sizes="(max-width: 720px) 100vw, (max-width: 1024px) 50vw, 720px"
-                                                fit="cover"
-                                                position="center"
-                                                class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                                            />
-                                        )}
-                                        <div class="p-6">
-                                            <h4 class="text-xl font-semibold text-theme-text mb-2 group-hover:text-theme-accent transition-colors duration-200">
-                                                {post.data.title}
-                                            </h4>
-                                            <p class="text-sm text-theme-text opacity-80 group-hover:text-theme-accent transition-colors duration-200">
-                                                <FormattedDate
-                                                    date={post.data.date}
+                                return (
+                                    <li class="bg-theme-card-bg rounded-lg shadow-lg overflow-hidden transition-shadow duration-300 hover:shadow-xl">
+                                        <a
+                                            href={`/blog/${postSlug}/`}
+                                            class="block group"
+                                        >
+                                            {imageSource && (
+                                                <Picture
+                                                    src={imageSource}
+                                                    alt={post.data.title}
+                                                    width={720}
+                                                    height={360}
+                                                    formats={[
+                                                        "avif",
+                                                        "webp",
+                                                        "jpeg",
+                                                    ]}
+                                                    quality={80}
+                                                    sizes="(max-width: 720px) 100vw, (max-width: 1024px) 50vw, 720px"
+                                                    fit="cover"
+                                                    position="center"
+                                                    class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                                                 />
-                                            </p>
-                                            {post.data.description && (
-                                                <p class="text-sm text-theme-text opacity-90 mt-2 mb-3 group-hover:text-theme-accent-hover transition-colors duration-200">
-                                                    {post.data.description}
-                                                </p>
                                             )}
-                                            {post.data.tags &&
-                                                post.data.tags.length > 0 && (
-                                                    <div class="mt-2 flex flex-wrap gap-2">
-                                                        {post.data.tags.map(
-                                                            (tag: string) => (
-                                                                <a
-                                                                    href={`/tags/${tag}`}
-                                                                    class="text-xs bg-theme-accent text-theme-accent-text px-2 py-1 rounded-full hover:bg-theme-accent-hover transition-colors duration-200"
-                                                                >
-                                                                    {tag}
-                                                                </a>
-                                                            ),
-                                                        )}
-                                                    </div>
+                                            <div class="p-6">
+                                                <h4 class="text-xl font-semibold text-theme-text mb-2 group-hover:text-theme-accent transition-colors duration-200">
+                                                    {post.data.title}
+                                                </h4>
+                                                <p class="text-sm text-theme-text opacity-80 group-hover:text-theme-accent transition-colors duration-200">
+                                                    <FormattedDate
+                                                        date={post.data.date}
+                                                    />
+                                                </p>
+                                                {post.data.description && (
+                                                    <p class="text-sm text-theme-text opacity-90 mt-2 mb-3 group-hover:text-theme-accent-hover transition-colors duration-200">
+                                                        {post.data.description}
+                                                    </p>
                                                 )}
-                                        </div>
-                                    </a>
-                                </li>
-                            );
-                        })
+                                                {post.data.tags &&
+                                                    post.data.tags.length >
+                                                        0 && (
+                                                        <div class="mt-2 flex flex-wrap gap-2">
+                                                            {post.data.tags.map(
+                                                                (
+                                                                    tag: string,
+                                                                ) => (
+                                                                    <a
+                                                                        href={`/tags/${tag}`}
+                                                                        class="text-xs bg-theme-accent text-theme-accent-text px-2 py-1 rounded-full hover:bg-theme-accent-hover transition-colors duration-200"
+                                                                    >
+                                                                        {tag}
+                                                                    </a>
+                                                                ),
+                                                            )}
+                                                        </div>
+                                                    )}
+                                            </div>
+                                        </a>
+                                    </li>
+                                );
+                            })
+                        ) : (
+                            <p>No blog posts found.</p>
+                        )
                     }
                 </ul>
-                <PaginationControls page={page} />
+                {page && <PaginationControls page={page} />}
             </section>
         </main>
         <Footer />
